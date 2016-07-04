@@ -8,9 +8,9 @@ function Sprite(img, x, y, width, height) {
 	this.height = height*2;
 };
 
-Sprite.prototype.draw = function(ctx, x, y, width, height) {
+Sprite.prototype.draw = function(ctx, x, y, scale) {
 	ctx.drawImage(this.img, this.x, this.y, this.width, this.height,
-		x, y, width, height);
+		x, y, this.width*scale, this.height*scale);
 };
 
 function initSprites(){

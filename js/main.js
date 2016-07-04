@@ -3,8 +3,8 @@ var canvas, ctx, width, height;
 function main(){
 	canvas = document.getElementById('canvas');
 
-	width = window.innerWidth;
-	height = window.innerHeight;
+	width = window.innerWidth-20;
+	height = window.innerHeight-20;
 
 	canvas.width = width;
 	canvas.height = height;
@@ -30,7 +30,7 @@ function update(){
 }
 
 function render(){
-	s_map.draw(ctx,0,0,s_map.width*2, s_map.height*2);
+	s_map.draw(ctx, 0, 0, 4);
 }
 
 main();
