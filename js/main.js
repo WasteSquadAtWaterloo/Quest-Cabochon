@@ -9,6 +9,10 @@ function main(){
 	canvas.width = width;
 	canvas.height = height;
 	ctx = canvas.getContext('2d');
+
+	initSprites();
+
+	run();
 }
 
 function run(){
@@ -26,7 +30,7 @@ function update(){
 }
 
 function render(){
-
+	s_map.draw(ctx,0,0);
 }
 
 main();
