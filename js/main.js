@@ -30,7 +30,7 @@ function update(){
 }
 
 function render(){
-	s_map.draw(ctx,0,0);
+	s_map.draw(ctx,0,0,s_map.width*2, s_map.height*2);
 }
 
 main();
