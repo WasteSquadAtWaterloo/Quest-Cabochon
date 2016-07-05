@@ -31,10 +31,10 @@ function create() {
     player.animations.add('down', [0,1,2], 5, true);
     player.animations.add('left', [3,4,5], 5, true);    
     player.animations.add('right', [6,7,8], 5, true);
-    player.animations.add('up', [9,10,11], 5, true);
+    player.animations.add('up', [9,10,11], 5, true);    
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(10,10, 24, 40);
+    player.body.setSize(20,10, 15, 40);
     game.camera.follow(player);
     cursors = game.input.keyboard.createCursorKeys();
 }
