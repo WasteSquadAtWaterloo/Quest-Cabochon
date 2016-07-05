@@ -10,7 +10,7 @@ function preload() {
 
 var map;
 var layer;
-var wasd;
+var cursors;
 var player;
 
 function create() {
@@ -31,7 +31,7 @@ function create() {
     player = game.add.sprite(0,0, 'player', 1);
     player.anchor.set(0.5);
     player.smoothed = false;
-    player.scale.set(2);
+    player.scale.set(1);
 
     player.animations.add('down', [0,1,2], 5, true);
     player.animations.add('left', [3,4,5], 5, true);    
@@ -40,31 +40,26 @@ function create() {
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
     game.camera.follow(player);
-    game.wasd = {
-        up: XV.game.input.keyboard.addKey(Phaser.Keyboard.W),
-        down: XV.game.input.keyboard.addKey(Phaser.Keyboard.S),
-        left: XV.game.input.keyboard.addKey(Phaser.Keyboard.A),
-        right: XV.game.input.keyboard.addKey(Phaser.Keyboard.D),
-    };
+    cursors = game.input.keyboard.createCursorKeys();
 }
 
 function update() {    
     game.physics.arcade.collide(player, layer);
     player.body.velocity.set(0);
 
-    if (wasd.left.isDown){
+    if (cursors.left.isDown){
         player.body.velocity.x = -100;
         player.play('left');
     }
-    else if (wasd.right.isDown){
+    else if (cursors.right.isDown){
         player.body.velocity.x = 100;
         player.play('right');
     }
-    else if (wasd.up.isDown){
+    else if (cursors.up.isDown){
         player.body.velocity.y = -100;
         player.play('up');
     }
-    else if (wasd.down.isDown){
+    else if (cursors.down.isDown){
         player.body.velocity.y = 100;
         player.play('down');
     }
