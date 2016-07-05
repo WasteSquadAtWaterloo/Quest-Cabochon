@@ -14,19 +14,19 @@ var cursors;
 var player;
 var dir;
 
-function create() {
-
-    //  Because we're loading CSV map data we have to specify the tile size here or we can't render it
+function create() {    
     map = game.add.tilemap('map');   
     map.addTilesetImage('Roguelike','tiles');  
 
     Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
     groundLayer = map.createLayer(0); groundLayer.smoothed = false;groundLayer.setScale(3);
-    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);
+    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
+    player = game.add.sprite(0,0, 'player', 1); 
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
+    groundLayer.resizeWorld();
 
     var stand = [];
     for (var i=0; i<25; i++){
@@ -34,12 +34,17 @@ function create() {
             stand.push(i*57+j+1);
         }
     }
-
-    map.setCollisionByExclusion(stand);      
+    /*
+    map.setCollisionByExclusion(stand,true,groundLayer);      
+    map.setCollisionByExclusion(stand,true,layer2);  
+    map.setCollisionByExclusion(stand,true,layer3);  
+    map.setCollisionByExclusion(stand,true,layer4);  
+    map.setCollisionByExclusion(stand,true,layer5); 
+    */ 
 
     //fixedToCamera = true;
 
-    player = game.add.sprite(0,0, 'player', 1);    
+      
     player.smoothed = false;
     player.scale.set(1);
 
@@ -49,13 +54,19 @@ function create() {
     player.animations.add('up', [9,10,11], 5, true);    
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(20,10, 15, 40);
+    player.body.setSize(20,10, 15, 40);    
+    cursors = game.input.keyboard.createCursorKeys();   
+    
     game.camera.follow(player);
-    cursors = game.input.keyboard.createCursorKeys();
 }
+
 
 function update() {    
     game.physics.arcade.collide(player, groundLayer);
+    game.physics.arcade.collide(player, layer2);
+    game.physics.arcade.collide(player, layer3);
+    game.physics.arcade.collide(player, layer4);
+    game.physics.arcade.collide(player, layer5);
 
     player.body.velocity.set(0);
 
@@ -86,5 +97,5 @@ function update() {
 }
 
 function render() {
-
+    game.debug.body(player);
 }
