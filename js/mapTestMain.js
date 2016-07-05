@@ -4,7 +4,7 @@ function preload() {
 
     game.load.tilemap('map', 'assets/Map/testMap.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
-    game.load.spritesheet('player', 'assets/Spritesheet/player1_sheet.png', 48, 48, 12);
+    game.load.spritesheet('player', 'assets/Spritesheet/player1_weapon.png', 48, 48, 12);
 
 }
 
