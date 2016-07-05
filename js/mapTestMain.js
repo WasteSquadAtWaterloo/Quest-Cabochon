@@ -16,20 +16,15 @@ var player;
 function create() {
 
     //  Because we're loading CSV map data we have to specify the tile size here or we can't render it
-    map = game.add.tilemap('map');
-    //  Now add in the tileset
-    map.addTilesetImage('roguelikeSheet_transparent','tiles');    
-    //  Create our layer
+    map = game.add.tilemap('map');    
+    map.addTilesetImage('roguelikeSheet_transparent','tiles');   
     layer = map.createLayer(0);
-
-    map.setCollision(61, true);    
-    //  Resize the world
+    map.setCollisionByExclusion([63]); 
     layer.resizeWorld();    
     
     //fixedToCamera = true;
 
-    player = game.add.sprite(0,0, 'player', 1);
-    player.anchor.set(0.5);
+    player = game.add.sprite(0,0, 'player', 1);    
     player.smoothed = false;
     player.scale.set(1);
 
@@ -45,6 +40,7 @@ function create() {
 
 function update() {    
     game.physics.arcade.collide(player, layer);
+
     player.body.velocity.set(0);
 
     if (cursors.left.isDown){
