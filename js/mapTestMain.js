@@ -16,16 +16,20 @@ var player;
 function create() {
 
     //  Because we're loading CSV map data we have to specify the tile size here or we can't render it
+    Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
     map = game.add.tilemap('map');    
-    map.addTilesetImage('Roguelike','tiles');   
-    groundLayer = map.createLayer(0);
-    map.setCollisionByExclusion([63]); 
-    groundLayer.resizeWorld(); 
-    layer2 = map.createLayer(1);
-    layer3 = map.createLayer(2);
-    layer4 = map.createLayer(3);
-    layer5 = map.createLayer(4);
+    map.addTilesetImage('Roguelike','tiles'); 
+    map.setCollisionByExclusion([63]);   
+    //map.scale = {x:4, y:4};
+
+    groundLayer = map.createLayer(0); groundLayer.smoothed = false;groundLayer.setScale(3);
+    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);
+    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
+    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
+
     
+    groundLayer.resizeWorld(); 
     //fixedToCamera = true;
 
     player = game.add.sprite(0,0, 'player', 1);    
