@@ -1,13 +1,16 @@
-var canvas, ctx, width, height, maxX=40, maxY = 30,
+var canvas, ctx, width, height, maxX=39, maxY = 29,
 player = {
 	x: 0,
 	y: 0,
-	draw: function(ctx){
-		ctx.save();
+	posX: Math.round(width/128)*64,
+	posY: Math.round(height/128)*64,
+	update: function(){
+		this.posX = Math.round(width/128)*64;
+		this.posY = Math.round(height/128)*64;
+	},
+	draw: function(ctx){		
 		ctx.fillStyle = "red";
-		ctx.fillRect(this.x*64, this.y*64, 64, 64);
-		//ctx.stroke();
-		ctx.restore();
+		ctx.fillRect(this.posX,this.posY,64,64);	
 	}
 };
 
@@ -53,11 +56,16 @@ function run(){
 
 function update(){
 
+	player.update();
+
 }
 
 function render(){
-	s_map.draw(ctx, 0, 0, 4);
+	ctx.fillStyle = "green";
+	ctx.fillRect(-50,-50,width+50,height+50);		
+	s_map.draw(ctx, -player.x*64+player.posX, -player.y*64+player.posY, 4);
 	player.draw(ctx);
 }
 
 main();
+
