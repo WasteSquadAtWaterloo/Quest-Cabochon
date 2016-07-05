@@ -29,6 +29,7 @@ function create() {
     //fixedToCamera = true;
 
     player = game.add.sprite(0,0, 'player', 1);
+
     player.anchor.set(0.5);
     player.smoothed = false;
     player.scale.set(1);
@@ -39,6 +40,7 @@ function create() {
     player.animations.add('up', [9,10,11], 5, true);
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
+    player.body.setSize(10,10, 24, 40);
     game.camera.follow(player);
     cursors = game.input.keyboard.createCursorKeys();
 }
