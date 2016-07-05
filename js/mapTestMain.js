@@ -22,9 +22,9 @@ function create() {
 
     layer1 = map.createLayer(0); layer1.smoothed = false;layer1.setScale(2);
     layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(2);     
-    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(2);
-    player = game.add.sprite(1600, 1600, 'player', playerFrames.default.down.walk[0]); 
-    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(2);  
+    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(2);    
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(2); 
+    player = game.add.sprite(1600, 1600, 'player', playerFrames.default.down.walk[0]);  
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(2);      
     layer1.resizeWorld();
 
