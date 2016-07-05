@@ -4,13 +4,13 @@ function preload() {
 
     game.load.tilemap('map', 'assets/Map/sample_map.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
-    game.load.spritesheet('player', 'assets/Spritesheet/player1_sheet.png', 48, 48, 96);
+    game.load.spritesheet('player', 'assets/Spritesheet/player1_sheet.png', 48, 48, 12);
 
 }
 
 var map;
 var layer;
-var cursors;
+var wasd;
 var player;
 
 function create() {
@@ -26,37 +26,42 @@ function create() {
     
     //fixedToCamera = true;
 
-    player = game.add.sprite(0,0, 'player', 0);
+    player = game.add.sprite(0,0, 'player', 1);
     player.smoothed = false;
     player.scale.set(2);
 
-    player.animations.add('down', [0,1,2], 3, true);
-    player.animations.add('left', [3,4,5], 3, true);    
-    player.animations.add('right', [6,7,8], 3, true);
-    player.animations.add('up', [9,10,11], 3, true);
+    player.animations.add('down', [0,1,2], 5, true);
+    player.animations.add('left', [3,4,5], 5, true);    
+    player.animations.add('right', [6,7,8], 5, true);
+    player.animations.add('up', [9,10,11], 5, true);
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
     game.camera.follow(player);
-    cursors = game.input.keyboard.createCursorKeys();
+    game.wasd = {
+        up: XV.game.input.keyboard.addKey(Phaser.Keyboard.W),
+        down: XV.game.input.keyboard.addKey(Phaser.Keyboard.S),
+        left: XV.game.input.keyboard.addKey(Phaser.Keyboard.A),
+        right: XV.game.input.keyboard.addKey(Phaser.Keyboard.D),
+    };
 }
 
 function update() {    
 
     player.body.velocity.set(0);
 
-    if (cursors.left.isDown){
+    if (wasd.left.isDown){
         player.body.velocity.x = -100;
         player.play('left');
     }
-    else if (cursors.right.isDown){
+    else if (wasd.right.isDown){
         player.body.velocity.x = 100;
         player.play('right');
     }
-    else if (cursors.up.isDown){
+    else if (wasd.up.isDown){
         player.body.velocity.y = -100;
         player.play('up');
     }
-    else if (cursors.down.isDown){
+    else if (wasd.down.isDown){
         player.body.velocity.y = 100;
         player.play('down');
     }
