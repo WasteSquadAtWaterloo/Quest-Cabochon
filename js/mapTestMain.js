@@ -18,9 +18,16 @@ function create() {
 
     //  Because we're loading CSV map data we have to specify the tile size here or we can't render it
     map = game.add.tilemap('map');   
+    map.addTilesetImage('Roguelike','tiles');  
 
-    map.addTilesetImage('Roguelike','tiles');    
-    
+    Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
+
+    groundLayer = map.createLayer(0); groundLayer.smoothed = false;groundLayer.setScale(3);
+    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);
+    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
+    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
+
     var stand = [];
     for (var i=0; i<25; i++){
         for (var j=5; j<10; j++){
@@ -28,16 +35,7 @@ function create() {
         }
     }
 
-    map.setCollisionByExclusion(stand);    
-   
-    groundLayer = map.createLayer(0);     
-    layer2 = map.createLayer(1);
-    layer3 = map.createLayer(2);
-    layer4 = map.createLayer(3);
-    layer5 = map.createLayer(4);
-
-    
-
+    map.setCollisionByExclusion(stand);      
 
     //fixedToCamera = true;
 
@@ -62,22 +60,22 @@ function update() {
     player.body.velocity.set(0);
 
     if (cursors.left.isDown){
-        player.body.velocity.x = -100;
+        player.body.velocity.x = -500;
         player.play('left');
         dir = 4;
     }
     else if (cursors.right.isDown){
-        player.body.velocity.x = 100;
+        player.body.velocity.x = 500;
         player.play('right');
         dir = 7;
     }
     else if (cursors.up.isDown){
-        player.body.velocity.y = -100;
+        player.body.velocity.y = -500;
         player.play('up');
         dir = 10;
     }
     else if (cursors.down.isDown){
-        player.body.velocity.y = 100;
+        player.body.velocity.y = 500;
         player.play('down');
         dir = 1;
     }
