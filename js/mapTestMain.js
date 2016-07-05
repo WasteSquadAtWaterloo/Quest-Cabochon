@@ -1,15 +1,15 @@
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(window.innerWidth - 20, window.innerHeight -20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
-    game.load.tilemap('map', 'assets/Map/testMap.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map', 'assets/Map/sample_map.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     game.load.spritesheet('player', 'assets/Spritesheet/player1_weapon.png', 48, 48, 12);
 
 }
 
 var map;
-var layer;
+var groundLayer,layer2,layer3,layer4,layer5;
 var cursors;
 var player;
 
@@ -17,10 +17,14 @@ function create() {
 
     //  Because we're loading CSV map data we have to specify the tile size here or we can't render it
     map = game.add.tilemap('map');    
-    map.addTilesetImage('roguelikeSheet_transparent','tiles');   
-    layer = map.createLayer(0);
+    map.addTilesetImage('Roguelike','tiles');   
+    groundLayer = map.createLayer(0);
     map.setCollisionByExclusion([63]); 
-    layer.resizeWorld();    
+    groundLayer.resizeWorld(); 
+    layer2 = map.createLayer(1);
+    layer3 = map.createLayer(2);
+    layer4 = map.createLayer(3);
+    layer5 = map.createLayer(4);
     
     //fixedToCamera = true;
 
@@ -40,7 +44,7 @@ function create() {
 }
 
 function update() {    
-    game.physics.arcade.collide(player, layer);
+    game.physics.arcade.collide(player, groundLayer);
 
     player.body.velocity.set(0);
 
