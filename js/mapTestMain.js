@@ -17,6 +17,7 @@ function preload() {
 var map;
 var layer1,layer2,layer3,layer4,layer5;
 var cursors, wasd, melee;
+var damageTime = 0;
 var player;
 var playerHealth, playerMaxHealth; playerHealth = playerMaxHealth = 10;
 var player_dir = 'down';
@@ -49,7 +50,9 @@ function create() {
     createSpiders();
 
     player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.default.down.walk[0]);
-
+    
+    //player.maxHealth = 100
+    player.setHealth(100);
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
 
 
@@ -104,63 +107,76 @@ function create() {
 }
 
 
-function update() {    
-    game.physics.arcade.collide(player, layer1);
-    game.physics.arcade.collide(player, layer2);
-    game.physics.arcade.collide(player, layer3);
-    game.physics.arcade.collide(player, layer4);
-    game.physics.arcade.collide(player, layer5);     
+function update() { 
 
-    player.body.velocity.set(0);
-    
-    if (cursors.left.isDown || wasd.left.isDown){
-        player.body.velocity.x = -500;
-        player.play('left');
-        //dir = playerFrames.default.left.walk[0];
-        player_dir = 'left';
-    }
-    else if (cursors.right.isDown || wasd.right.isDown){
-        player.body.velocity.x = 500;
-        player.play('right');
-        //dir = playerFrames.default.right.walk[0];
-        player_dir = 'right';
-    }
-    else if (cursors.up.isDown || wasd.up.isDown){
-        player.body.velocity.y = -500;
-        player.play('up');
-        //dir = playerFrames.default.up.walk[0];
-        player_dir = 'up';
-    }
-    else if (cursors.down.isDown || wasd.down.isDown){
-        player.body.velocity.y = 500;
-        player.play('down');
-        //dir = playerFrames.default.down.walk[0];
-        player_dir = 'down';
-    }
+    if (player.alive){  
+        game.physics.arcade.collide(player, layer1);
+        game.physics.arcade.collide(player, layer2);
+        game.physics.arcade.collide(player, layer3);
+        game.physics.arcade.collide(player, layer4);
+        game.physics.arcade.collide(player, layer5);     
 
-    else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
-        melee_animation_is_playing = false;
-
-        //Calculate direction        
-        var player_screen_x = player.position.x - game.camera.x;
-        var player_screen_y = player.position.y - game.camera.y;
-        var dif_x = game.input.mousePointer.x - player_screen_x;
-        var dif_y = game.input.mousePointer.y - player_screen_y;
-
-        if (Math.abs(dif_x) >= Math.abs(dif_y)){
-            player_dir = dif_x>=0 ? 'right' : 'left';
+        player.body.velocity.set(0);
+        
+        if (cursors.left.isDown || wasd.left.isDown){
+            player.body.velocity.x = -500;
+            player.play('left');
+            //dir = playerFrames.default.left.walk[0];
+            player_dir = 'left';
         }
-        else if (Math.abs(dif_x) <= Math.abs(dif_y)){
-            player_dir = dif_y>=0 ? 'down' : 'up';
+        else if (cursors.right.isDown || wasd.right.isDown){
+            player.body.velocity.x = 500;
+            player.play('right');
+            //dir = playerFrames.default.right.walk[0];
+            player_dir = 'right';
         }
-        player.play(player_dir+"_melee");
+        else if (cursors.up.isDown || wasd.up.isDown){
+            player.body.velocity.y = -500;
+            player.play('up');
+            //dir = playerFrames.default.up.walk[0];
+            player_dir = 'up';
+        }
+        else if (cursors.down.isDown || wasd.down.isDown){
+            player.body.velocity.y = 500;
+            player.play('down');
+            //dir = playerFrames.default.down.walk[0];
+            player_dir = 'down';
+        }
+
+        else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
+            melee_animation_is_playing = false;
+
+            //Calculate direction        
+            var player_screen_x = player.position.x - game.camera.x;
+            var player_screen_y = player.position.y - game.camera.y;
+            var dif_x = game.input.mousePointer.x - player_screen_x;
+            var dif_y = game.input.mousePointer.y - player_screen_y;
+
+            if (Math.abs(dif_x) >= Math.abs(dif_y)){
+                player_dir = dif_x>=0 ? 'right' : 'left';
+            }
+            else if (Math.abs(dif_x) <= Math.abs(dif_y)){
+                player_dir = dif_y>=0 ? 'down' : 'up';
+            }
+            player.play(player_dir+"_melee");
+
+            //Deal Damage to whatever is in front of it
+            console.log(game.physics.arcade.distanceBetween(spider,player));
+
+
+
+        }
+        else if (player.animations.currentAnim.isFinished){        
+            player.frame = playerFrames.default[player_dir].walk[0];
+        }       
+
+        //Put all damage/collision detection in this if statement
+        if (game.time.now - damageTime > 300){
+            game.physics.arcade.overlap(player, spiders, spiderCollisionHandler, null, this);
+
+
+        }
     }
-    else if (player.animations.currentAnim.isFinished){        
-        player.frame = playerFrames.default[player_dir].walk[0];
-    }       
-
-
-    game.physics.arcade.overlap(player, spiders, spiderCollisionHandler, null, this);
 }
 
 function render() {
@@ -174,6 +190,7 @@ function createSpiders(){
     for (var i=1; i<=2; i++){
         for (var j=1; j<=2; j++){
             var spider = spiders.create(Math.random()*480+480*i, Math.random()*480+480*j, "spider");
+            spider.setHealth(10);
             spider.anchor.setTo(0.5, 0.5);     
             spider.scale.set(1.5);       
             spider.animations.add('move', enemyFrames.spider.down.walk, 10, true);              
@@ -216,14 +233,7 @@ function meleeAnimation() {
 
 }
 function spiderCollisionHandler(player, spider) {
-    spider.kill();
-    playerHealth -= 3;
-    if (playerHealth <= 0) {
-        playerDied();
-    }
+    damageTime = game.time.now;
+    player.damage(5);
+    console.log(player.health);
 }
-function playerDied() {
-    player.kill()
-    
-}
-
