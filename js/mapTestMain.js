@@ -52,23 +52,8 @@ function create() {
 
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
 
-    layer1.resizeWorld();
 
-    //
-    var stand = [];
-    for (var i=0; i<25; i++){
-        for (var j=5; j<10; j++){
-            stand.push(i*57+j+1);
-        }
-    }
-
-    for (var i=21; i<25; i++){
-        for (var j=13; j<41; j++){
-            stand.push(i*57+j);
-        }
-    }
-    stand.push(541, 542, 543, 544, 545, 546, 547, 548, 549, 593, 650, 583, 584, 585, 586, 587, 588);
-    //
+    layer1.resizeWorld();   
 
     map.setCollisionByExclusion(stand,true,layer1);      
     map.setCollisionByExclusion(stand,true,layer2);  
@@ -180,7 +165,7 @@ function update() {
 
 function render() {
     spiders.forEach(function(mob){
-        game.debug.body(mob);
+        //game.debug.body(mob);
     });
 }
 
@@ -191,7 +176,7 @@ function createSpiders(){
             var spider = spiders.create(Math.random()*480+480*i, Math.random()*480+480*j, "spider");
             spider.anchor.setTo(0.5, 0.5);     
             spider.scale.set(1.5);       
-            spider.animations.add('move', enemyFrames.spider.up.walk, 15, true);              
+            spider.animations.add('move', enemyFrames.spider.down.walk, 10, true);              
             spider.play('move');
             spider.body.moves = false;
         }
@@ -199,6 +184,11 @@ function createSpiders(){
 
     spiders.x = 480;
     spiders.y = 480;
+    spiders.forEach(function(mob){
+        game.add.tween(mob).to( { x: Math.random()*200 }, Math.random()*5000+5000, Phaser.Easing.Linear.None, true, 0, 1000, true);        
+        
+    });
+    
 }
 
 function meleeAnimation() {

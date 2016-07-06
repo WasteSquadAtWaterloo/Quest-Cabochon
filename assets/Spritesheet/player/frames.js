@@ -48,3 +48,18 @@ enemyFrames = {
 }
 }
 
+var stand = [];
+
+for (var i=0; i<25; i++){
+    for (var j=5; j<10; j++){
+        stand.push(i*57+j+1);
+    }
+}
+
+for (var i=21; i<25; i++){
+    for (var j=13; j<41; j++){
+        stand.push(i*57+j);
+    }
+}
+
+stand.push(541, 542, 543, 544, 545, 546, 547, 548, 549, 593, 650, 583, 584, 585, 586, 587, 588);
