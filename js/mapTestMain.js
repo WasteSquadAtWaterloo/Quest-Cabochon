@@ -10,9 +10,10 @@ function preload() {
 
 var map;
 var layer1,layer2,layer3,layer4,layer5;
-var cursors, wasd;
+var cursors, wasd, melee;
 var player;
 var player_dir = 'down';
+var melee_animation_is_playing = false;
 var dir;
 
 function create() {    
@@ -49,8 +50,12 @@ function create() {
     player.animations.add('down', playerFrames.default.down.walk, 10, true);
     player.animations.add('left', playerFrames.default.left.walk, 10, true);    
     player.animations.add('right', playerFrames.default.right.walk, 10, true);
-    player.animations.add('up', playerFrames.default.up.walk, 10, true);    
+    player.animations.add('up', playerFrames.default.up.walk, 10, true); 
 
+    player.animations.add('down_melee', playerFrames.default.down.attack, 15, false);
+    player.animations.add('left_melee', playerFrames.default.left.attack, 15, false);    
+    player.animations.add('right_melee', playerFrames.default.right.attack, 15, false);
+    player.animations.add('up_melee', playerFrames.default.up.attack, 15, false); 
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.setSize(25, 15,20, 40);    
@@ -64,6 +69,8 @@ function create() {
         right: game.input.keyboard.addKey(Phaser.Keyboard.D),
         down: game.input.keyboard.addKey(Phaser.Keyboard.S)
     };
+    game.input.mouse.capture = true;
+
     
     game.camera.follow(player);
 }
@@ -104,6 +111,29 @@ function update() {
         dir = playerFrames.default.down.walk[0];
         player_dir = 'down';
     }
+    else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
+        //melee_animation_is_playing = false;
+        if (player_dir === 'down'){
+            player.play('down_melee');
+            //console.log(player_dir);
+
+        }
+        else if (player_dir === 'left'){
+            player.play('left_melee');
+            //console.log(player_dir);
+
+        }
+        else if (player_dir === 'right'){
+            player.play('right_melee');
+            //console.log(player_dir);
+
+        }
+        else if (player_dir === 'up'){
+            player.play('up_melee');
+            //console.log(player_dir);  
+
+        }
+    }
     else {
         player.frame = dir;
     }
@@ -112,4 +142,29 @@ function update() {
 
 function render() {
     game.debug.body(player);
+}
+
+function meleeAnimation() {
+    // if (player_dir === 'down'){
+    //     player.play('down_melee');
+    //     console.log(player_dir);
+
+    // }
+    // else if (player_dir === 'left'){
+    //     player.play('left_melee');
+    //     console.log(player_dir);
+
+    // }
+    // else if (player_dir === 'right'){
+    //     player.play('right_melee');
+    //     console.log(player_dir);
+
+    // }
+    // else if (player_dir === 'up'){
+    //     player.play('up_melee');
+    //     console.log(player_dir);  
+
+    // }
+    melee_animation_is_playing = true;
+
 }
