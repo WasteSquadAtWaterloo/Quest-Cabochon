@@ -14,7 +14,12 @@ var cursors;
 var player;
 var dir;
 
-function create() {    
+function create() {   
+
+    $(window).resize(function(){
+        game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
+    });
+
     map = game.add.tilemap('map');   
     map.addTilesetImage('roguelikeSheet_transparent','tiles');  
 
@@ -95,3 +100,4 @@ function update() {
 function render() {
     game.debug.body(player);
 }
+
