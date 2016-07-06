@@ -18,6 +18,7 @@ var map;
 var layer1,layer2,layer3,layer4,layer5;
 var cursors, wasd, melee;
 var player;
+var playerHealth, playerMaxHealth; playerHealth = playerMaxHealth = 10;
 var player_dir = 'down';
 var dir = playerFrames.default.down.walk[0];
 var equip = {
@@ -53,6 +54,7 @@ function create() {
 
     layer1.resizeWorld();
 
+    //
     var stand = [];
     for (var i=0; i<25; i++){
         for (var j=5; j<10; j++){
@@ -66,7 +68,8 @@ function create() {
         }
     }
     stand.push(541, 542, 543, 544, 545, 546, 547, 548, 549, 593, 650, 583, 584, 585, 586, 587, 588);
-    
+    //
+
     map.setCollisionByExclusion(stand,true,layer1);      
     map.setCollisionByExclusion(stand,true,layer2);  
     map.setCollisionByExclusion(stand,true,layer3);  
@@ -171,6 +174,8 @@ function update() {
         player.frame = playerFrames.default[player_dir].walk[0];
     }       
 
+
+    game.physics.arcade.overlap(player, spiders, spiderCollisionHandler, null, this);
 }
 
 function render() {
@@ -219,5 +224,16 @@ function meleeAnimation() {
     // }
     melee_animation_is_playing = true;
 
+}
+function spiderCollisionHandler(player, spider) {
+    spider.kill();
+    playerHealth -= 3;
+    if (playerHealth <= 0) {
+        playerDied();
+    }
+}
+function playerDied() {
+    player.kill()
+    
 }
 
