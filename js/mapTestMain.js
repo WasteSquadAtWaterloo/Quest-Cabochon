@@ -4,8 +4,11 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 function preload() {
     game.load.tilemap('map', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
-    game.load.spritesheet('default', 'assets/Spritesheet/player/default.png', 64, 65);
-    game.load.spritesheet('armor1', 'assets/Spritesheet/player/armor1.png', 64, 65);
+
+    game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 65);
+    game.load.spritesheet('{"armor":"leather","weapon":"none"}', 'assets/Spritesheet/player/armor0.png', 64, 65);
+    game.load.spritesheet('{"armor":"plate","weapon":"none"}', 'assets/Spritesheet/player/armor1.png', 64, 65);
+    game.load.spritesheet('{"armor":"gold","weapon":"none"}', 'assets/Spritesheet/player/armor2.png', 64, 65);
 }
 
 var map;
@@ -14,6 +17,10 @@ var cursors, wasd;
 var player;
 var player_dir = 'down';
 var dir = playerFrames.default.down.walk[0];
+var equip = {
+    armor: "none",
+    weapon: "none",
+}
 
 function create() {   
 
@@ -26,14 +33,15 @@ function create() {
 
     Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
-    layer1 = map.createLayer(0); layer1.smoothed = false;layer1.setScale(2);
-    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(2);     
-    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(2);    
-    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(2);
+    layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(2.5);
+    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(2.5);     
+    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(2.5);    
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(2.5);
 
-    player = game.add.sprite(1600, 1600, 'default', playerFrames.default.down.walk[0]);
+    player = game.add.sprite(1600, 1600, JSON.stringify(equip), playerFrames.default.down.walk[0]);
 
-    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(2);      
+    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(2.5);
+
     layer1.resizeWorld();
 
     var stand = [];
@@ -75,11 +83,13 @@ function create() {
     };
 
     wasd.E.onDown.add(function(){
-        player.loadTexture('armor1', dir, true);
+        equip.armor = "plate";
+        player.loadTexture(JSON.stringify(equip), dir, true);
     });
 
     wasd.Q.onDown.add(function(){
-        player.loadTexture('default', dir, true);
+        equip.armor = "none";
+        player.loadTexture(JSON.stringify(equip), dir, true);
     });
     
     game.camera.follow(player);
