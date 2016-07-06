@@ -10,8 +10,9 @@ function preload() {
 
 var map;
 var layer1,layer2,layer3,layer4,layer5;
-var cursors;
+var cursors, wasd;
 var player;
+var player_dir = 'down';
 var dir;
 
 function create() {   
@@ -47,6 +48,7 @@ function create() {
     map.setCollisionByExclusion(stand,true,layer4);  
     map.setCollisionByExclusion(stand,true,layer5);     
 
+
     player.scale.set(1);
 
     player.animations.add('down', playerFrames.default.down.walk, 10, true);
@@ -54,9 +56,19 @@ function create() {
     player.animations.add('right', playerFrames.default.right.walk, 10, true);
     player.animations.add('up', playerFrames.default.up.walk, 10, true);    
 
+
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.setSize(25, 15,20, 40);    
-    cursors = game.input.keyboard.createCursorKeys();   
+
+
+
+    cursors = game.input.keyboard.createCursorKeys(); 
+    wasd = {
+        up: game.input.keyboard.addKey(Phaser.Keyboard.W),
+        left: game.input.keyboard.addKey(Phaser.Keyboard.A),
+        right: game.input.keyboard.addKey(Phaser.Keyboard.D),
+        down: game.input.keyboard.addKey(Phaser.Keyboard.S)
+    };
     
     game.camera.follow(player);
 }
@@ -67,29 +79,35 @@ function update() {
     game.physics.arcade.collide(player, layer2);
     game.physics.arcade.collide(player, layer3);
     game.physics.arcade.collide(player, layer4);
-    game.physics.arcade.collide(player, layer5);
+    //game.physics.arcade.collide(player, layer5);
+
 
     player.body.velocity.set(0);
 
-    if (cursors.left.isDown){
+
+    if (cursors.left.isDown || wasd.left.isDown){
         player.body.velocity.x = -500;
         player.play('left');
         dir = playerFrames.default.left.walk[0];
+        player_dir = 'left';
     }
-    else if (cursors.right.isDown){
+    else if (cursors.right.isDown || wasd.right.isDown){
         player.body.velocity.x = 500;
         player.play('right');
         dir = playerFrames.default.right.walk[0];
+        player_dir = 'right';
     }
-    else if (cursors.up.isDown){
+    else if (cursors.up.isDown || wasd.up.isDown){
         player.body.velocity.y = -500;
         player.play('up');
         dir = playerFrames.default.up.walk[0];
+        player_dir = 'up';
     }
-    else if (cursors.down.isDown){
+    else if (cursors.down.isDown || wasd.down.isDown){
         player.body.velocity.y = 500;
         player.play('down');
         dir = playerFrames.default.down.walk[0];
+        player_dir = 'down';
     }
     else {
         player.frame = dir;
