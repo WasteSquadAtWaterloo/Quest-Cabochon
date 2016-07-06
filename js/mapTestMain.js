@@ -110,33 +110,34 @@ function update() {
     game.physics.arcade.collide(player, layer5);     
 
     player.body.velocity.set(0);
-    
-    if (cursors.left.isDown || wasd.left.isDown){
-        player.body.velocity.x = -500;
-        player.play('left');
-        //dir = playerFrames.default.left.walk[0];
-        player_dir = 'left';
-    }
-    else if (cursors.right.isDown || wasd.right.isDown){
-        player.body.velocity.x = 500;
-        player.play('right');
-        //dir = playerFrames.default.right.walk[0];
-        player_dir = 'right';
-    }
-    else if (cursors.up.isDown || wasd.up.isDown){
-        player.body.velocity.y = -500;
-        player.play('up');
-        //dir = playerFrames.default.up.walk[0];
-        player_dir = 'up';
-    }
-    else if (cursors.down.isDown || wasd.down.isDown){
-        player.body.velocity.y = 500;
-        player.play('down');
-        //dir = playerFrames.default.down.walk[0];
-        player_dir = 'down';
+    if (player.animations.currentAnim.isFinished || player.animations.currentAnim.name.indexOf("melee") === -1){
+        if (cursors.left.isDown || wasd.left.isDown){
+            player.body.velocity.x = -500;
+            player.play('left');
+            //dir = playerFrames.default.left.walk[0];
+            player_dir = 'left';
+        }
+        else if (cursors.right.isDown || wasd.right.isDown){
+            player.body.velocity.x = 500;
+            player.play('right');
+            //dir = playerFrames.default.right.walk[0];
+            player_dir = 'right';
+        }
+        else if (cursors.up.isDown || wasd.up.isDown){
+            player.body.velocity.y = -500;
+            player.play('up');
+            //dir = playerFrames.default.up.walk[0];
+            player_dir = 'up';
+        }
+        else if (cursors.down.isDown || wasd.down.isDown){
+            player.body.velocity.y = 500;
+            player.play('down');
+            //dir = playerFrames.default.down.walk[0];
+            player_dir = 'down';
+        }
     }
 
-    else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
+    if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
         melee_animation_is_playing = false;
 
         //Calculate direction        
