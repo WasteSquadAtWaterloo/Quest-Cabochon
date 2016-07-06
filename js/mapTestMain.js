@@ -4,8 +4,8 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 function preload() {
     game.load.tilemap('map', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
-    game.load.spritesheet('player', 'assets/Spritesheet/player/default.png', 64, 65);
-
+    game.load.spritesheet('default', 'assets/Spritesheet/player/default.png', 64, 65);
+    game.load.spritesheet('armor1', 'assets/Spritesheet/player/armor1.png', 64, 65);
 }
 
 var map;
@@ -13,7 +13,7 @@ var layer1,layer2,layer3,layer4,layer5;
 var cursors, wasd;
 var player;
 var player_dir = 'down';
-var dir;
+var dir = playerFrames.default.down.walk[0];
 
 function create() {   
 
@@ -29,8 +29,10 @@ function create() {
     layer1 = map.createLayer(0); layer1.smoothed = false;layer1.setScale(2);
     layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(2);     
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(2);    
-    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(2); 
-    player = game.add.sprite(1600, 1600, 'player', playerFrames.default.down.walk[0]);  
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(2);
+
+    player = game.add.sprite(1600, 1600, 'default', playerFrames.default.down.walk[0]);
+
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(2);      
     layer1.resizeWorld();
 
@@ -67,8 +69,18 @@ function create() {
         up: game.input.keyboard.addKey(Phaser.Keyboard.W),
         left: game.input.keyboard.addKey(Phaser.Keyboard.A),
         right: game.input.keyboard.addKey(Phaser.Keyboard.D),
-        down: game.input.keyboard.addKey(Phaser.Keyboard.S)
+        down: game.input.keyboard.addKey(Phaser.Keyboard.S),
+        E: game.input.keyboard.addKey(Phaser.Keyboard.E),
+        Q: game.input.keyboard.addKey(Phaser.Keyboard.Q),
     };
+
+    wasd.E.onDown.add(function(){
+        player.loadTexture('armor1', dir, true);
+    });
+
+    wasd.Q.onDown.add(function(){
+        player.loadTexture('default', dir, true);
+    });
     
     game.camera.follow(player);
 }
@@ -78,12 +90,9 @@ function update() {
     game.physics.arcade.collide(player, layer1);
     game.physics.arcade.collide(player, layer2);
     game.physics.arcade.collide(player, layer3);
-    game.physics.arcade.collide(player, layer4);
-    //game.physics.arcade.collide(player, layer5);
-
+    game.physics.arcade.collide(player, layer4);    
 
     player.body.velocity.set(0);
-
 
     if (cursors.left.isDown || wasd.left.isDown){
         player.body.velocity.x = -500;
@@ -111,11 +120,11 @@ function update() {
     }
     else {
         player.frame = dir;
-    }
+    }       
 
 }
 
 function render() {
-    game.debug.body(player);
+    //game.debug.body(player);
 }
 
