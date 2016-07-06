@@ -4,7 +4,7 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 function preload() {
     game.load.tilemap('map', 'assets/Map/lev1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
-
+    game.load.image('attackBox', 'assets/blank.png');
 
     game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
     game.load.spritesheet('{"armor":"leather","weapon":"none"}', 'assets/Spritesheet/player/armor0.png', 64, 64);
@@ -17,7 +17,7 @@ function preload() {
 var map;
 var layer1,layer2,layer3,layer4,layer5;
 var cursors, wasd, melee;
-var damageTime = 0;
+var damageTime = 0, atkTime = 0;
 var player;
 var playerHealth, playerMaxHealth; playerHealth = playerMaxHealth = 10;
 var player_dir = 'down';
@@ -27,6 +27,13 @@ var equip = {
     weapon: "none",
 }
 var spiders;
+var atkBox;
+var atkOpts = {
+    "up": {x:0, y:-25},
+    "down": {x:0, y:10},
+    "right": {x:25, y:-10},
+    "left": {x:-25, y:-10}
+};
 
 function create() {   
 
@@ -39,6 +46,9 @@ function create() {
 
     Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
+    atkBox = game.add.sprite(2388,2383, "attackBox");
+    game.physics.enable(atkBox, Phaser.Physics.ARCADE);
+
     layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
     layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
@@ -50,11 +60,9 @@ function create() {
     createSpiders();
 
     player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.default.down.walk[0]);
-    
-    //player.maxHealth = 100
+        
     player.setHealth(100);
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
-
 
     layer1.resizeWorld();   
 
@@ -78,7 +86,7 @@ function create() {
     player.animations.add('up_melee', playerFrames.default.up.attack, 15, false); 
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(25, 15,20, 40);
+    player.body.setSize(25, 15, 20, 40);
 
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
@@ -108,7 +116,7 @@ function create() {
 
 function update() { 
 
-    if (player.alive){  
+    if (player.alive){     
         game.physics.arcade.collide(player, layer1);
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
@@ -120,34 +128,30 @@ function update() {
         if (player.animations.currentAnim.isFinished || player.animations.currentAnim.name.indexOf("melee") === -1){
             if (cursors.left.isDown || wasd.left.isDown){
                 player.body.velocity.x = -500;
-                player.play('left');
-                //dir = playerFrames.default.left.walk[0];
+                player.play('left');                
                 player_dir = 'left';
             }
             else if (cursors.right.isDown || wasd.right.isDown){
                 player.body.velocity.x = 500;
-                player.play('right');
-                //dir = playerFrames.default.right.walk[0];
+                player.play('right');                
                 player_dir = 'right';
             }
             else if (cursors.up.isDown || wasd.up.isDown){
                 player.body.velocity.y = -500;
-                player.play('up');
-                //dir = playerFrames.default.up.walk[0];
+                player.play('up');                
                 player_dir = 'up';
             }
             else if (cursors.down.isDown || wasd.down.isDown){
                 player.body.velocity.y = 500;
-                player.play('down');
-                //dir = playerFrames.default.down.walk[0];
+                player.play('down');                
                 player_dir = 'down';
             }
         }
+        
 
 
+        if (game.input.activePointer.leftButton.isDown){   
 
-
-        else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
             melee_animation_is_playing = false;
 
             //Calculate direction        
@@ -159,22 +163,32 @@ function update() {
             if (Math.abs(dif_x) >= Math.abs(dif_y)){
                 player_dir = dif_x>=0 ? 'right' : 'left';
             }
-            else if (Math.abs(dif_x) <= Math.abs(dif_y)){
+            else{
                 player_dir = dif_y>=0 ? 'down' : 'up';
-            }
-            player.play(player_dir+"_melee");
+            }            
 
-            //Deal Damage to whatever is in front of it
-            console.log(game.physics.arcade.distanceBetween(spiders,player));
-        }   
+            player.play(player_dir+"_melee");            
+        } 
+
+        if(player.animations.currentAnim.name.indexOf("melee") != -1 && !player.animations.currentAnim.isFinished){
+            atkBox.x = player.body.x+atkOpts[player_dir].x;
+            atkBox.y = player.body.y+atkOpts[player_dir].y;
+        }else{
+            atkBox.x = -100;
+            atkBox.y = -100; 
+        }  
             
-        else if (player.animations.currentAnim.isFinished){        
+        if (player.animations.currentAnim.isFinished){        
             player.frame = playerFrames.default[player_dir].walk[0];
         }       
 
         //Put all damage/collision detection in this if statement
         if (game.time.now - damageTime > 300){
-            game.physics.arcade.overlap(player, spiders, spiderCollisionHandler, null, this);
+            game.physics.arcade.overlap(player, spiders, spiderCollisionHandler, null, this);            
+        }
+
+        if(game.time.now - atkTime > 200){
+            game.physics.arcade.overlap(atkBox, spiders, attackCollisionHandler, null, this);
         }
     }
 }
@@ -183,6 +197,8 @@ function render() {
     spiders.forEach(function(mob){
         //game.debug.body(mob);
     });
+    game.debug.body(atkBox);
+    game.debug.body(player);
 }
 
 function createSpiders(){
@@ -247,6 +263,10 @@ function meleeAnimation() {
 function spiderCollisionHandler(player, spider) {
     damageTime = game.time.now;
     player.damage(5);
-    updateHealthBar();
-    console.log(player.health);
+    updateHealthBar();   
+}
+
+function attackCollisionHandler(atkBox, spider){
+    atkTime = game.time.now;
+    console.log("hit!");
 }
