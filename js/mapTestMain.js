@@ -75,9 +75,7 @@ function create() {
     player.animations.add('up_melee', playerFrames.default.up.attack, 15, false); 
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(25, 15,20, 40);    
-
-
+    player.body.setSize(25, 15,20, 40);
 
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
@@ -190,6 +188,18 @@ function createSpiders(){
         
     });
     
+}
+
+function updateHealthBar(){
+    var pc = Math.ceil(playerHealth/playerMaxHealth*10);
+
+    $("#red-bars").empty();
+    for (var i=0; i<pc; i++){
+        var hp = $('<img />', {           
+          src: 'assets/HUD/hp_bar.png'          
+        });
+        hp.appendTo($("#red-bars"));
+    }
 }
 
 function meleeAnimation() {

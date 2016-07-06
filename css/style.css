@@ -1,9 +1,7 @@
 #container {
   	position: relative;
 }
-.hud {
-  width: 100%;
-  height: 100%;
+.hud {  
   position: absolute;
   top: 15px;
   left: 15px;
@@ -11,10 +9,14 @@
 .hud .bar {
 	right: 10;
 }
-.ps {
-  width: 100%;
-  height: 100%;
+.ps {  
   position: absolute;
   top: 0;
   left: 0;
+}
+
+#red-bars {  
+  position: fixed;
+  top: 32px;
+  left: 109px;
 }
