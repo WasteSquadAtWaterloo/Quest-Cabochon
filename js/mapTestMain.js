@@ -78,9 +78,7 @@ function create() {
     player.animations.add('up_melee', playerFrames.default.up.attack, 15, false); 
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(25, 15,20, 40);    
-
-
+    player.body.setSize(25, 15,20, 40);
 
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
@@ -104,6 +102,7 @@ function create() {
     });
     
     game.camera.follow(player);
+    updateHealthBar();
 }
 
 
@@ -117,31 +116,36 @@ function update() {
         game.physics.arcade.collide(player, layer5);     
 
         player.body.velocity.set(0);
-        
-        if (cursors.left.isDown || wasd.left.isDown){
-            player.body.velocity.x = -500;
-            player.play('left');
-            //dir = playerFrames.default.left.walk[0];
-            player_dir = 'left';
+
+        if (player.animations.currentAnim.isFinished || player.animations.currentAnim.name.indexOf("melee") === -1){
+            if (cursors.left.isDown || wasd.left.isDown){
+                player.body.velocity.x = -500;
+                player.play('left');
+                //dir = playerFrames.default.left.walk[0];
+                player_dir = 'left';
+            }
+            else if (cursors.right.isDown || wasd.right.isDown){
+                player.body.velocity.x = 500;
+                player.play('right');
+                //dir = playerFrames.default.right.walk[0];
+                player_dir = 'right';
+            }
+            else if (cursors.up.isDown || wasd.up.isDown){
+                player.body.velocity.y = -500;
+                player.play('up');
+                //dir = playerFrames.default.up.walk[0];
+                player_dir = 'up';
+            }
+            else if (cursors.down.isDown || wasd.down.isDown){
+                player.body.velocity.y = 500;
+                player.play('down');
+                //dir = playerFrames.default.down.walk[0];
+                player_dir = 'down';
+            }
         }
-        else if (cursors.right.isDown || wasd.right.isDown){
-            player.body.velocity.x = 500;
-            player.play('right');
-            //dir = playerFrames.default.right.walk[0];
-            player_dir = 'right';
-        }
-        else if (cursors.up.isDown || wasd.up.isDown){
-            player.body.velocity.y = -500;
-            player.play('up');
-            //dir = playerFrames.default.up.walk[0];
-            player_dir = 'up';
-        }
-        else if (cursors.down.isDown || wasd.down.isDown){
-            player.body.velocity.y = 500;
-            player.play('down');
-            //dir = playerFrames.default.down.walk[0];
-            player_dir = 'down';
-        }
+
+
+
 
         else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
             melee_animation_is_playing = false;
@@ -161,11 +165,9 @@ function update() {
             player.play(player_dir+"_melee");
 
             //Deal Damage to whatever is in front of it
-            console.log(game.physics.arcade.distanceBetween(spider,player));
-
-
-
-        }
+            console.log(game.physics.arcade.distanceBetween(spiders,player));
+        }   
+            
         else if (player.animations.currentAnim.isFinished){        
             player.frame = playerFrames.default[player_dir].walk[0];
         }       
@@ -173,8 +175,6 @@ function update() {
         //Put all damage/collision detection in this if statement
         if (game.time.now - damageTime > 300){
             game.physics.arcade.overlap(player, spiders, spiderCollisionHandler, null, this);
-
-
         }
     }
 }
@@ -208,6 +208,18 @@ function createSpiders(){
     
 }
 
+function updateHealthBar(){
+    var pc = Math.ceil(player.health/player.maxHealth*10);
+
+    $("#red-bars").empty();
+    for (var i=0; i<pc; i++){
+        var hp = $('<img />', {           
+          src: 'assets/HUD/hp_bar.png'          
+        });
+        hp.appendTo($("#red-bars"));
+    }
+}
+
 function meleeAnimation() {
     // if (player_dir === 'down'){
     //     player.play('down_melee');
@@ -235,5 +247,6 @@ function meleeAnimation() {
 function spiderCollisionHandler(player, spider) {
     damageTime = game.time.now;
     player.damage(5);
+    updateHealthBar();
     console.log(player.health);
 }
