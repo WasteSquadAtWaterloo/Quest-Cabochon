@@ -11,6 +11,7 @@ function preload() {
     game.load.spritesheet('{"armor":"plate","weapon":"none"}', 'assets/Spritesheet/player/armor1.png', 64, 64);
     game.load.spritesheet('{"armor":"gold","weapon":"none"}', 'assets/Spritesheet/player/armor2.png', 64, 64);
 
+    game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
 }
 
 var map;
@@ -23,6 +24,7 @@ var equip = {
     armor: "none",
     weapon: "none",
 }
+var spiders;
 
 function create() {   
 
@@ -38,9 +40,16 @@ function create() {
     layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
     layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
-    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);    
+        
+    spiders = game.add.group();
+    spiders.enableBody = true;
+    spiders.physicsBodyType = Phaser.Physics.ARCADE;
+    createSpiders();
+
     player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.default.down.walk[0]);
-    //layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
+
+    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
 
     layer1.resizeWorld();
 
@@ -65,6 +74,7 @@ function create() {
     map.setCollisionByExclusion(stand,true,layer5);
 
     player.scale.set(1);
+    player.anchor.setTo(0.5,0.5);
 
     player.animations.add('down', playerFrames.default.down.walk, 10, false);
     player.animations.add('left', playerFrames.default.left.walk, 10, false);    
@@ -164,7 +174,26 @@ function update() {
 }
 
 function render() {
-    //game.debug.body(player);
+    spiders.forEach(function(mob){
+        game.debug.body(mob);
+    });
+}
+
+function createSpiders(){
+
+    for (var i=1; i<=2; i++){
+        for (var j=1; j<=2; j++){
+            var spider = spiders.create(Math.random()*480+480*i, Math.random()*480+480*j, "spider");
+            spider.anchor.setTo(0.5, 0.5);     
+            spider.scale.set(1.5);       
+            spider.animations.add('move', enemyFrames.spider.up.walk, 15, true);              
+            spider.play('move');
+            spider.body.moves = false;
+        }
+    }
+
+    spiders.x = 480;
+    spiders.y = 480;
 }
 
 function meleeAnimation() {
@@ -191,3 +220,4 @@ function meleeAnimation() {
     melee_animation_is_playing = true;
 
 }
+
