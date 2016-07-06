@@ -4,8 +4,8 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 function preload() {
     game.load.tilemap('map', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
-    game.load.spritesheet('default', 'assets/Spritesheet/player/default.png', 64, 65);
-    game.load.spritesheet('armor1', 'assets/Spritesheet/player/armor1.png', 64, 65);
+    game.load.spritesheet('default', 'assets/Spritesheet/player/default.png', 64, 64);
+    game.load.spritesheet('armor1', 'assets/Spritesheet/player/armor1.png', 64, 64);
 }
 
 var map;
@@ -102,29 +102,55 @@ function update() {
     if (cursors.left.isDown || wasd.left.isDown){
         player.body.velocity.x = -500;
         player.play('left');
-        dir = playerFrames.default.left.walk[0];
+        //dir = playerFrames.default.left.walk[0];
         player_dir = 'left';
     }
     else if (cursors.right.isDown || wasd.right.isDown){
         player.body.velocity.x = 500;
         player.play('right');
-        dir = playerFrames.default.right.walk[0];
+        //dir = playerFrames.default.right.walk[0];
         player_dir = 'right';
     }
     else if (cursors.up.isDown || wasd.up.isDown){
         player.body.velocity.y = -500;
         player.play('up');
-        dir = playerFrames.default.up.walk[0];
+        //dir = playerFrames.default.up.walk[0];
         player_dir = 'up';
     }
     else if (cursors.down.isDown || wasd.down.isDown){
         player.body.velocity.y = 500;
         player.play('down');
-        dir = playerFrames.default.down.walk[0];
+        //dir = playerFrames.default.down.walk[0];
         player_dir = 'down';
     }
     else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
-        //melee_animation_is_playing = false;
+        melee_animation_is_playing = false;
+
+        //Calculate direction
+        console.log(player.position.x - game.camera.x, player.position.y-game.camera.y, game.input.mousePointer.x, game.input.mousePointer.y)
+        var player_screen_x = player.position.x - game.camera.x;
+        var player_screen_y = player.position.y - game.camera.y;
+        var dif_x = game.input.mousePointer.x - player_screen_x;
+        var dif_y = game.input.mousePointer.y - player_screen_y;
+
+        if (Math.abs(dif_x) >= Math.abs(dif_y)){
+            if (dif_x >= 0) {
+                player_dir = 'right';
+            }
+            else {
+                player_dir = 'left';
+            }
+        }
+        else if (Math.abs(dif_x) <= Math.abs(dif_y)){
+            if (dif_y >= 0) {
+                player_dir = 'down';
+            }
+            else {
+                player_dir = 'up';
+            }
+        }
+
+
         if (player_dir === 'down'){
             player.play('down_melee');
             //console.log(player_dir);
@@ -147,13 +173,33 @@ function update() {
         }
     }
     else {
+        if (player_dir === 'down'){
+            dir = playerFrames.default.down.walk[0];
+            //console.log(player_dir);
+
+        }
+        else if (player_dir === 'left'){
+            dir = playerFrames.default.left.walk[0];
+            //console.log(player_dir);
+
+        }
+        else if (player_dir === 'right'){
+            dir = playerFrames.default.right.walk[0];
+            //console.log(player_dir);
+
+        }
+        else if (player_dir === 'up'){
+           dir = playerFrames.default.up.walk[0];
+            //console.log(player_dir);  
+
+        }
         player.frame = dir;
     }       
 
 }
 
 function render() {
-    game.debug.body(player);
+    //game.debug.body(player);
 }
 
 function meleeAnimation() {
