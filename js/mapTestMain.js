@@ -40,7 +40,7 @@ function create() {
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
     player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.default.down.walk[0]);
-    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
+    //layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
 
     layer1.resizeWorld();
 
@@ -66,10 +66,10 @@ function create() {
 
     player.scale.set(1);
 
-    player.animations.add('down', playerFrames.default.down.walk, 10, true);
-    player.animations.add('left', playerFrames.default.left.walk, 10, true);    
-    player.animations.add('right', playerFrames.default.right.walk, 10, true);
-    player.animations.add('up', playerFrames.default.up.walk, 10, true); 
+    player.animations.add('down', playerFrames.default.down.walk, 10, false);
+    player.animations.add('left', playerFrames.default.left.walk, 10, false);    
+    player.animations.add('right', playerFrames.default.right.walk, 10, false);
+    player.animations.add('up', playerFrames.default.up.walk, 10, false); 
 
     player.animations.add('down_melee', playerFrames.default.down.attack, 15, false);
     player.animations.add('left_melee', playerFrames.default.left.attack, 15, false);    
@@ -114,7 +114,7 @@ function update() {
     game.physics.arcade.collide(player, layer5);     
 
     player.body.velocity.set(0);
-
+    
     if (cursors.left.isDown || wasd.left.isDown){
         player.body.velocity.x = -500;
         player.play('left');
@@ -143,74 +143,22 @@ function update() {
     else if (game.input.activePointer.leftButton.isDown){ //else if (melee_animation_is_playing){ //melee.isDown
         melee_animation_is_playing = false;
 
-        //Calculate direction
-        console.log(player.position.x - game.camera.x, player.position.y-game.camera.y, game.input.mousePointer.x, game.input.mousePointer.y)
+        //Calculate direction        
         var player_screen_x = player.position.x - game.camera.x;
         var player_screen_y = player.position.y - game.camera.y;
         var dif_x = game.input.mousePointer.x - player_screen_x;
         var dif_y = game.input.mousePointer.y - player_screen_y;
 
         if (Math.abs(dif_x) >= Math.abs(dif_y)){
-            if (dif_x >= 0) {
-                player_dir = 'right';
-            }
-            else {
-                player_dir = 'left';
-            }
+            player_dir = dif_x>=0 ? 'right' : 'left';
         }
         else if (Math.abs(dif_x) <= Math.abs(dif_y)){
-            if (dif_y >= 0) {
-                player_dir = 'down';
-            }
-            else {
-                player_dir = 'up';
-            }
+            player_dir = dif_y>=0 ? 'down' : 'up';
         }
-
-
-        if (player_dir === 'down'){
-            player.play('down_melee');
-            //console.log(player_dir);
-
-        }
-        else if (player_dir === 'left'){
-            player.play('left_melee');
-            //console.log(player_dir);
-
-        }
-        else if (player_dir === 'right'){
-            player.play('right_melee');
-            //console.log(player_dir);
-
-        }
-        else if (player_dir === 'up'){
-            player.play('up_melee');
-            //console.log(player_dir);  
-
-        }
+        player.play(player_dir+"_melee");
     }
-    else {
-        if (player_dir === 'down'){
-            dir = playerFrames.default.down.walk[0];
-            //console.log(player_dir);
-
-        }
-        else if (player_dir === 'left'){
-            dir = playerFrames.default.left.walk[0];
-            //console.log(player_dir);
-
-        }
-        else if (player_dir === 'right'){
-            dir = playerFrames.default.right.walk[0];
-            //console.log(player_dir);
-
-        }
-        else if (player_dir === 'up'){
-           dir = playerFrames.default.up.walk[0];
-            //console.log(player_dir);  
-
-        }
-        player.frame = dir;
+    else if (player.animations.currentAnim.isFinished){        
+        player.frame = playerFrames.default[player_dir].walk[0];
     }       
 
 }
