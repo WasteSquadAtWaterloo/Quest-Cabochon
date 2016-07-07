@@ -35,10 +35,10 @@ var equip = {
 var spiders;
 var atkBox;
 var atkOpts = {
-    "up": {x:0, y:-25},
-    "down": {x:0, y:10},
-    "right": {x:25, y:-10},
-    "left": {x:-25, y:-10}
+    "up": {x:-2.5, y:-30},
+    "down": {x:-2.5, y:15},
+    "right": {x:25, y:-12.5},
+    "left": {x:-25, y:-12.5}
 };
 
 function create() {   
@@ -260,15 +260,16 @@ function createSpiders(){
             spider.animations.add('move', enemyFrames.spider.down.walk, 10, true);              
             spider.play('move');
             spider.body.moves = false;
+            
+            game.add.tween(spider).to( { x: spider.x+(Math.random()*100+100)*randSign(), y: spider.y+(Math.random()*200-100)*randSign()}, 1000, null, true, Math.random()*5000, -1, true);
         }
     }
 
     spiders.x = 480;
     spiders.y = 480;
+
     spiders.forEach(function(mob){
         game.add.tween(mob).to( { x: Math.random()*200 }, Math.random()*5000+5000, Phaser.Easing.Circular.None, true, 0, 1000, true);        
-        
-    });
     
 }
 
