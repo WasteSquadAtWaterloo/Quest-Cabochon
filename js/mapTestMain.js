@@ -29,8 +29,8 @@ var equip = {
 var spiders;
 var atkBox;
 var atkOpts = {
-    "up": {x:0, y:-25},
-    "down": {x:0, y:10},
+    "up": {x:-2.5, y:-25},
+    "down": {x:-2.5, y:10},
     "right": {x:25, y:-10},
     "left": {x:-25, y:-10}
 };
@@ -47,6 +47,7 @@ function create() {
     Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
     atkBox = game.add.sprite(2388,2383, "attackBox");
+    atkBox.body.setSize(0,0,50,50);
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
 
     layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
@@ -73,17 +74,17 @@ function create() {
     map.setCollisionByExclusion(stand,true,layer5);
 
     player.scale.set(1);
-    player.anchor.setTo(0.5,0.5);
-
-    player.animations.add('down', playerFrames.default.down.walk, 10, false);
-    player.animations.add('left', playerFrames.default.left.walk, 10, false);    
-    player.animations.add('right', playerFrames.default.right.walk, 10, false);
-    player.animations.add('up', playerFrames.default.up.walk, 10, false); 
+    player.anchor.setTo(0.5,0.5);   
 
     player.animations.add('down_melee', playerFrames.default.down.attack, 15, false);
     player.animations.add('left_melee', playerFrames.default.left.attack, 15, false);    
     player.animations.add('right_melee', playerFrames.default.right.attack, 15, false);
     player.animations.add('up_melee', playerFrames.default.up.attack, 15, false); 
+
+    player.animations.add('down', playerFrames.default.down.walk, 10, false);
+    player.animations.add('left', playerFrames.default.left.walk, 10, false);    
+    player.animations.add('right', playerFrames.default.right.walk, 10, false);
+    player.animations.add('up', playerFrames.default.up.walk, 10, false); 
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.setSize(25, 15, 20, 40);
@@ -110,6 +111,7 @@ function create() {
     });
     
     game.camera.follow(player);
+    player.animations.play("down");
     updateHealthBar();
 }
 
@@ -218,7 +220,7 @@ function createSpiders(){
     spiders.x = 480;
     spiders.y = 480;
     spiders.forEach(function(mob){
-        game.add.tween(mob).to( { x: Math.random()*200 }, Math.random()*5000+5000, Phaser.Easing.Linear.None, true, 0, 1000, true);        
+        game.add.tween(mob).to( { x: Math.random()*200 }, Math.random()*5000+7500, Phaser.Easing.Linear.None, true, 0, 1000, true);        
         
     });
     
