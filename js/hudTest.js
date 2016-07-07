@@ -25,6 +25,7 @@ var equip = {
     armor: "none",
     weapon: "none",
 }
+var playerAtk = 3;
 var spiders;
 var atkBox;
 var atkOpts = {
@@ -32,6 +33,11 @@ var atkOpts = {
     "down": {x:-2.5, y:15},
     "right": {x:25, y:-12.5},
     "left": {x:-25, y:-12.5}
+};
+
+var dmgTxtStyle = {
+    font: "bold 18px Courier",
+    fill: "red",
 };
 
 function create() {   
@@ -85,7 +91,7 @@ function create() {
     player.animations.add('up_melee', playerFrames.default.up.attack, 15, false); 
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(25, 15, 20, 40);
+    player.body.setSize(25, 20, 20, 45);
 
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
@@ -253,19 +259,31 @@ function mobHealthBarManager(mobMaxHealth, mobHealth){
 }
 
 function spiderCollisionHandler(player, spider) {
+    game.camera.shake(0.003, 500, true);
+
     damageTime = game.time.now;
     player.damage(5);
     updateHealthBar();   
 }
 
 function attackCollisionHandler(atkBox, spider){
+    //Damage TExt
+    var dmgTxt = game.add.text(spider.x+spiders.x, spider.y+spiders.y, playerAtk.toString() ,dmgTxtStyle);
+    game.add.tween(dmgTxt).to({y: dmgTxt.y-50}, 2000, Phaser.Easing.Default, true);
+    var tweenTxt = game.add.tween(dmgTxt).to( { alpha: 0 }, 3000, "Linear", true);
+    console.log(tweenTxt);
+    tweenTxt.onComplete.add(function(){
+        dmgTxt.destroy(); 
+        console.log("done");
+    });
+
     atkTime = game.time.now;
-    spider.damage(3);
+    spider.damage(playerAtk);
     var madeBar = mobHealthBarManager(10, spider.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
 
     spider.removeChildAt(0);
     spider.addChild(monHealthBar);
 
-    console.log("hit!");
+    console.log(dmgTxt.x, dmgTxt.y);
 }
