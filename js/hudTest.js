@@ -8,6 +8,10 @@ function preload() {
     game.load.image('attackBox', 'assets/blank.png');
     game.load.image('characterHud', 'assets/HUD/character_hud.png');
     game.load.image('emptySlot', 'assets/HUD/empty_slot.png');
+    game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
+    game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
+    game.load.image('swordSlot', 'assets/HUD/sword_slot.png');
+
 
     game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
     game.load.spritesheet('{"armor":"leather","weapon":"none"}', 'assets/Spritesheet/player/armor0.png', 64, 64);
@@ -23,6 +27,14 @@ function preload() {
 var map;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
+var inventoryAvailability = [];
+var helmet_slot, sword_slot, chest_slot;
+var helmetAvailability, swordAvailability, chestAvailability; helmetAvailability = chestAvailability = swordAvailability = true;
+
+for (var i=0;i<24;i++){
+    inventoryAvailability[i] = true;
+}
+
 var buttonCreated = 0;
 var layer1,layer2,layer3,layer4,layer5;
 var cursors, wasd, melee;
@@ -82,11 +94,6 @@ function create() {
     inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
     inventory.fixedToCamera = true;
 
-    //var inventorySlots = game.add.group();
-    items.armor0 = itemFrames.load('armor0', 1600, 1600);
-    items.armor1 = itemFrames.load('armor1', 1600, 1600);
-    items.armor2 = itemFrames.load('armor2', 1600, 1600);
-
     for (var i=0; i<4; i++){
         for (var j=0; j<6; j++){
             var givenFunction = inventoryCreator();
@@ -95,6 +102,47 @@ function create() {
             buttonCreated += 1
         }
     }
+    //Adding equip slots
+    sword_slot = game.make.button(214,167 ,"swordSlot", function() {
+         try { //Removing an item
+            var item = sword_slot.getChildAt(0);
+            sword_slot.removeChildAt(0);
+            pickUpItems(item, player);
+            swordAvailability = true;
+        }
+        catch(err){
+        }
+    }, this);
+    helmet_slot = game.make.button(258,98 ,"helmetSlot", function() {
+         try { //Removing an item
+            var item = helmet_slot.getChildAt(0);
+            helmet_slot.removeChildAt(0);
+            pickUpItems(item, player);
+            helmetAvailability = true;
+        }
+        catch(err){
+
+        }
+    }, this);
+    chest_slot = game.make.button(258 ,146 ,"chestSlot", function() {
+         try { //Removing an item
+            var item = chest_slot.getChildAt(0);
+            chest_slot.removeChildAt(0);
+            pickUpItems(item, player);
+            chestAvailability = true;
+        }
+        catch(err){
+
+        }
+    }, this);
+
+    inventory.addChild(sword_slot);
+    inventory.addChild(helmet_slot);
+    inventory.addChild(chest_slot);
+    
+    items.armor0 = itemFrames.load('armor0', 1600, 1600); game.physics.enable(items.armor0, Phaser.Physics.ARCADE);
+    items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
+    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);
 
     map.setCollisionByExclusion(stand,true,layer1);      
     map.setCollisionByExclusion(stand,true,layer2);  
@@ -230,11 +278,15 @@ function update() {
             
         if (player.animations.currentAnim.isFinished){        
             player.frame = playerFrames[player_dir].walk[0];
-        }            
+        }        
 
-        
+        //item pick up
+        game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, this);
+        game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, this);
+        game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, this);        
     }
 
+    //ENemy collion + revive
     for (var enemyGroup in enemys){  
         if (game.time.now - damageTime > 500){
             game.physics.arcade.overlap(player, enemys[enemyGroup], enemyCollisionHandler, null, this);            
@@ -245,15 +297,12 @@ function update() {
         }
 
         enemys[enemyGroup].forEach(function(mob){
-
             if (!mob.alive && game.time.now - mob.deathTime >= 15000){
                 mob.revive();
                 mob.setHealth(mob.maxHealth);
-
                 var madeBar = mobHealthBarManager(10, mob.health);
                 var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
                 mob.addChild(monHealthBar);
-
             }
         });
     }    
@@ -283,18 +332,42 @@ function updateHealthBar(){
 function inventoryCreator(){
     var id = buttonCreated;
     function generatedFunction(){
-        try { //Removing an item/ equiping an item
+        try { //equiping an item
             var item = inventorySlots[id].getChildAt(0);
-            inventorySlots[id].removeChildAt(0);
+            //Check item type
 
+            inventorySlots[id].removeChildAt(0);
+            inventoryAvailability[id] = true;
+            if (chestAvailability) { //There is a free chest armor space
+                chest_slot.addChild(item);
+                chestAvailability = false;
+            }
+            else { //there is no free chest armor space
+                var temp = chest_slot.getChildAt(0);
+                chest_slot.removeChildAt(0);
+                chest_slot.addChild(item);
+                pickUpItems(temp, player);
+            }
         }
         catch(err){ //Adding an item
             console.log(err);
 
         }
     }
-
     return generatedFunction;
+}
+
+function pickUpItems(item, player) {
+    for (var i=0; i<24; i++){
+        if (inventoryAvailability[i]) {
+            item.x = 0;
+            item.y = 0;
+            inventorySlots[i].addChild(item);
+            inventoryAvailability[i] = false;
+            console.log(i);
+            break;
+        }
+    }
 }
 
 function mobHealthBarManager(mobMaxHealth, mobHealth){
