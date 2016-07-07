@@ -2,7 +2,7 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 
 
 function preload() {
-    game.load.tilemap('map', 'assets/Map/lev1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
     game.load.image('attackBox', 'assets/blank.png');
@@ -34,7 +34,7 @@ var equip = {
     weapon: "none",
 }
 var playerAtk = 3;
-var spiders;
+var enemys = {};
 var atkBox;
 var atkOpts = {
     "up": {x:-2.5, y:-30},
@@ -67,10 +67,7 @@ function create() {
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);    
         
-    spiders = game.add.group();
-    spiders.enableBody = true;
-    spiders.physicsBodyType = Phaser.Physics.ARCADE;
-    createSpiders();
+    initEnemys();
 
     player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.down.walk[0]);
     player.setHealth(100);
@@ -88,7 +85,6 @@ function create() {
     items.armor1 = itemFrames.load('armor1', 1600, 1600);
     items.armor2 = itemFrames.load('armor2', 1600, 1600);
 
-
     for (var i=0; i<4; i++){
         for (var j=0; j<6; j++){
             var givenFunction = inventoryCreator();
@@ -97,10 +93,6 @@ function create() {
             buttonCreated += 1
         }
     }
-
-    
-
-
 
     map.setCollisionByExclusion(stand,true,layer1);      
     map.setCollisionByExclusion(stand,true,layer2);  
@@ -240,49 +232,38 @@ function update() {
 
         //Put all damage/collision detection in this if statement
         if (game.time.now - damageTime > 300){
-            game.physics.arcade.overlap(player, spiders, enemyCollisionHandler, null, this);            
+            game.physics.arcade.overlap(player, enemys.spiders, enemyCollisionHandler, null, this);            
         }
 
         if(game.time.now - atkTime > 500){
-            game.physics.arcade.overlap(atkBox, spiders, attackCollisionHandler, null, spiders);
+            game.physics.arcade.overlap(atkBox, enemys.spiders, attackCollisionHandler, null, enemys.spiders);
         }
     }
+
+    for (var enemyGroup in enemys){        
+        enemys[enemyGroup].forEach(function(mob){
+            if (!mob.alive && game.time.now - mob.deathTime >= 15000){
+                mob.revive();
+                mob.setHealth(mob.maxHealth);
+
+                var madeBar = mobHealthBarManager(10, mob.health);
+                var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
+                mob.addChild(monHealthBar);
+
+            }
+        });
+    }    
 }
 
 function render() {
-    spiders.forEach(function(mob){
+    enemys.spiders.forEach(function(mob){
         //game.debug.body(mob);
     });
     game.debug.body(atkBox);
     game.debug.body(player);
 }
 
-function createSpiders(){
 
-    for (var i=1; i<=2; i++){
-        for (var j=1; j<=2; j++){
-            var spider = spiders.create(Math.random()*480+480*i, Math.random()*480+480*j, "spider");
-            spider.setHealth(10);
-            //spider.anchor.setTo(0.5, 0.5);  
-
-            var madeBar = mobHealthBarManager(10, spider.health);
-            var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
-            spider.addChild(monHealthBar);
-
-            spider.scale.set(1.5);       
-            spider.animations.add('move', enemyFrames.spider.down.walk, 10, true);              
-            spider.play('move');
-            spider.body.moves = false;
-            spider.atk = 5;
-            
-            game.add.tween(spider).to( { x: spider.x+(Math.random()*100+100)*randSign(), y: spider.y+(Math.random()*200-100)*randSign()}, 1000, null, true, Math.random()*5000, -1, true);
-        }
-    }
-
-    spiders.x = 480;
-    spiders.y = 480;
-
-}
 
 function updateHealthBar(){
     var pc = Math.ceil(player.health/player.maxHealth*10);
@@ -348,8 +329,11 @@ function attackCollisionHandler(atkBox, enemy){
 
     atkTime = game.time.now;
     enemy.damage(playerAtk);
+
+    if (!enemy.alive) enemy.deathTime = game.time.now;
+
     var madeBar = mobHealthBarManager(10, enemy.health);
-    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
+    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
 
     enemy.removeChildAt(0);
     enemy.addChild(monHealthBar);    
