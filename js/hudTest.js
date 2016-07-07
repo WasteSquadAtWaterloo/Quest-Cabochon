@@ -60,6 +60,7 @@ var dmgTxtStyle = {
     font: "bold 18px Courier",
     fill: "red",
 };
+var spawn = {x:2400, y:2400};
 
 function create() {   
 
@@ -72,7 +73,7 @@ function create() {
 
     Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
-    atkBox = game.add.sprite(2388,2383, "attackBox");
+    atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
 
     layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
@@ -82,9 +83,32 @@ function create() {
         
     initEnemys();
 
-    player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.down.walk[0]);
+    player = game.add.sprite(spawn.x, spawn.y, JSON.stringify(equip), playerFrames.down.walk[0]);
     player.maxHealth = 20;
     player.setHealth(20);
+    player.__proto__.kill = function(){ 
+        this.body.velocity.x = 0; this.body.velocity.y = 0;        
+        this.alive = false;
+        this.events.onKilled$dispatch(this);
+        this.animations.play('dead');  
+
+        return this
+    }
+    player.__proto__.revive = function () {     
+        this.x = spawn.x; this.y = spawn.y;
+
+        this.alive = true;
+        this.exists = true;
+        this.visible = true;
+        this.setHealth(this.maxHealth);        
+
+        if (this.events)
+        {
+            this.events.onRevived$dispatch(this);
+        }
+
+        return this;
+    }   
 
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
 
@@ -283,29 +307,31 @@ function update() {
         //item pick up
         game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, this);
         game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, this);
-        game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, this);        
+        game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, this);  
+
+        //ENemy collion + revive
+        for (var enemyGroup in enemys){  
+            if (game.time.now - damageTime > 500){
+                game.physics.arcade.overlap(player, enemys[enemyGroup], enemyCollisionHandler, null, this);            
+            }
+
+            if(game.time.now - atkTime > 500){
+                game.physics.arcade.overlap(atkBox, enemys[enemyGroup], attackCollisionHandler, null, enemys[enemyGroup]);
+            }
+
+            enemys[enemyGroup].forEach(function(mob){
+                if (!mob.alive && game.time.now - mob.deathTime >= 15000){
+                    mob.revive();
+                    mob.setHealth(mob.maxHealth);
+                    var madeBar = mobHealthBarManager(10, mob.health);
+                    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
+                    mob.addChild(monHealthBar);
+                }
+            });
+        }       
     }
 
-    //ENemy collion + revive
-    for (var enemyGroup in enemys){  
-        if (game.time.now - damageTime > 500){
-            game.physics.arcade.overlap(player, enemys[enemyGroup], enemyCollisionHandler, null, this);            
-        }
-
-        if(game.time.now - atkTime > 500){
-            game.physics.arcade.overlap(atkBox, enemys[enemyGroup], attackCollisionHandler, null, enemys[enemyGroup]);
-        }
-
-        enemys[enemyGroup].forEach(function(mob){
-            if (!mob.alive && game.time.now - mob.deathTime >= 15000){
-                mob.revive();
-                mob.setHealth(mob.maxHealth);
-                var madeBar = mobHealthBarManager(10, mob.health);
-                var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
-                mob.addChild(monHealthBar);
-            }
-        });
-    }    
+       
 }
 
 function render() {
@@ -364,7 +390,6 @@ function pickUpItems(item, player) {
             item.y = 0;
             inventorySlots[i].addChild(item);
             inventoryAvailability[i] = false;
-            console.log(i);
             break;
         }
     }
@@ -384,12 +409,13 @@ function enemyCollisionHandler(player, enemy) {
     game.camera.shake(0.003, 500, true);
 
     damageTime = game.time.now;
+    /*
     if (enemy.atk >= player.health){
         player.alive = false;
         player.animations.play('dead');
         if (player.animations.currentAnim.isFinished); 
     }
-    else player.damage(enemy.atk);
+    else*/ player.damage(enemy.atk);
     
     updateHealthBar();   
 }
