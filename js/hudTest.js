@@ -4,6 +4,7 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 function preload() {
     game.load.tilemap('map', 'assets/Map/lev1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
+    
     game.load.image('attackBox', 'assets/blank.png');
 
     game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
@@ -20,7 +21,7 @@ var cursors, wasd, melee;
 var damageTime = 0, atkTime = 0;
 var player;
 var player_dir = 'down';
-var dir = playerFrames.default.down.walk[0];
+var dir = playerFrames.down.walk[0];
 var equip = {
     armor: "none",
     weapon: "none",
@@ -64,9 +65,9 @@ function create() {
     spiders.physicsBodyType = Phaser.Physics.ARCADE;
     createSpiders();
 
-    player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.default.down.walk[0]);
-        
+    player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.down.walk[0]);        
     player.setHealth(100);
+
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
 
     layer1.resizeWorld();   
@@ -80,15 +81,17 @@ function create() {
     player.scale.set(1);
     player.anchor.setTo(0.5,0.5);
 
-    player.animations.add('down', playerFrames.default.down.walk, 10, false);
-    player.animations.add('left', playerFrames.default.left.walk, 10, false);    
-    player.animations.add('right', playerFrames.default.right.walk, 10, false);
-    player.animations.add('up', playerFrames.default.up.walk, 10, false); 
+    player.animations.add('down', playerFrames.down.walk, 10, false);
+    player.animations.add('left', playerFrames.left.walk, 10, false);    
+    player.animations.add('right', playerFrames.right.walk, 10, false);
+    player.animations.add('up', playerFrames.up.walk, 10, false); 
 
-    player.animations.add('down_melee', playerFrames.default.down.attack, 15, false);
-    player.animations.add('left_melee', playerFrames.default.left.attack, 15, false);    
-    player.animations.add('right_melee', playerFrames.default.right.attack, 15, false);
-    player.animations.add('up_melee', playerFrames.default.up.attack, 15, false); 
+    player.animations.add('down_melee', playerFrames.down.attack, 15, false);
+    player.animations.add('left_melee', playerFrames.left.attack, 15, false);    
+    player.animations.add('right_melee', playerFrames.right.attack, 15, false);
+    player.animations.add('up_melee', playerFrames.up.attack, 15, false); 
+
+    player.animations.add('dead', playerFrames.dead, 5, false); 
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.setSize(25, 20, 20, 45);
@@ -184,16 +187,16 @@ function update() {
         }  
             
         if (player.animations.currentAnim.isFinished){        
-            player.frame = playerFrames.default[player_dir].walk[0];
+            player.frame = playerFrames[player_dir].walk[0];
         }       
 
         //Put all damage/collision detection in this if statement
         if (game.time.now - damageTime > 300){
-            game.physics.arcade.overlap(player, spiders, spiderCollisionHandler, null, this);            
+            game.physics.arcade.overlap(player, spiders, enemyCollisionHandler, null, this);            
         }
 
         if(game.time.now - atkTime > 500){
-            game.physics.arcade.overlap(atkBox, spiders, attackCollisionHandler, null, this);
+            game.physics.arcade.overlap(atkBox, spiders, attackCollisionHandler, null, spiders);
         }
     }
 }
@@ -222,6 +225,7 @@ function createSpiders(){
             spider.animations.add('move', enemyFrames.spider.down.walk, 10, true);              
             spider.play('move');
             spider.body.moves = false;
+            spider.atk = 5;
             
             game.add.tween(spider).to( { x: spider.x+(Math.random()*100+100)*randSign(), y: spider.y+(Math.random()*200-100)*randSign()}, 1000, null, true, Math.random()*5000, -1, true);
         }
@@ -258,32 +262,35 @@ function mobHealthBarManager(mobMaxHealth, mobHealth){
     return bar;
 }
 
-function spiderCollisionHandler(player, spider) {
+function enemyCollisionHandler(player, enemy) {
     game.camera.shake(0.003, 500, true);
 
     damageTime = game.time.now;
-    player.damage(5);
+    if (enemy.atk >= player.health){
+        player.alive = false;
+        player.animations.play('dead');
+        if (player.animations.currentAnim.isFinished); 
+    }
+    else player.damage(enemy.atk);
+    
     updateHealthBar();   
 }
 
-function attackCollisionHandler(atkBox, spider){
+function attackCollisionHandler(atkBox, enemy){
     //Damage TExt
-    var dmgTxt = game.add.text(spider.x+spiders.x, spider.y+spiders.y, playerAtk.toString() ,dmgTxtStyle);
+    var dmgTxt = game.add.text(enemy.x+this.x, enemy.y+this.y, playerAtk.toString() ,dmgTxtStyle);
     game.add.tween(dmgTxt).to({y: dmgTxt.y-50}, 2000, Phaser.Easing.Default, true);
     var tweenTxt = game.add.tween(dmgTxt).to( { alpha: 0 }, 3000, "Linear", true);
-    console.log(tweenTxt);
+    
     tweenTxt.onComplete.add(function(){
-        dmgTxt.destroy(); 
-        console.log("done");
+        dmgTxt.destroy();
     });
 
     atkTime = game.time.now;
-    spider.damage(playerAtk);
-    var madeBar = mobHealthBarManager(10, spider.health);
+    enemy.damage(playerAtk);
+    var madeBar = mobHealthBarManager(10, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
 
-    spider.removeChildAt(0);
-    spider.addChild(monHealthBar);
-
-    console.log(dmgTxt.x, dmgTxt.y);
+    enemy.removeChildAt(0);
+    enemy.addChild(monHealthBar);    
 }
