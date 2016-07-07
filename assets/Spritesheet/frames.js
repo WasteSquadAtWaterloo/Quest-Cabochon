@@ -43,7 +43,19 @@ enemyFrames = {
 		"dead": 27
 	},
 }
+},
+
+itemFrames = {
+	'armor0': 184,
+	'armor1': 186,
+	'armor2': 187,
+
+	load: function(item, x, y){
+		return game.add.sprite(x, y, 'items', this[item]);
+	}
 }
+
+
 
 var stand = [];
 

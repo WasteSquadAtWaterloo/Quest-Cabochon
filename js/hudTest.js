@@ -14,9 +14,9 @@ function preload() {
     game.load.spritesheet('{"armor":"plate","weapon":"none"}', 'assets/Spritesheet/player/armor1.png', 64, 64);
     game.load.spritesheet('{"armor":"gold","weapon":"none"}', 'assets/Spritesheet/player/armor2.png', 64, 64);
 
-
-
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
+
+    game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34)
 }
 
 var map;
@@ -42,7 +42,7 @@ var atkOpts = {
     "right": {x:25, y:-12.5},
     "left": {x:-25, y:-12.5}
 };
-
+var items = {};
 var dmgTxtStyle = {
     font: "bold 18px Courier",
     fill: "red",
@@ -72,19 +72,22 @@ function create() {
     spiders.physicsBodyType = Phaser.Physics.ARCADE;
     createSpiders();
 
-    player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.down.walk[0]);        
-
+    player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.down.walk[0]);
     player.setHealth(100);
 
-    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
+    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
 
-    layer1.resizeWorld();   
-
+    layer1.resizeWorld(); 
 
     //Adding inventory
     inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
     inventory.fixedToCamera = true;
+
     //var inventorySlots = game.add.group();
+    items.armor0 = itemFrames.load('armor0', 1600, 1600);
+    items.armor1 = itemFrames.load('armor1', 1600, 1600);
+    items.armor2 = itemFrames.load('armor2', 1600, 1600);
+
 
     for (var i=0; i<4; i++){
         for (var j=0; j<6; j++){
@@ -144,6 +147,7 @@ function create() {
         equip.armor = "none";
         player.loadTexture(JSON.stringify(equip), dir, true);
     });
+
     wasd.C.onDown.add(function(){
         if (inventoryDisplayed){
             inventory.fixedToCamera = false;
