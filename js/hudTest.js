@@ -278,9 +278,6 @@ function createSpiders(){
     spiders.x = 480;
     spiders.y = 480;
 
-    spiders.forEach(function(mob){
-        game.add.tween(mob).to( { x: Math.random()*200 }, Math.random()*5000+5000, Phaser.Easing.Circular.None, true, 0, 1000, true);        
-    
 }
 
 function updateHealthBar(){
