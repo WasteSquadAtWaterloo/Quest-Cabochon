@@ -15,6 +15,7 @@ function preload() {
     game.load.spritesheet('{"armor":"gold","weapon":"none"}', 'assets/Spritesheet/player/armor2.png', 64, 64);
 
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
+    game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34)
 }
@@ -70,7 +71,8 @@ function create() {
     initEnemys();
 
     player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.down.walk[0]);
-    player.setHealth(100);
+    player.maxHealth = 20;
+    player.setHealth(20);
 
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
 
@@ -228,20 +230,22 @@ function update() {
             
         if (player.animations.currentAnim.isFinished){        
             player.frame = playerFrames[player_dir].walk[0];
-        }       
+        }            
 
-        //Put all damage/collision detection in this if statement
-        if (game.time.now - damageTime > 300){
-            game.physics.arcade.overlap(player, enemys.spiders, enemyCollisionHandler, null, this);            
+        
+    }
+
+    for (var enemyGroup in enemys){  
+        if (game.time.now - damageTime > 500){
+            game.physics.arcade.overlap(player, enemys[enemyGroup], enemyCollisionHandler, null, this);            
         }
 
         if(game.time.now - atkTime > 500){
-            game.physics.arcade.overlap(atkBox, enemys.spiders, attackCollisionHandler, null, enemys.spiders);
+            game.physics.arcade.overlap(atkBox, enemys[enemyGroup], attackCollisionHandler, null, enemys[enemyGroup]);
         }
-    }
 
-    for (var enemyGroup in enemys){        
         enemys[enemyGroup].forEach(function(mob){
+
             if (!mob.alive && game.time.now - mob.deathTime >= 15000){
                 mob.revive();
                 mob.setHealth(mob.maxHealth);

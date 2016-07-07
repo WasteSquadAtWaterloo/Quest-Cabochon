@@ -3,6 +3,11 @@ function initEnemys(){
 	enemys.spiders.enableBody = true;
 	enemys.spiders.physicsBodyType = Phaser.Physics.ARCADE;
 	createEnemys(enemys.spiders, 'spider', 10, 5, 160, 160, 960, 640, 1.5);
+
+	enemys.scorpions = game.add.group();
+	enemys.scorpions.enableBody = true;
+	enemys.scorpions.physicsBodyType = Phaser.Physics.ARCADE;
+	createEnemys(enemys.scorpions, 'scorpion', 20, 15, 240, 3408, 960, 640, 1.5);
 }
 
 function createEnemys(group, key, hp, atk, topX, topY, width, height, scale){
@@ -12,7 +17,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, scale){
 
     for (var i=0; i<3; i++){
         for (var j=0; j<2; j++){
-            var enemy = group.create(topX + eachX*i + eachX/2, topY + eachY*j + eachX/2, "spider");
+            var enemy = group.create(topX + eachX*i + eachX/2, topY + eachY*j + eachX/2, key);
             enemy.maxHealth = hp;
             enemy.setHealth(hp);            
 
@@ -25,7 +30,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, scale){
             enemy.play('move');            
             enemy.atk = atk;
 
-            enemy.deathTime = 0;
+            enemy.deathTime = 0;            
             
             game.add.tween(enemy).to( { 
             	x: enemy.x + (Math.random()*80+80)*randSign(), 
