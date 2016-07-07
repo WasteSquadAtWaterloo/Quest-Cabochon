@@ -5,16 +5,23 @@ function preload() {
     game.load.tilemap('map', 'assets/Map/lev1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     game.load.image('attackBox', 'assets/blank.png');
+    game.load.image('characterHud', 'assets/HUD/character_hud.png');
+    game.load.image('emptySlot', 'assets/HUD/empty_slot.png');
 
     game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
     game.load.spritesheet('{"armor":"leather","weapon":"none"}', 'assets/Spritesheet/player/armor0.png', 64, 64);
     game.load.spritesheet('{"armor":"plate","weapon":"none"}', 'assets/Spritesheet/player/armor1.png', 64, 64);
     game.load.spritesheet('{"armor":"gold","weapon":"none"}', 'assets/Spritesheet/player/armor2.png', 64, 64);
 
+
+
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
 }
 
 var map;
+var inventory, inventoryDisplayed; inventoryDisplayed = false;
+var inventorySlots = [];
+var buttonCreated = 0;
 var layer1,layer2,layer3,layer4,layer5;
 var cursors, wasd, melee;
 var damageTime = 0, atkTime = 0;
@@ -59,11 +66,31 @@ function create() {
     createSpiders();
 
     player = game.add.sprite(2400, 2400, JSON.stringify(equip), playerFrames.default.down.walk[0]);
+
         
     player.setHealth(100);
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);
 
     layer1.resizeWorld();   
+
+
+    //Adding inventory
+    inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
+    inventory.fixedToCamera = true;
+    //var inventorySlots = game.add.group();
+
+    for (var i=0; i<4; i++){
+        for (var j=0; j<6; j++){
+            var givenFunction = inventoryCreator();
+            inventorySlots[buttonCreated] = game.make.button(i*36+34, j*36+94, "emptySlot", givenFunction, this);
+            inventory.addChild(inventorySlots[buttonCreated]);
+            buttonCreated += 1
+        }
+    }
+
+    
+
+
 
     map.setCollisionByExclusion(stand,true,layer1);      
     map.setCollisionByExclusion(stand,true,layer2);  
@@ -95,6 +122,7 @@ function create() {
         down: game.input.keyboard.addKey(Phaser.Keyboard.S),
         E: game.input.keyboard.addKey(Phaser.Keyboard.E),
         Q: game.input.keyboard.addKey(Phaser.Keyboard.Q),
+        C: game.input.keyboard.addKey(Phaser.Keyboard.C)
     };
     game.input.mouse.capture = true;
 
@@ -106,6 +134,22 @@ function create() {
     wasd.Q.onDown.add(function(){
         equip.armor = "none";
         player.loadTexture(JSON.stringify(equip), dir, true);
+    });
+    wasd.C.onDown.add(function(){
+        if (inventoryDisplayed){
+            inventory.fixedToCamera = false;
+            inventory.x = (window.innerWidth)+200;
+            inventory.y =  (window.innerHeight)+200;
+            inventoryDisplayed = false;
+            inventory.fixedToCamera = true;
+        }
+        else {
+            inventory.fixedToCamera = false;
+            inventory.x = (window.innerWidth/2)-200;
+            inventory.y = (window.innerHeight/2)-200;
+            inventoryDisplayed = true;
+            inventory.fixedToCamera = true;
+        }
     });
     
     game.camera.follow(player);
@@ -222,7 +266,7 @@ function createSpiders(){
     spiders.x = 480;
     spiders.y = 480;
     spiders.forEach(function(mob){
-        game.add.tween(mob).to( { x: Math.random()*200 }, Math.random()*5000+5000, Phaser.Easing.Linear.None, true, 0, 1000, true);        
+        game.add.tween(mob).to( { x: Math.random()*200 }, Math.random()*5000+5000, Phaser.Easing.Circular.None, true, 0, 1000, true);        
         
     });
     
@@ -238,6 +282,22 @@ function updateHealthBar(){
         });
         hp.appendTo($("#red-bars"));
     }
+}
+function inventoryCreator(){
+    var id = buttonCreated;
+    function generatedFunction(){
+        try { //Removing an item/ equiping an item
+            var item = inventorySlots[id].getChildAt(0);
+            inventorySlots[id].removeChildAt(0);
+
+        }
+        catch(err){ //Adding an item
+            console.log(err);
+
+        }
+    }
+
+    return generatedFunction;
 }
 
 function mobHealthBarManager(mobMaxHealth, mobHealth){
