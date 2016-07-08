@@ -1,4 +1,15 @@
-function loadMap(map, key, spawn_x, spawn_y, player_hp){
+var map;
+
+function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
+	if (!bgn){
+		layer1.destroy();
+		layer2.destroy();
+		layer3.destroy();
+		layer4.destroy();
+		layer5.destroy();
+		map.destroy();
+	}
+
 	map = game.add.tilemap(key);   
     map.addTilesetImage('roguelikeSheet_transparent','tiles');
 
@@ -7,7 +18,7 @@ function loadMap(map, key, spawn_x, spawn_y, player_hp){
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
 
-    initEnemys();
+    //initEnemys();
     initPlayer(spawn_x, spawn_y, player_hp);
 
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    

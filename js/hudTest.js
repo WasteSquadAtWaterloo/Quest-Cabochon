@@ -3,6 +3,8 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 
 function preload() {
     game.load.tilemap('map0', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map2', 'assets/Map/level_3.json', null, Phaser.Tilemap.TILED_JSON);
+
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
     game.load.image('attackBox', 'assets/blank.png');
@@ -26,7 +28,6 @@ function preload() {
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34)
 }
 
-var map;
 var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
@@ -77,7 +78,7 @@ function create() {
     atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
 
-    loadMap(map, 'map0', spawn.x, spawn.y, 20);
+    loadMap('map0', spawn.x, spawn.y, 20, true);
 
     //Adding inventory
     inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
@@ -207,11 +208,25 @@ function update() {
                 player.body.velocity.y = -500;
                 player.play('up');                
                 player_dir = 'up';
+
+                if (map.key==="map0"){
+                    if (player.y===2435 && (player.x>3456 && player.x<3472)){
+                        loadMap('map2', 480, 960-32, 20, false);
+                        player.animations.play("up")
+                    }
+                }
             }
-            else if (cursors.down.isDown || wasd.down.isDown){
+            else if (cursors.down.isDown || wasd.down.isDown){ 
                 player.body.velocity.y = 500;
                 player.play('down');                
                 player_dir = 'down';
+
+                if (map.key==="map2"){
+                    if (player.y>960){
+                        loadMap('map0', 3464, 2435, 20, false);
+                        player.animations.play('down');
+                    }
+                }
             }
         }
         
@@ -266,7 +281,6 @@ function update() {
 
             enemys[enemyGroup].forEach(function(mob){
                 if (!mob.alive && game.time.now - mob.deathTime >= 15000){
-                    console.log("HELLO");
                     mob.revive();
                     mob.setHealth(mob.maxHealth);
                     var madeBar = mobHealthBarManager(10, mob.health);
@@ -281,9 +295,6 @@ function update() {
 }
 
 function render() {
-    enemys.spiders.forEach(function(mob){
-        //game.debug.body(mob);
-    });
     //game.debug.body(atkBox);
     //game.debug.body(player);
 }

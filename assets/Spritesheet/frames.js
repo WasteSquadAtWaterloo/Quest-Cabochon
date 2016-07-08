@@ -51,8 +51,8 @@ itemFrames = {
 var stand = [];
 
 for (var i=0; i<25; i++){
-    for (var j=5; j<10; j++){
-        stand.push(i*57+j+1);
+    for (var j=6; j<14; j++){
+    	if (i>6 || j<11) stand.push(i*57+j);
     }
 }
 
