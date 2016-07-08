@@ -2,7 +2,7 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 
 
 function preload() {
-    game.load.tilemap('map', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map0', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
     game.load.image('attackBox', 'assets/blank.png');
@@ -72,51 +72,12 @@ function create() {
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
     });
 
-    map = game.add.tilemap('map');   
-    map.addTilesetImage('roguelikeSheet_transparent','tiles');  
-
     Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
     atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
 
-    layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
-    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
-    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
-    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);    
-        
-    initEnemys();
-
-    player = game.add.sprite(spawn.x, spawn.y, JSON.stringify(equip), playerFrames.down.walk[0]);
-    player.maxHealth = 20;
-    player.setHealth(20);
-    player.kill = function(){ 
-        this.body.velocity.x = 0; this.body.velocity.y = 0;        
-        this.alive = false;
-        this.events.onKilled$dispatch(this);
-        this.animations.play('dead');  
-
-        return this
-    }
-    player.revive = function () {     
-        this.x = spawn.x; this.y = spawn.y;
-
-        this.alive = true;
-        this.exists = true;
-        this.visible = true;
-        this.setHealth(this.maxHealth);        
-
-        if (this.events)
-        {
-            this.events.onRevived$dispatch(this);
-        }
-
-        return this;
-    }   
-
-    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
-
-    layer1.resizeWorld(); 
+    loadMap(map, 'map0', spawn.x, spawn.y, 20);
 
     //Adding inventory
     inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
@@ -172,30 +133,6 @@ function create() {
     items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
     items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);
 
-    map.setCollisionByExclusion(stand,true,layer1);      
-    map.setCollisionByExclusion(stand,true,layer2);  
-    map.setCollisionByExclusion(stand,true,layer3);  
-    map.setCollisionByExclusion(stand,true,layer4);  
-    map.setCollisionByExclusion(stand,true,layer5);
-
-    player.scale.set(1);
-    player.anchor.setTo(0.5,0.5);
-
-    player.animations.add('down', playerFrames.down.walk, 10, false);
-    player.animations.add('left', playerFrames.left.walk, 10, false);    
-    player.animations.add('right', playerFrames.right.walk, 10, false);
-    player.animations.add('up', playerFrames.up.walk, 10, false); 
-
-    player.animations.add('down_melee', playerFrames.down.attack, 15, false);
-    player.animations.add('left_melee', playerFrames.left.attack, 15, false);    
-    player.animations.add('right_melee', playerFrames.right.attack, 15, false);
-    player.animations.add('up_melee', playerFrames.up.attack, 15, false); 
-
-    player.animations.add('dead', playerFrames.dead, 5, false); 
-
-    game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(25, 20, 20, 45);
-
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
         up: game.input.keyboard.addKey(Phaser.Keyboard.W),
@@ -234,8 +171,6 @@ function create() {
             inventory.fixedToCamera = true;
         }
     });
-    
-    game.camera.follow(player);
 
     gold = game.add.sprite(30, 85, 'goldIcon');
     goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
