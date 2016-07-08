@@ -20,6 +20,7 @@ function preload() {
 
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
+    game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34)
 }
@@ -338,8 +339,8 @@ function render() {
     enemys.spiders.forEach(function(mob){
         //game.debug.body(mob);
     });
-    game.debug.body(atkBox);
-    game.debug.body(player);
+    //game.debug.body(atkBox);
+    //game.debug.body(player);
 }
 
 
