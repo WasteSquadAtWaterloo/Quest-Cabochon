@@ -7,7 +7,7 @@ function initEnemys(){
 	enemys.scorpions = game.add.group();
 	enemys.scorpions.enableBody = true;
 	enemys.scorpions.physicsBodyType = Phaser.Physics.ARCADE;
-	createEnemys(enemys.scorpions, 'scorpion', 20, 15, 240, 3408, 960, 640, 1.5);
+	createEnemys(enemys.scorpions, 'scorpion', 20, 15, 240, 4000, 960, 640, 1.5);
 }
 
 function createEnemys(group, key, hp, atk, topX, topY, width, height, scale){

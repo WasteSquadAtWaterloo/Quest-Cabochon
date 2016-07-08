@@ -61,12 +61,17 @@ var dmgTxtStyle = {
     fill: "red",
 };
 var spawn = {x:2400, y:2400};
+var bg_layer, sprite_layer, front_layer();
 
 function create() {   
 
     $(window).resize(function(){
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
     });
+
+    bg_layer = game.add.group();
+    sprite_layer = game.add.group();
+    front_layer = game.add.group();
 
     map = game.add.tilemap('map');   
     map.addTilesetImage('roguelikeSheet_transparent','tiles');  
@@ -86,7 +91,7 @@ function create() {
     player = game.add.sprite(spawn.x, spawn.y, JSON.stringify(equip), playerFrames.down.walk[0]);
     player.maxHealth = 20;
     player.setHealth(20);
-    player.__proto__.kill = function(){ 
+    player.kill = function(){ 
         this.body.velocity.x = 0; this.body.velocity.y = 0;        
         this.alive = false;
         this.events.onKilled$dispatch(this);
@@ -94,7 +99,7 @@ function create() {
 
         return this
     }
-    player.__proto__.revive = function () {     
+    player.revive = function () {     
         this.x = spawn.x; this.y = spawn.y;
 
         this.alive = true;
@@ -243,7 +248,7 @@ function update() {
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
         game.physics.arcade.collide(player, layer4);
-        game.physics.arcade.collide(player, layer5);     
+        //game.physics.arcade.collide(player, layer5);     
 
         player.body.velocity.set(0);
 
@@ -321,6 +326,7 @@ function update() {
 
             enemys[enemyGroup].forEach(function(mob){
                 if (!mob.alive && game.time.now - mob.deathTime >= 15000){
+                    console.log("HELLO");
                     mob.revive();
                     mob.setHealth(mob.maxHealth);
                     var madeBar = mobHealthBarManager(10, mob.health);
@@ -433,7 +439,9 @@ function attackCollisionHandler(atkBox, enemy){
     atkTime = game.time.now;
     enemy.damage(playerAtk);
 
-    if (!enemy.alive) enemy.deathTime = game.time.now;
+    if (!enemy.alive) {        
+        enemy.deathTime = game.time.now;
+    }
 
     var madeBar = mobHealthBarManager(10, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
