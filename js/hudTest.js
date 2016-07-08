@@ -11,6 +11,7 @@ function preload() {
     game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
     game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
     game.load.image('swordSlot', 'assets/HUD/sword_slot.png');
+    game.load.image('goldIcon', 'assets/goldIcon.png');
 
 
     game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
@@ -20,11 +21,13 @@ function preload() {
 
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
+    game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34)
 }
 
 var map;
+var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
 var inventoryAvailability = [];
@@ -61,7 +64,7 @@ var dmgTxtStyle = {
     fill: "red",
 };
 var spawn = {x:2400, y:2400};
-var bg_layer, sprite_layer, front_layer();
+var bg_layer, sprite_layer, front_layer;
 
 function create() {   
 
@@ -237,6 +240,12 @@ function create() {
     });
     
     game.camera.follow(player);
+
+    gold = game.add.sprite(30, 85, 'goldIcon');
+    goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
+    gold.addChild(goldText);
+
+    gold.fixedToCamera = true;
     updateHealthBar();
 }
 
@@ -344,8 +353,8 @@ function render() {
     enemys.spiders.forEach(function(mob){
         //game.debug.body(mob);
     });
-    game.debug.body(atkBox);
-    game.debug.body(player);
+    //game.debug.body(atkBox);
+    //game.debug.body(player);
 }
 
 
@@ -439,10 +448,15 @@ function attackCollisionHandler(atkBox, enemy){
     atkTime = game.time.now;
     enemy.damage(playerAtk);
 
-    if (!enemy.alive) {        
+    if (!enemy.alive) {
         enemy.deathTime = game.time.now;
-    }
+        playerGold += enemy.gold;
 
+        gold.removeChildAt(0);
+        goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
+        gold.addChild(goldText);
+
+    }
     var madeBar = mobHealthBarManager(10, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
 

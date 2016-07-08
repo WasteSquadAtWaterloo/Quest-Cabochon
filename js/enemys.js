@@ -2,15 +2,15 @@ function initEnemys(){
 	enemys.spiders = game.add.group();
 	enemys.spiders.enableBody = true;
 	enemys.spiders.physicsBodyType = Phaser.Physics.ARCADE;
-	createEnemys(enemys.spiders, 'spider', 10, 5, 310, 265, 960, 640, 1.5);
+	createEnemys(enemys.spiders, 'spider', 10, 5, 310, 265, 960, 640, 1.5, 25);
 
 	enemys.scorpions = game.add.group();
 	enemys.scorpions.enableBody = true;
 	enemys.scorpions.physicsBodyType = Phaser.Physics.ARCADE;
-	createEnemys(enemys.scorpions, 'scorpion', 20, 15, 240, 4000, 960, 640, 1.5);
+	createEnemys(enemys.scorpions, 'scorpion', 20, 15, 240, 4000, 960, 640, 1.5, 100);
 }
 
-function createEnemys(group, key, hp, atk, topX, topY, width, height, scale){
+function createEnemys(group, key, hp, atk, topX, topY, width, height, scale, goldAmount){
 
 	var eachX = width/3;
 	var eachY = height/2;
@@ -31,7 +31,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, scale){
             enemy.atk = atk;
 
             enemy.deathTime = 0;            
-            
+            enemy.gold = goldAmount;
             game.add.tween(enemy).to( { 
             	x: enemy.x + (Math.random()*80+80)*randSign(), 
             	y: enemy.y + (Math.random()*80+80)*randSign()}, 
