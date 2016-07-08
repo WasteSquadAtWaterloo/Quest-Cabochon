@@ -11,6 +11,7 @@ function preload() {
     game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
     game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
     game.load.image('swordSlot', 'assets/HUD/sword_slot.png');
+    game.load.image('goldIcon', 'assets/goldIcon.png');
 
 
     game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
@@ -26,6 +27,7 @@ function preload() {
 }
 
 var map;
+var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
 var inventoryAvailability = [];
@@ -233,6 +235,12 @@ function create() {
     });
     
     game.camera.follow(player);
+
+    gold = game.add.sprite(30, 85, 'goldIcon');
+    goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
+    gold.addChild(goldText);
+
+    gold.fixedToCamera = true;
     updateHealthBar();
 }
 
@@ -434,8 +442,16 @@ function attackCollisionHandler(atkBox, enemy){
     atkTime = game.time.now;
     enemy.damage(playerAtk);
 
-    if (!enemy.alive) enemy.deathTime = game.time.now;
+    if (!enemy.alive) {
+        enemy.deathTime = game.time.now;
+        playerGold += enemy.gold;
+        console.log(playerGold);
 
+        gold.removeChildAt(0);
+        goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
+        gold.addChild(goldText);
+
+    }
     var madeBar = mobHealthBarManager(10, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
 
