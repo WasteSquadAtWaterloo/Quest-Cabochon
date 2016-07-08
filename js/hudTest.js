@@ -64,17 +64,13 @@ var dmgTxtStyle = {
     fill: "red",
 };
 var spawn = {x:2400, y:2400};
-var bg_layer, sprite_layer, front_layer;
+var maxHealth = 20;
 
 function create() {   
 
     $(window).resize(function(){
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
     });
-
-    bg_layer = game.add.group();
-    sprite_layer = game.add.group();
-    front_layer = game.add.group();
 
     map = game.add.tilemap('map');   
     map.addTilesetImage('roguelikeSheet_transparent','tiles');  
