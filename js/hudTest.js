@@ -2,7 +2,9 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 
 
 function preload() {
-    game.load.tilemap('map', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map0', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map2', 'assets/Map/level_3.json', null, Phaser.Tilemap.TILED_JSON);
+
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
     game.load.image('attackBox', 'assets/blank.png');
@@ -32,8 +34,10 @@ function preload() {
     //game.load.spritesheet('NPCs', 'assets/Spritesheet/NPC/npc_spritesheet.png', 40, 48);
 }
 
+
 var map;
 var NPC;
+
 var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
@@ -71,6 +75,7 @@ var dmgTxtStyle = {
     fill: "red",
 };
 var spawn = {x:2400, y:2400};
+var maxHealth = 20;
 
 function create() {   
 
@@ -78,13 +83,11 @@ function create() {
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
     });
 
-    map = game.add.tilemap('map');   
-    map.addTilesetImage('roguelikeSheet_transparent','tiles');  
-
     Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
     atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
+
 
     layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
     layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
@@ -140,6 +143,9 @@ function create() {
 
     layer1.resizeWorld(); 
 
+    loadMap('map0', spawn.x, spawn.y, 20, true);
+
+
     //Adding inventory
     inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
     inventory.fixedToCamera = true;
@@ -194,30 +200,6 @@ function create() {
     items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
     items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);
 
-    map.setCollisionByExclusion(stand,true,layer1);      
-    map.setCollisionByExclusion(stand,true,layer2);  
-    map.setCollisionByExclusion(stand,true,layer3);  
-    map.setCollisionByExclusion(stand,true,layer4);  
-    map.setCollisionByExclusion(stand,true,layer5);
-
-    player.scale.set(1);
-    player.anchor.setTo(0.5,0.5);
-
-    player.animations.add('down', playerFrames.down.walk, 10, false);
-    player.animations.add('left', playerFrames.left.walk, 10, false);    
-    player.animations.add('right', playerFrames.right.walk, 10, false);
-    player.animations.add('up', playerFrames.up.walk, 10, false); 
-
-    player.animations.add('down_melee', playerFrames.down.attack, 15, false);
-    player.animations.add('left_melee', playerFrames.left.attack, 15, false);    
-    player.animations.add('right_melee', playerFrames.right.attack, 15, false);
-    player.animations.add('up_melee', playerFrames.up.attack, 15, false); 
-
-    player.animations.add('dead', playerFrames.dead, 5, false); 
-
-    game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(25, 20, 20, 45);
-
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
         up: game.input.keyboard.addKey(Phaser.Keyboard.W),
@@ -256,8 +238,6 @@ function create() {
             inventory.fixedToCamera = true;
         }
     });
-    
-    game.camera.follow(player);
 
 
 
@@ -277,7 +257,7 @@ function update() {
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
         game.physics.arcade.collide(player, layer4);
-        game.physics.arcade.collide(player, layer5);     
+        //game.physics.arcade.collide(player, layer5);     
 
         player.body.velocity.set(0);
 
@@ -296,11 +276,25 @@ function update() {
                 player.body.velocity.y = -500;
                 player.play('up');                
                 player_dir = 'up';
+
+                if (map.key==="map0"){
+                    if (player.y===2435 && (player.x>3456 && player.x<3472)){
+                        loadMap('map2', 480, 960-32, 20, false);
+                        player.animations.play("up")
+                    }
+                }
             }
-            else if (cursors.down.isDown || wasd.down.isDown){
+            else if (cursors.down.isDown || wasd.down.isDown){ 
                 player.body.velocity.y = 500;
                 player.play('down');                
                 player_dir = 'down';
+
+                if (map.key==="map2"){
+                    if (player.y>960){
+                        loadMap('map0', 3464, 2435, 20, false);
+                        player.animations.play('down');
+                    }
+                }
             }
         }
         
@@ -375,11 +369,6 @@ function render() {
         //game.debug.body(mob);
     });
     game.debug.body(NPCBox);
-    //game.debug.body(atkBox);
-    //game.debug.body(player);
-}
-
-
 
 function updateHealthBar(){
     var pc = Math.ceil(player.health/player.maxHealth*10);
@@ -473,7 +462,6 @@ function attackCollisionHandler(atkBox, enemy){
     if (!enemy.alive) {
         enemy.deathTime = game.time.now;
         playerGold += enemy.gold;
-        console.log(playerGold);
 
         gold.removeChildAt(0);
         goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
