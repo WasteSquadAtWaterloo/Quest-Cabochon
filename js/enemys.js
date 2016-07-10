@@ -1,23 +1,39 @@
-function initEnemys(){
-	enemys.spiders = game.add.group();
-	enemys.spiders.enableBody = true;
-	enemys.spiders.physicsBodyType = Phaser.Physics.ARCADE;
-	createEnemys(enemys.spiders, 'spider', 10, 5, 310, 265, 960, 640, 1.5, 25);
+function initEnemys(map){
+    if (map === 'map0'){
+        //change snail stats
+        enemys.snails = game.add.group();
+        createEnemys(enemys.snails, 'snail', 10, 5, 2832, 576, 640, 960, 1.5, 25);        
 
-	enemys.scorpions = game.add.group();
-	enemys.scorpions.enableBody = true;
-	enemys.scorpions.physicsBodyType = Phaser.Physics.ARCADE;
-	createEnemys(enemys.scorpions, 'scorpion', 20, 15, 240, 4000, 960, 640, 1.5, 100);
+    	enemys.spiders = game.add.group();
+    	createEnemys(enemys.spiders, 'spider', 10, 5, 310, 265, 960, 640, 1.5, 25);    	
+
+        enemys.spiders2 = game.add.group();
+        createEnemys(enemys.spiders2, 'spider', 10, 5, 240, 3264, 640, 960, 1.5, 25);
+
+        //change atk,hp and gold of log monster
+        enemys.logmonsters = game.add.group();
+        createEnemys(enemys.logmonsters, 'logmonster', 10, 5, 4032, 3168, 640, 960, 1.5, 100);
+
+        enemys.logmonsters2 = game.add.group();
+        createEnemys(enemys.logmonsters2, 'logmonster', 10, 5, 1056, 3984, 960, 640, 1.5, 100);    
+
+        enemys.scorpions = game.add.group();    
+        createEnemys(enemys.scorpions, 'scorpion', 20, 15, 3744, 240, 960, 640, 1.5, 100);    
+    }
+
+    
 }
 
 function createEnemys(group, key, hp, atk, topX, topY, width, height, scale, goldAmount){
+    group.enableBody = true;
+    group.physicsBodyType = Phaser.Physics.ARCADE;
 
-	var eachX = width/3;
-	var eachY = height/2;
+	var eachX = width>height ? 3 : 2;
+	var eachY = width>height ? 2 : 3;
 
-    for (var i=0; i<3; i++){
-        for (var j=0; j<2; j++){
-            var enemy = group.create(eachX*i + eachX/2, eachY*j + eachX/2, key);
+    for (var i=0; i<eachX; i++){
+        for (var j=0; j<eachY; j++){
+            var enemy = group.create(320*i + 160, 320*j + 160, key);
             enemy.maxHealth = hp;
             enemy.setHealth(hp);            
 

@@ -2,6 +2,9 @@ var map;
 
 function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
 	if (!bgn){
+        for (var enemy in enemys){
+            enemys[enemy].destroy();
+        }
 		layer1.destroy();
 		layer2.destroy();
 		layer3.destroy();
@@ -18,7 +21,7 @@ function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
 
-    //initEnemys();
+    initEnemys(key);
     initPlayer(spawn_x, spawn_y, player_hp);
 
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
