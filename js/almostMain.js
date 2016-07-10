@@ -2,9 +2,7 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 
 
 function preload() {
-    game.load.tilemap('map0', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.tilemap('map2', 'assets/Map/level_3.json', null, Phaser.Tilemap.TILED_JSON);
-
+    game.load.tilemap('map', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
     game.load.image('attackBox', 'assets/blank.png');
@@ -15,9 +13,10 @@ function preload() {
     game.load.image('swordSlot', 'assets/HUD/sword_slot.png');
     game.load.image('goldIcon', 'assets/goldIcon.png');
 
-    game.load.image('healer', 'assets/Spritesheet/NPC/healer.png');
-    game.load.image('kid', 'assets/Spritesheet/NPC/kid.png');
-    game.load.image('clerk', 'assets/Spritesheet/NPC/storeClerk.png');
+    game.load.image('healer', 'assets/Spritesheet/NPC/healer.png')
+    game.load.image('kid', 'assets/Spritesheet/NPC/kid.png')
+    game.load.image('clerk', 'assets/Spritesheet/NPC/storeClerk.png')
+
 
     game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
     game.load.spritesheet('{"armor":"leather","weapon":"none"}', 'assets/Spritesheet/player/armor0.png', 64, 64);
@@ -27,17 +26,14 @@ function preload() {
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
     game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
-    game.load.spritesheet('logmonster', 'assets/Spritesheet/monsters/logmonster.png', 45, 45);
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34);
 
     //game.load.spritesheet('NPCs', 'assets/Spritesheet/NPC/npc_spritesheet.png', 40, 48);
 }
 
-
 var map;
 var NPC;
-
 var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
@@ -75,18 +71,74 @@ var dmgTxtStyle = {
     fill: "red",
 };
 var spawn = {x:2400, y:2400};
-var maxHealth = 20;
 
 function create() {   
 
     $(window).resize(function(){
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
-    });    
+    });
+
+    map = game.add.tilemap('map');   
+    map.addTilesetImage('roguelikeSheet_transparent','tiles');  
+
+    Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
 
     atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
 
-    loadMap('map0', spawn.x, spawn.y, 20, true);
+    layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
+    layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
+    layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);    
+        
+    initEnemys();
+
+
+    //Create NPCs
+    NPC = game.add.group();
+    NPC.enableBody = true;
+    NPC.physicsBodyType = Phaser.Physics.ARCADE;
+
+    var healer = NPC.create(2790,2050, 'healer'); healer.scale.set(1.2); healer.addChild(NPCBox);
+    var kid = NPC.create(3076,2390, 'kid'); kid.scale.set(1.2); kid.addChild(NPCBox);
+    var storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(NPCBox);
+
+    for (var i=0; i<3; i++){
+            NPCBox = game.make.sprite(-50, -50, "attackBox");
+            NPCBox.scale.set(5);
+            game.physics.enable(NPCBox, Phaser.Physics.ARCADE);
+    }
+
+    player = game.add.sprite(spawn.x, spawn.y, JSON.stringify(equip), playerFrames.down.walk[0]);
+    player.maxHealth = 20;
+    player.setHealth(20);
+    player.__proto__.kill = function(){ 
+        this.body.velocity.x = 0; this.body.velocity.y = 0;        
+        this.alive = false;
+        this.events.onKilled$dispatch(this);
+        this.animations.play('dead');  
+
+        return this
+    }
+    player.__proto__.revive = function () {     
+        this.x = spawn.x; this.y = spawn.y;
+
+        this.alive = true;
+        this.exists = true;
+        this.visible = true;
+        this.setHealth(this.maxHealth);        
+
+        if (this.events)
+        {
+            this.events.onRevived$dispatch(this);
+        }
+
+        return this;
+    }   
+
+    layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
+
+    layer1.resizeWorld(); 
 
     //Adding inventory
     inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
@@ -142,6 +194,30 @@ function create() {
     items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
     items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);
 
+    map.setCollisionByExclusion(stand,true,layer1);      
+    map.setCollisionByExclusion(stand,true,layer2);  
+    map.setCollisionByExclusion(stand,true,layer3);  
+    map.setCollisionByExclusion(stand,true,layer4);  
+    map.setCollisionByExclusion(stand,true,layer5);
+
+    player.scale.set(1);
+    player.anchor.setTo(0.5,0.5);
+
+    player.animations.add('down', playerFrames.down.walk, 10, false);
+    player.animations.add('left', playerFrames.left.walk, 10, false);    
+    player.animations.add('right', playerFrames.right.walk, 10, false);
+    player.animations.add('up', playerFrames.up.walk, 10, false); 
+
+    player.animations.add('down_melee', playerFrames.down.attack, 15, false);
+    player.animations.add('left_melee', playerFrames.left.attack, 15, false);    
+    player.animations.add('right_melee', playerFrames.right.attack, 15, false);
+    player.animations.add('up_melee', playerFrames.up.attack, 15, false); 
+
+    player.animations.add('dead', playerFrames.dead, 5, false); 
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);
+    player.body.setSize(25, 20, 20, 45);
+
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
         up: game.input.keyboard.addKey(Phaser.Keyboard.W),
@@ -180,25 +256,10 @@ function create() {
             inventory.fixedToCamera = true;
         }
     });
-
     
-    //Create NPCs
-    
-    NPC = game.add.group();
-    NPC.enableBody = true;
-    NPC.physicsBodyType = Phaser.Physics.ARCADE;
+    game.camera.follow(player);
 
-    /*
-    var healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(NPCBox); 
-    var kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(NPCBox);
-    var storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(NPCBox);
 
-    for (var i=0; i<3; i++){
-            NPCBox = game.add.sprite(-50, -50, "attackBox");
-            NPCBox.scale.set(5);
-            game.physics.enable(NPCBox, Phaser.Physics.ARCADE);
-    }
-    */
 
     gold = game.add.sprite(30, 85, 'goldIcon');
     goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
@@ -216,7 +277,7 @@ function update() {
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
         game.physics.arcade.collide(player, layer4);
-        //game.physics.arcade.collide(player, layer5);     
+        game.physics.arcade.collide(player, layer5);     
 
         player.body.velocity.set(0);
 
@@ -235,31 +296,20 @@ function update() {
                 player.body.velocity.y = -500;
                 player.play('up');                
                 player_dir = 'up';
-
-                if (map.key==="map0"){
-                    if (player.y===2435 && (player.x>3440 && player.x<3470)){
-                        loadMap('map2', 480, 928, 20, false);
-                        player.animations.play("up")
-                    }
-                }
             }
-            else if (cursors.down.isDown || wasd.down.isDown){ 
+            else if (cursors.down.isDown || wasd.down.isDown){
                 player.body.velocity.y = 500;
                 player.play('down');                
                 player_dir = 'down';
-
-                if (map.key==="map2"){
-                    if (player.y>960){
-                        loadMap('map0', 3460, 2435, 20, false);
-                        player.animations.play('down');
-                    }
-                }
             }
         }
         
 
 
         if (game.input.activePointer.leftButton.isDown){   
+
+            melee_animation_is_playing = false;
+
             //Calculate direction        
             var player_screen_x = player.position.x - game.camera.x;
             var player_screen_y = player.position.y - game.camera.y;
@@ -272,7 +322,7 @@ function update() {
             else{
                 player_dir = dif_y>=0 ? 'down' : 'up';
             }            
-            console.log(game.input.mousePointer.x, game.input.mousePointer.y); 
+
             player.play(player_dir+"_melee");            
         } 
 
@@ -293,7 +343,7 @@ function update() {
         game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, this);
         game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, this);  
 
-        //game.physics.arcade.overlap(NPCBox, player, NPCDialogue, null, this);
+        game.physics.arcade.overlap(NPCBox, player, NPCDialogue, null, this);
 
         //ENemy collion + revive
         for (var enemyGroup in enemys){  
@@ -324,8 +374,12 @@ function render() {
     enemys.spiders.forEach(function(mob){
         //game.debug.body(mob);
     });
-    //game.debug.body(NPCBox);
+    game.debug.body(NPCBox);
+    //game.debug.body(atkBox);
+    //game.debug.body(player);
 }
+
+
 
 function updateHealthBar(){
     var pc = Math.ceil(player.health/player.maxHealth*10);
@@ -419,6 +473,7 @@ function attackCollisionHandler(atkBox, enemy){
     if (!enemy.alive) {
         enemy.deathTime = game.time.now;
         playerGold += enemy.gold;
+        console.log(playerGold);
 
         gold.removeChildAt(0);
         goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
@@ -431,7 +486,6 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.removeChildAt(0);
     enemy.addChild(monHealthBar);    
 }
-
 function NPCDialogue(collisionBox, player) {
     var currentNPC = collisionBox.parent;
     console.log(currentNPC.x, currentNPC.y);
