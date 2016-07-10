@@ -23,6 +23,11 @@ var playerFrames = {
 },
 
 enemyFrames = {
+"snail": {
+	"down": {
+		"walk": [0, 1, 2, 3]		
+	},	
+},
 "spider": {
 	"down": {
 		"walk": [0, 1, 2, 3, 4, 5],
@@ -30,6 +35,11 @@ enemyFrames = {
 	},	
 },
 "scorpion": {
+	"down":{
+		"walk": [0, 1, 2, 3, 4],
+	}
+},
+"logmonster": {
 	"down":{
 		"walk": [0, 1, 2, 3, 4],
 	}

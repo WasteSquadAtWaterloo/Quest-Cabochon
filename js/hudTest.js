@@ -24,6 +24,7 @@ function preload() {
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
     game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
+    game.load.spritesheet('logmonster', 'assets/Spritesheet/monsters/logmonster.png', 45, 45);
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34)
 }
@@ -71,9 +72,7 @@ function create() {
 
     $(window).resize(function(){
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
-    });
-
-    Phaser.Canvas.setSmoothingEnabled(this.game.context, false);
+    });    
 
     atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
@@ -210,8 +209,8 @@ function update() {
                 player_dir = 'up';
 
                 if (map.key==="map0"){
-                    if (player.y===2435 && (player.x>3456 && player.x<3472)){
-                        loadMap('map2', 480, 960-32, 20, false);
+                    if (player.y===2435 && (player.x>3440 && player.x<3470)){
+                        loadMap('map2', 480, 928, 20, false);
                         player.animations.play("up")
                     }
                 }
@@ -223,7 +222,7 @@ function update() {
 
                 if (map.key==="map2"){
                     if (player.y>960){
-                        loadMap('map0', 3464, 2435, 20, false);
+                        loadMap('map0', 3460, 2435, 20, false);
                         player.animations.play('down');
                     }
                 }
@@ -233,9 +232,6 @@ function update() {
 
 
         if (game.input.activePointer.leftButton.isDown){   
-
-            melee_animation_is_playing = false;
-
             //Calculate direction        
             var player_screen_x = player.position.x - game.camera.x;
             var player_screen_y = player.position.y - game.camera.y;
@@ -248,7 +244,7 @@ function update() {
             else{
                 player_dir = dif_y>=0 ? 'down' : 'up';
             }            
-
+            console.log(game.input.mousePointer.x, game.input.mousePointer.y); 
             player.play(player_dir+"_melee");            
         } 
 
