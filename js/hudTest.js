@@ -8,7 +8,7 @@ function preload() {
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
     game.load.image('attackBox', 'assets/blank.png');
-    game.load.image('shop', 'assets/HUD/shop.png');
+    game.load.image('shop', 'assets/HUD/realShop.png');
     game.load.image('characterHud', 'assets/HUD/character_hud.png');
     game.load.image('textHud', 'assets/HUD/text_hud.png');
     game.load.image('emptySlot', 'assets/HUD/empty_slot.png');
