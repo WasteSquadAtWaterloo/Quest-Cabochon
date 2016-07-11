@@ -95,8 +95,9 @@ function create() {
     $(window).resize(function(){
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
 
-        shop.cameraOffset.x = window.innerWidth/2-290; 
-        shop.cameraOffset.y = window.innerHeight/2-212
+        console.log(window.innerWidth/2-386,window.innerHeight/2-283)
+        shop.cameraOffset.x = window.innerWidth/2-386; 
+        shop.cameraOffset.y = window.innerHeight/2-283;
     });    
 
     atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");

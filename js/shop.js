@@ -8,10 +8,10 @@ function initShop(){
 	var ct = 0;
 
 	for (var i=0; i<6; i++){
-		make_button(18,16+42*i, shopItems[ct++]);		
+		make_button(36,32+84*i, shopItems[ct++]);		
 	}
 	for (var i=0; i<4; i++){
-		make_button(214,16+42*i, shopItems[ct++]);
+		make_button(428,32+84*i, shopItems[ct++]);
 	}
 
 	shop.kill();
@@ -19,7 +19,7 @@ function initShop(){
 
 function make_button (x, y, item){	
 	var btn = game.add.button(x, y, '', pickUpItems, item);
-	btn.width = 30; btn.height = 30;
+	btn.width = 60; btn.height = 60;
 
 	shop.addChild(btn);
 }
