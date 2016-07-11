@@ -1,8 +1,8 @@
 var shop;
 
 function initShop(){
-	shop = game.add.image(window.innerWidth/2-290, window.innerHeight/2-212 ,'shop');
-	shop.scale.set(1.5);
+	shop = game.add.image(window.innerWidth/2-400, window.innerHeight/2-300 ,'shop');
+	shop.scale.set(1);
 	shop.fixedToCamera = true;
 	var shopItems = ['hp0', 'hp1', 'hp2', 'mp0', 'mp1', 'mp2', 'hat0', 'hat1', 'hat2', 'hat3'];
 	var ct = 0;
