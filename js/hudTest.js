@@ -30,6 +30,10 @@ function preload() {
     game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
     game.load.spritesheet('logmonster', 'assets/Spritesheet/monsters/logmonster.png', 45, 45);
 
+    game.load.spritesheet('wolfBoss', 'assets/Spritesheet/monsters/Boss_1.png', 32, 50);
+    game.load.spritesheet('skeleBoss','assets/Spritesheet/monsters/BOSS2.png', 50, 48);
+    game.load.spritesheet('knightBoss','assets/Spritesheet/monsters/BOSS3.png', 49, 48);
+
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34);
 
     //game.load.spritesheet('NPCs', 'assets/Spritesheet/NPC/npc_spritesheet.png', 40, 48);
@@ -82,6 +86,8 @@ var niceTxtStyle = {
 }
 var spawn = {x:2400, y:2400};
 var maxHealth = 20;
+
+var wolfBoss
 
 function create() {   
 
@@ -204,7 +210,10 @@ function create() {
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
 
-    //
+    //Create wolfBoss
+
+
+
 
     gold = game.add.sprite(30, 85, 'goldIcon');
     goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
@@ -326,6 +335,16 @@ function update() {
                 }
             });
         }
+
+        //WolfBoss Collision
+        if (game.time.now - damageTime > 700){
+            game.physics.arcade.overlap(player, wolfBoss, enemyCollisionHandler, null, this);            
+        }
+
+        if(game.time.now - atkTime > 500){
+            game.physics.arcade.overlap(atkBox, wolfBoss, attackCollisionHandler, null, wolfBoss);
+        }
+
         if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false) {
             //dialogue = true;
             dialogue = false;
@@ -444,7 +463,7 @@ function attackCollisionHandler(atkBox, enemy){
         gold.addChild(goldText);
 
     }
-    var madeBar = mobHealthBarManager(10, enemy.health);
+    var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
 
     enemy.removeChildAt(0);
