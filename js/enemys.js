@@ -20,6 +20,7 @@ function initEnemys(map){
         enemys.scorpions = game.add.group();
         createEnemys(enemys.scorpions, 'scorpion', 20, 15, 3744, 240, 960, 640, 1.5, 100);  
 
+        enemys.wolfBoss = game.add.group();
         createWolfBoss('wolfBoss', 50, 5, 400, 600, 100, 100, 3, 300);
 
     }
@@ -68,7 +69,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, scale, gol
 }
 
 function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
-    wolfBoss = game.add.sprite(topX, topY, 'wolfBoss');
+    var wolfBoss = enemys.wolfBoss.create(topX, topY, 'wolfBoss');
     wolfBoss.maxHealth = hp;
     wolfBoss.setHealth(hp);
     game.physics.enable(wolfBoss, Phaser.Physics.ARCADE);

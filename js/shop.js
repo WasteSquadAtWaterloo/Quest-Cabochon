@@ -1,4 +1,5 @@
 var shop;
+
 function initShop(){
 	shop = game.add.image(window.innerWidth/2-290, window.innerHeight/2-212 ,'shop');
 	shop.scale.set(1.5);
@@ -10,7 +11,7 @@ function initShop(){
 		make_button(18,16+42*i, shopItems[ct++]);		
 	}
 	for (var i=0; i<4; i++){
-		make_button(214,16+42*i, shopItems[ct++]);		
+		make_button(214,16+42*i, shopItems[ct++]);
 	}
 
 	shop.kill();
@@ -21,4 +22,8 @@ function make_button (x, y, item){
 	btn.width = 30; btn.height = 30;
 
 	shop.addChild(btn);
+}
+
+function toggleShop(){
+	shop.revive();
 }

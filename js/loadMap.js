@@ -1,4 +1,7 @@
 var map;
+var NPC;
+var healer, kid, storeClerk;
+var healerBox, kidBox, storeClerkBox;
 
 function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
 	if (!bgn){
@@ -23,6 +26,19 @@ function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
 
     initEnemys(key);
     initPlayer(spawn_x, spawn_y, player_hp);
+    if (key=="map0"){
+        NPC = game.add.group();
+        NPC.enableBody = true;
+        NPC.physicsBodyType = Phaser.Physics.ARCADE;
+
+        healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healerBox";
+        kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kidBox";
+        storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
+        
+        healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
+        kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
+        storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
+    }
 
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
     layer1.resizeWorld(); 
@@ -54,7 +70,8 @@ function initPlayer(spawnX, spawnY, hp){
         this.alive = true;
         this.exists = true;
         this.visible = true;
-        this.setHealth(this.maxHealth);        
+        this.setHealth(this.maxHealth); 
+        updateHealthBar();       
 
         if (this.events)
         {

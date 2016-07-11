@@ -45,9 +45,8 @@ function preload() {
 
 
 var map;
-var NPC, dialogueBox, textBox;
+var dialogueBox, textBox;
 var dialogue = false;
-var healer, kid, storeClerk;
 var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
@@ -90,8 +89,6 @@ var niceTxtStyle = {
 }
 var spawn = {x:2400, y:2400};
 var maxHealth = 20;
-
-var wolfBoss
 
 function create() {   
 
@@ -161,17 +158,7 @@ function create() {
     
     items.armor0 = itemFrames.load('armor0', 1600, 1600); game.physics.enable(items.armor0, Phaser.Physics.ARCADE);
     items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
-    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);    
-    items.hp0 = itemFrames.load('hp0', -100, -100);
-    items.hp1 = itemFrames.load('hp1', -100, -100);
-    items.hp2 = itemFrames.load('hp2', -100, -100);
-    items.mp0 = itemFrames.load('mp0', -100, -100);
-    items.mp1 = itemFrames.load('mp1', -100, -100);
-    items.mp2 = itemFrames.load('mp2', -100, -100);
-    items.hat0 = itemFrames.load('hat0', -100, -100);
-    items.hat1 = itemFrames.load('hat1', -100, -100);
-    items.hat2 = itemFrames.load('hat2', -100, -100);    
-    items.hat3 = itemFrames.load('hat3', -100, -100);   
+    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);      
 
     initShop();
 
@@ -191,7 +178,7 @@ function create() {
     wasd.E.onDown.add(function(){        
         for (var i=0; i<24; i++){
             if (inventorySlots[i].children.length){
-                console.log(inventorySlots[i].getChildAt(0).frame);
+                
                 if ([35, 49, 28].indexOf(inventorySlots[i].getChildAt(0).frame) > -1){                   
                     switch (inventorySlots[i].getChildAt(0).frame){
                         case 35: player.heal(10);
@@ -231,30 +218,13 @@ function create() {
             inventory.fixedToCamera = true;
         }
     });
-
     
     
-    //Create NPCs
-    
-    NPC = game.add.group();
-    NPC.enableBody = true;
-    NPC.physicsBodyType = Phaser.Physics.ARCADE;
-
-    healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healerBox";
-    kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kidBox";
-    storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
-    
-    healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
-    kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
-    storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox);
+    //Create NPCs   
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
 
     //Create wolfBoss
-
-
-
-
     gold = game.add.sprite(30, 85, 'goldIcon');
     goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
     gold.addChild(goldText);
@@ -326,8 +296,8 @@ function update() {
             }
             else{
                 player_dir = dif_y>=0 ? 'down' : 'up';
-            }            
-            //console.log(game.input.mousePointer.x, game.input.mousePointer.y); 
+            }          
+            
             player.play(player_dir+"_melee");            
         } 
 
@@ -349,11 +319,12 @@ function update() {
         game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);  
 
         game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
-        game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
-        game.physics.arcade.overlap(storeClerkBox, player, createDialogue, null, this);
+        game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);        
 
+        if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
+            shop.revive();
+        }else shop.kill();     
         
-        //console.log(dialogue);
 
         //ENemy collion + revive
         for (var enemyGroup in enemys){  
@@ -365,8 +336,8 @@ function update() {
                 game.physics.arcade.overlap(atkBox, enemys[enemyGroup], attackCollisionHandler, null, enemys[enemyGroup]);
             }
 
-            enemys[enemyGroup].forEach(function(mob){
-                if (!mob.alive && game.time.now - mob.deathTime >= 15000){
+            enemys[enemyGroup].forEach(function(mob){                
+                if (enemyGroup.indexOf('Boss')===-1 &&!mob.alive && game.time.now - mob.deathTime >= 15000){
                     mob.revive();
                     mob.setHealth(mob.maxHealth);
                     var madeBar = mobHealthBarManager(10, mob.health);
@@ -377,6 +348,7 @@ function update() {
         }
 
         //WolfBoss Collision
+        /*
         if (game.time.now - damageTime > 700){
             game.physics.arcade.overlap(player, wolfBoss, enemyCollisionHandler, null, this);            
         }
@@ -384,6 +356,7 @@ function update() {
         if(game.time.now - atkTime > 500){
             game.physics.arcade.overlap(atkBox, wolfBoss, attackCollisionHandler, null, wolfBoss);
         }
+        */
 
         if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false) {
             //dialogue = true;
@@ -480,16 +453,11 @@ function mobHealthBarManager(mobMaxHealth, mobHealth){
 }
 
 function enemyCollisionHandler(player, enemy) {
+    console.log(enemy);
     game.camera.shake(0.003, 500, true);
 
     damageTime = game.time.now;
-    /*
-    if (enemy.atk >= player.health){
-        player.alive = false;
-        player.animations.play('dead');
-        if (player.animations.currentAnim.isFinished); 
-    }
-    else*/ player.damage(enemy.atk);
+    player.damage(enemy.atk);
     
     updateHealthBar();   
 }
@@ -529,19 +497,16 @@ function createDialogue(collisionBox, player) {
         if (NPCname == "storeClerkBox") {
             textBox.exists = true;
             var clerkText = game.add.text(10, 10, "Clerk Text", niceTxtStyle);
-            textBox.addChild(clerkText);
-            console.log("store");
+            textBox.addChild(clerkText);            
 
         }
         else if (NPCname == "kidBox") {
             textBox.exists = true;
             var kidText = game.add.text(15, 15, "The wind... is troubled today. But this wind is \nweeping just a little.", niceTxtStyle);
-            textBox.addChild(kidText);
-            console.log("kid");
+            textBox.addChild(kidText);            
         }
         else if (NPCname == "healerBox") {
-            textBox.exists = true;
-            console.log("healer");
+            textBox.exists = true;           
             var healerText = game.add.text(15, 15, "Hello, and welcome to the Poke- err, healing center. \nI've restored you to full health.", niceTxtStyle);
             textBox.addChild(healerText);
         }
