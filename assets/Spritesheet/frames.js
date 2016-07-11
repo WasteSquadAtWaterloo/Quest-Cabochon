@@ -47,9 +47,20 @@ enemyFrames = {
 },
 
 itemFrames = {
+	'hat0': 192,
+	'hat1': 190,
+	'hat2': 194,
+	'hat3': 195,
 	'armor0': 184,
 	'armor1': 186,
 	'armor2': 187,
+	'hp0': 35,
+	'hp1': 49,
+	'hp2': 28,
+	'mp0': 38,
+	'mp1': 52,
+	'mp2': 31,
+
 
 	load: function(item, x, y){
 		return game.add.sprite(x, y, 'items', this[item]);

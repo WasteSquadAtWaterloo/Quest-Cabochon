@@ -8,6 +8,7 @@ function preload() {
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
     game.load.image('attackBox', 'assets/blank.png');
+    game.load.image('shop', 'assets/HUD/shop.png');
     game.load.image('characterHud', 'assets/HUD/character_hud.png');
     game.load.image('emptySlot', 'assets/HUD/empty_slot.png');
     game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
@@ -32,6 +33,9 @@ function preload() {
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34);
 
     //game.load.spritesheet('NPCs', 'assets/Spritesheet/NPC/npc_spritesheet.png', 40, 48);
+
+    //for testing
+    game.load.image('rect', 'assets/HUD/hp_bar.png');
 }
 
 
@@ -81,12 +85,17 @@ function create() {
 
     $(window).resize(function(){
         game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
+
+        shop.cameraOffset.x = window.innerWidth/2-290; 
+        shop.cameraOffset.y = window.innerHeight/2-212
     });    
 
     atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
     game.physics.enable(atkBox, Phaser.Physics.ARCADE);
 
     loadMap('map0', spawn.x, spawn.y, 20, true);
+
+    
 
     //Adding inventory
     inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
@@ -105,7 +114,7 @@ function create() {
          try { //Removing an item
             var item = sword_slot.getChildAt(0);
             sword_slot.removeChildAt(0);
-            pickUpItems(item, player);
+            pickUpItems.call(item, item, player);
             swordAvailability = true;
         }
         catch(err){
@@ -115,7 +124,7 @@ function create() {
          try { //Removing an item
             var item = helmet_slot.getChildAt(0);
             helmet_slot.removeChildAt(0);
-            pickUpItems(item, player);
+            pickUpItems.call(item, item, player);
             helmetAvailability = true;
         }
         catch(err){
@@ -126,7 +135,7 @@ function create() {
          try { //Removing an item
             var item = chest_slot.getChildAt(0);
             chest_slot.removeChildAt(0);
-            pickUpItems(item, player);
+            pickUpItems.call(item, item, player);
             chestAvailability = true;
         }
         catch(err){
@@ -140,7 +149,19 @@ function create() {
     
     items.armor0 = itemFrames.load('armor0', 1600, 1600); game.physics.enable(items.armor0, Phaser.Physics.ARCADE);
     items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
-    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);
+    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);    
+    items.hp0 = itemFrames.load('hp0', -100, -100);
+    items.hp1 = itemFrames.load('hp1', -100, -100);
+    items.hp2 = itemFrames.load('hp2', -100, -100);
+    items.mp0 = itemFrames.load('mp0', -100, -100);
+    items.mp1 = itemFrames.load('mp1', -100, -100);
+    items.mp2 = itemFrames.load('mp2', -100, -100);
+    items.hat0 = itemFrames.load('hat0', -100, -100);
+    items.hat1 = itemFrames.load('hat1', -100, -100);
+    items.hat2 = itemFrames.load('hat2', -100, -100);    
+    items.hat3 = itemFrames.load('hat3', -100, -100);   
+
+    initShop();
 
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
@@ -154,14 +175,32 @@ function create() {
     };
     game.input.mouse.capture = true;
 
-    wasd.E.onDown.add(function(){
-        equip.armor = "plate";
-        player.loadTexture(JSON.stringify(equip), dir, true);
+    //pots
+    wasd.E.onDown.add(function(){        
+        for (var i=0; i<24; i++){
+            if (inventorySlots[i].children.length){
+                console.log(inventorySlots[i].getChildAt(0).frame);
+                if ([35, 49, 28].indexOf(inventorySlots[i].getChildAt(0).frame) > -1){                   
+                    switch (inventorySlots[i].getChildAt(0).frame){
+                        case 35: player.heal(10);
+                        case 49: player.heal(10);
+                        case 28: player.heal(10);
+                    }
+                    updateHealthBar();
+
+                    inventorySlots[i].removeChildAt(0);
+                    inventoryAvailability[i] = true;
+                    break;                    
+                }                
+            }
+        }
     });
 
+    //temp shop
     wasd.Q.onDown.add(function(){
-        equip.armor = "none";
-        player.loadTexture(JSON.stringify(equip), dir, true);
+        if (shop.alive){
+            shop.kill();
+        } else shop.revive();
     });
 
     wasd.C.onDown.add(function(){
@@ -181,6 +220,7 @@ function create() {
         }
     });
 
+    
     
     //Create NPCs
     
@@ -272,7 +312,7 @@ function update() {
             else{
                 player_dir = dif_y>=0 ? 'down' : 'up';
             }            
-            console.log(game.input.mousePointer.x, game.input.mousePointer.y); 
+            //console.log(game.input.mousePointer.x, game.input.mousePointer.y); 
             player.play(player_dir+"_melee");            
         } 
 
@@ -289,9 +329,9 @@ function update() {
         }        
 
         //item pick up
-        game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, this);
-        game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, this);
-        game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, this);  
+        game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, items.armor0);
+        game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, items.armor1);
+        game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);  
 
         //game.physics.arcade.overlap(NPCBox, player, NPCDialogue, null, this);
 
@@ -355,7 +395,7 @@ function inventoryCreator(){
                 var temp = chest_slot.getChildAt(0);
                 chest_slot.removeChildAt(0);
                 chest_slot.addChild(item);
-                pickUpItems(temp, player);
+                pickUpItems.call(temp, temp, player);
             }
         }
         catch(err){ //Adding an item
@@ -367,13 +407,26 @@ function inventoryCreator(){
 }
 
 function pickUpItems(item, player) {
-    for (var i=0; i<24; i++){
-        if (inventoryAvailability[i]) {
-            item.x = 0;
-            item.y = 0;
-            inventorySlots[i].addChild(item);
-            inventoryAvailability[i] = false;
-            break;
+
+    if (this.toString()[0] !="["){        
+        var sItem = itemFrames.load(this.toString(), 0, 0);
+        for (var i=0; i<24; i++){
+            if (inventoryAvailability[i]) {                
+                inventorySlots[i].addChild(sItem);
+                inventoryAvailability[i] = false;
+                break;
+            }
+        }
+    }
+    else{
+        for (var i=0; i<24; i++){
+            if (inventoryAvailability[i]) {
+                this.x = 0;
+                this.y = 0;
+                inventorySlots[i].addChild(this);
+                inventoryAvailability[i] = false;
+                break;
+            }
         }
     }
 }

@@ -1,0 +1,24 @@
+var shop;
+function initShop(){
+	shop = game.add.image(window.innerWidth/2-290, window.innerHeight/2-212 ,'shop');
+	shop.scale.set(1.5);
+	shop.fixedToCamera = true;
+	var shopItems = ['hp0', 'hp1', 'hp2', 'mp0', 'mp1', 'mp2', 'hat0', 'hat1', 'hat2', 'hat3'];
+	var ct = 0;
+
+	for (var i=0; i<6; i++){
+		make_button(18,16+42*i, shopItems[ct++]);		
+	}
+	for (var i=0; i<4; i++){
+		make_button(214,16+42*i, shopItems[ct++]);		
+	}
+
+	shop.kill();
+}
+
+function make_button (x, y, item){	
+	var btn = game.add.button(x, y, '', pickUpItems, item);
+	btn.width = 30; btn.height = 30;
+
+	shop.addChild(btn);
+}

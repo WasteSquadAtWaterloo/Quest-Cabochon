@@ -18,10 +18,8 @@ function initEnemys(map){
         createEnemys(enemys.logmonsters2, 'logmonster', 10, 5, 1056, 3984, 960, 640, 1.5, 100);    
 
         enemys.scorpions = game.add.group();    
-        createEnemys(enemys.scorpions, 'scorpion', 20, 15, 3744, 240, 960, 640, 1.5, 100);    
-    }
-
-    
+        createEnemys(enemys.scorpions, 'scorpion', 20, 15, 4080, 864, 640, 960, 1.5, 100);    
+    }    
 }
 
 function createEnemys(group, key, hp, atk, topX, topY, width, height, scale, goldAmount){
