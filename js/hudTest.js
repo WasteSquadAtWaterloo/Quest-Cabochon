@@ -9,6 +9,7 @@ function preload() {
     
     game.load.image('attackBox', 'assets/blank.png');
     game.load.image('characterHud', 'assets/HUD/character_hud.png');
+    game.load.image('textHud', 'assets/HUD/text_hud.png');
     game.load.image('emptySlot', 'assets/HUD/empty_slot.png');
     game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
     game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
@@ -36,8 +37,9 @@ function preload() {
 
 
 var map;
-var NPC;
-
+var NPC, dialogueBox, textBox;
+var dialogue = false;
+var healer, kid, storeClerk;
 var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
@@ -74,6 +76,10 @@ var dmgTxtStyle = {
     font: "bold 18px Courier",
     fill: "red",
 };
+var niceTxtStyle = {
+    font: "bold 14px Lucida Console",
+    fill: "black",
+}
 var spawn = {x:2400, y:2400};
 var maxHealth = 20;
 
@@ -188,20 +194,20 @@ function create() {
     NPC.enableBody = true;
     NPC.physicsBodyType = Phaser.Physics.ARCADE;
 
-    /*
-    var healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(NPCBox); 
-    var kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(NPCBox);
-    var storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(NPCBox);
+    healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healerBox";
+    kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kidBox";
+    storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
+    
+    healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
+    kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
+    storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox);
 
-    for (var i=0; i<3; i++){
-            NPCBox = game.add.sprite(-50, -50, "attackBox");
-            NPCBox.scale.set(5);
-            game.physics.enable(NPCBox, Phaser.Physics.ARCADE);
-    }
-    */
+    textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
+
+    //
 
     gold = game.add.sprite(30, 85, 'goldIcon');
-    goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
+    goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
     gold.addChild(goldText);
 
     gold.fixedToCamera = true;
@@ -293,7 +299,12 @@ function update() {
         game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, this);
         game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, this);  
 
-        //game.physics.arcade.overlap(NPCBox, player, NPCDialogue, null, this);
+        game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
+        game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
+        game.physics.arcade.overlap(storeClerkBox, player, createDialogue, null, this);
+
+        
+        //console.log(dialogue);
 
         //ENemy collion + revive
         for (var enemyGroup in enemys){  
@@ -314,7 +325,13 @@ function update() {
                     mob.addChild(monHealthBar);
                 }
             });
-        }       
+        }
+        if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false) {
+            //dialogue = true;
+            dialogue = false;
+            textBox.removeChildren();
+            textBox.exists = false;
+        } 
     }
 
        
@@ -324,7 +341,9 @@ function render() {
     enemys.spiders.forEach(function(mob){
         //game.debug.body(mob);
     });
-    //game.debug.body(NPCBox);
+    game.debug.body(healerBox);
+    game.debug.body(kidBox);
+    game.debug.body(storeClerkBox);
 }
 
 function updateHealthBar(){
@@ -421,7 +440,7 @@ function attackCollisionHandler(atkBox, enemy){
         playerGold += enemy.gold;
 
         gold.removeChildAt(0);
-        goldText = game.add.text(40,8,playerGold.toString(), dmgTxtStyle);
+        goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
         gold.addChild(goldText);
 
     }
@@ -432,8 +451,30 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.addChild(monHealthBar);    
 }
 
-function NPCDialogue(collisionBox, player) {
-    var currentNPC = collisionBox.parent;
-    console.log(currentNPC.x, currentNPC.y);
-    console.log(currentNPC);
+function createDialogue(collisionBox, player) {
+    var NPCname = (collisionBox.name).toString();
+    if (dialogue == false){
+        if (NPCname == "storeClerkBox") {
+            textBox.exists = true;
+            var clerkText = game.add.text(10, 10, "Clerk Text", niceTxtStyle);
+            textBox.addChild(clerkText);
+            console.log("store");
+
+        }
+        else if (NPCname == "kidBox") {
+            textBox.exists = true;
+            var kidText = game.add.text(15, 15, "The wind... is troubled today. But this wind is \nweeping just a little.", niceTxtStyle);
+            textBox.addChild(kidText);
+            console.log("kid");
+        }
+        else if (NPCname == "healerBox") {
+            textBox.exists = true;
+            console.log("healer");
+            var healerText = game.add.text(15, 15, "Hello, and welcome to the Poke- err, healing center. \nI've restored you to full health.", niceTxtStyle);
+            textBox.addChild(healerText);
+        }
+        
+    }
+    dialogue = true;
+
 }
