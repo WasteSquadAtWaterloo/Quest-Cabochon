@@ -112,8 +112,13 @@ function inventoryCreator(){
                     pickUpItems.call(temp, temp, player);
                 }    
             }
-            else if (itemName.indexOf('hp') > -1 || itemName.indexOf('mp') > -1){
-                usePot();
+            else if (itemName.indexOf('hp') > -1){
+                usePot.call('hp');
+                console.log('hp');
+            }
+            else if (itemName.indexOf('mp') > -1) {
+                usePot.call('mp');
+                console.log('mp');
             }
         }
         catch(err){ //Adding an item
