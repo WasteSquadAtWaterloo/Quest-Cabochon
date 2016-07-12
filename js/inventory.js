@@ -48,9 +48,9 @@ function initInventory(){
     inventory.addChild(helmet_slot);
     inventory.addChild(chest_slot);
 
-    items.armor0 = itemFrames.load('armor0', 1600, 1600); game.physics.enable(items.armor0, Phaser.Physics.ARCADE);
-    items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
-    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);  
+    items.armor0 = itemFrames.load('armor0', 1600, 1600); game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
+    items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
+    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
 
     inventory.kill();
 }
@@ -72,18 +72,48 @@ function inventoryCreator(){
         try { //equiping an item
             var item = inventorySlots[id].getChildAt(0);
             //Check item type
-
+            var itemName = (item.name).toString();
             inventorySlots[id].removeChildAt(0);
             inventoryAvailability[id] = true;
-            if (chestAvailability) { //There is a free chest armor space
-                chest_slot.addChild(item);
-                chestAvailability = false;
+
+            if (itemName.indexOf('armor') > -1){
+                if (chestAvailability) { //There is a free chest armor space
+                    chest_slot.addChild(item);
+                    chestAvailability = false;
+                }
+                else { //there is no free chest armor space
+                    var temp = chest_slot.getChildAt(0);
+                    chest_slot.removeChildAt(0);
+                    chest_slot.addChild(item);
+                    pickUpItems.call(temp, temp, player);
+                }
             }
-            else { //there is no free chest armor space
-                var temp = chest_slot.getChildAt(0);
-                chest_slot.removeChildAt(0);
-                chest_slot.addChild(item);
-                pickUpItems.call(temp, temp, player);
+            else if (itemName.indexOf('hat') > -1){
+                if (helmetAvailability) { //There is a free chest armor space
+                    helmet_slot.addChild(item);
+                    helmetAvailability = false;
+                }
+                else { //there is no free chest armor space
+                    var temp = helmet_slot.getChildAt(0);
+                    helmet_slot.removeChildAt(0);
+                    helmet_slot.addChild(item);
+                    pickUpItems.call(temp, temp, player);
+                }                
+            }
+            else if (itemName.indexOf('weapon') > -1){
+                if (swordAvailability) { //There is a free chest armor space
+                    sword_slot.addChild(item);
+                    swordAvailability = false;
+                }
+                else { //there is no free chest armor space
+                    var temp = sword_slot.getChildAt(0);
+                    sword_slot.removeChildAt(0);
+                    sword_slot.addChild(item);
+                    pickUpItems.call(temp, temp, player);
+                }    
+            }
+            else if (itemName.indexOf('hp') > -1 || itemName.indexOf('mp') > -1){
+                usePot();
             }
         }
         catch(err){ //Adding an item
@@ -98,6 +128,7 @@ function pickUpItems(item, player) {
 
     if (this.toString()[0] !="["){        
         var sItem = itemFrames.load(this.toString(), 0, 0);
+        sItem.name = this.toString();
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {                
                 inventorySlots[i].addChild(sItem);
