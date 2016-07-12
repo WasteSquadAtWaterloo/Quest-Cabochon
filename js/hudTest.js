@@ -338,8 +338,8 @@ function attackCollisionHandler(atkBox, enemy){
 function usePot(){       
     for (var i=0; i<24; i++){
         if (inventorySlots[i].children.length){
-            
-            if (this.toString()==="hp"){                   
+            var tempChild = (inventorySlots[i].getChildAt(0)).name;      
+            if (this.toString()==="hp" && (tempChild.indexOf('hp') > -1)){                   
                 switch (inventorySlots[i].getChildAt(0).frame){
                     case 35: 
                         player.heal(10);
@@ -352,13 +352,12 @@ function usePot(){
                         break;
                 }
                 updateHealthBar();
-
                 inventorySlots[i].removeChildAt(0);
                 inventoryAvailability[i] = true;
                 break;                    
             }
 
-            else if (this.toString()==="mp"){
+            else if (this.toString()==="mp" && (tempChild.indexOf('mp') > -1)){
                 switch (inventorySlots[i].getChildAt(0).frame){
                     case 38: 
                         player.mana = Math.min(player.maxMana, player.mana+10);
