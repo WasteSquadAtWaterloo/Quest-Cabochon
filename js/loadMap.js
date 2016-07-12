@@ -43,6 +43,7 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     shop.bringToTop(); 
     inventory.bringToTop();
     textBox.bringToTop();
+    gold.bringToTop();
 }
 
 
@@ -106,6 +107,7 @@ function initPlayer(spawnX, spawnY, hp){
 
     gold.fixedToCamera = true;
     updateHealthBar();
+    updateManaBar();
 
     game.camera.follow(player);
 }
@@ -146,6 +148,9 @@ function createDialogue(collisionBox, player) {
             textBox.exists = true;           
             var healerText = game.add.text(15, 15, "Hello, and welcome to the Poke- err, healing center. \nI've restored you to full health.", niceTxtStyle);
             textBox.addChild(healerText);
+
+            player.heal(100); player.mana = player.maxMana;
+            updateHealthBar(); updateManaBar();
         }
         
     }

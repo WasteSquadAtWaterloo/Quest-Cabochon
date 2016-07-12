@@ -56,6 +56,7 @@ for (var i=0;i<24;i++){
     inventoryAvailability[i] = true;
 }
 
+var manaRegenTick = 0;
 var buttonCreated = 0;
 var layer1,layer2,layer3,layer4,layer5;
 var cursors, wasd, melee;
@@ -112,29 +113,9 @@ function create() {
     game.input.mouse.capture = true;
 
     //pots
-    wasd.E.onDown.add(function(){        
-        for (var i=0; i<24; i++){
-            if (inventorySlots[i].children.length){
-                
-                if ([35, 49, 28].indexOf(inventorySlots[i].getChildAt(0).frame) > -1){                   
-                    switch (inventorySlots[i].getChildAt(0).frame){
-                        case 35: player.heal(10);
-                        case 49: player.heal(10);
-                        case 28: player.heal(10);
-                    }
-                    updateHealthBar();
-
-                    inventorySlots[i].removeChildAt(0);
-                    inventoryAvailability[i] = true;
-                    break;                    
-                }                
-            }
-        }
-    });
+    wasd.E.onDown.add(usePot, 'hp');
     
-    wasd.Q.onDown.add(function(){
-        //mana pot
-    });
+    wasd.Q.onDown.add(usePot, 'mp');
 
     wasd.C.onDown.add(toggleInventory); 
 }
@@ -187,8 +168,6 @@ function update() {
                 }
             }
         }
-        
-
 
         if (game.input.activePointer.leftButton.isDown){   
             //Calculate direction        
@@ -205,12 +184,18 @@ function update() {
             }          
             
             player.play(player_dir+"_melee");            
-        } 
+        }
 
-        if(player.animations.currentAnim.name.indexOf("melee") != -1 && !player.animations.currentAnim.isFinished){
+        if (game.time.now - manaRegenTick >= 2000){
+            manaRegenTick = game.time.now;
+            player.mana = Math.min(player.maxMana, player.mana+1);
+            updateManaBar();            
+        }        
+
+        if (player.animations.currentAnim.name.indexOf("melee") != -1 && !player.animations.currentAnim.isFinished){
             atkBox.x = player.body.x+atkOpts[player_dir].x;
             atkBox.y = player.body.y+atkOpts[player_dir].y;
-        }else{
+        } else{
             atkBox.x = -100;
             atkBox.y = -100; 
         }  
@@ -229,7 +214,7 @@ function update() {
 
         if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
             shop.revive();
-        }else shop.kill();     
+        }else if (shop.alive) shop.kill();     
         
 
         //ENemy collion + revive
@@ -291,6 +276,18 @@ function updateHealthBar(){
     }
 }
 
+function updateManaBar(){
+    var pc = Math.ceil(player.mana/player.maxMana*10);
+
+    $("#blue-bars").empty();
+    for (var i=0; i<pc; i++){
+        var hp = $('<img />', {           
+          src: 'assets/HUD/mp_bar.png'          
+        });
+        hp.appendTo($("#blue-bars"));
+    }
+}
+
 function mobHealthBarManager(mobMaxHealth, mobHealth){
     var bar = game.add.bitmapData(32,2);
     var barProgress = (mobHealth/mobMaxHealth)*32;
@@ -339,4 +336,49 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.removeChildAt(0);
     enemy.addChild(monHealthBar);    
 }
+
+function usePot(){       
+    for (var i=0; i<24; i++){
+        if (inventorySlots[i].children.length){
+            
+            if (this.toString()==="hp"){                   
+                switch (inventorySlots[i].getChildAt(0).frame){
+                    case 35: 
+                        player.heal(10);
+                        break;
+                    case 49: 
+                        player.heal(25);
+                        break;
+                    case 28: 
+                        player.heal(50);
+                        break;
+                }
+                updateHealthBar();
+
+                inventorySlots[i].removeChildAt(0);
+                inventoryAvailability[i] = true;
+                break;                    
+            }
+
+            else if (this.toString()==="mp"){
+                switch (inventorySlots[i].getChildAt(0).frame){
+                    case 38: 
+                        player.mana = Math.min(player.maxMana, player.mana+10);
+                        break;
+                    case 52: 
+                        player.mana = Math.min(player.maxMana, player.mana+25);
+                        break;
+                    case 31: 
+                        player.mana = Math.min(player.maxMana, player.mana+50);
+                        break;
+                }
+                updateManaBar();
+
+                inventorySlots[i].removeChildAt(0);
+                inventoryAvailability[i] = true;
+                break; 
+            }                
+        }
+    }
+}    
 
