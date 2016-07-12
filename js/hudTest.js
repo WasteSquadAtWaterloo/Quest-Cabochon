@@ -35,9 +35,7 @@ function preload() {
     game.load.spritesheet('skeleBoss','assets/Spritesheet/monsters/BOSS2.png', 50, 48);
     game.load.spritesheet('knightBoss','assets/Spritesheet/monsters/BOSS3.png', 49, 48);
 
-    game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34);
-
-    //game.load.spritesheet('NPCs', 'assets/Spritesheet/NPC/npc_spritesheet.png', 40, 48);
+    game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34);   
 
     //for testing
     game.load.image('rect', 'assets/HUD/hp_bar.png');
@@ -86,82 +84,20 @@ var dmgTxtStyle = {
 var niceTxtStyle = {
     font: "bold 14px Lucida Console",
     fill: "black",
-}
+};
 var spawn = {x:2400, y:2400};
 var maxHealth = 20;
 
 function create() {   
 
-    $(window).resize(function(){
-        game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
+    $(window).resize(resizeComponents);        
 
-        console.log(window.innerWidth/2-386,window.innerHeight/2-283)
-        shop.cameraOffset.x = window.innerWidth/2-386; 
-        shop.cameraOffset.y = window.innerHeight/2-283;
-    });    
+    initNPC(); console.log('NPC loaded');
+    initPlayer(0, 0, 20); console.log('Player loaded');
+    initShop(); console.log('Shop loaded');
+    initInventory(); console.log('Inventory loaded'); 
 
-    atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
-    game.physics.enable(atkBox, Phaser.Physics.ARCADE);
-
-    loadMap('map0', spawn.x, spawn.y, 20, true);
-
-    
-
-    //Adding inventory
-    inventory = game.add.sprite((window.innerWidth)+200, (window.innerHeight)+200, 'characterHud');
-    inventory.fixedToCamera = true;
-
-    for (var i=0; i<4; i++){
-        for (var j=0; j<6; j++){
-            var givenFunction = inventoryCreator();
-            inventorySlots[buttonCreated] = game.make.button(i*36+34, j*36+94, "emptySlot", givenFunction, this);
-            inventory.addChild(inventorySlots[buttonCreated]);
-            buttonCreated += 1
-        }
-    }
-    //Adding equip slots
-    sword_slot = game.make.button(214,167 ,"swordSlot", function() {
-         try { //Removing an item
-            var item = sword_slot.getChildAt(0);
-            sword_slot.removeChildAt(0);
-            pickUpItems.call(item, item, player);
-            swordAvailability = true;
-        }
-        catch(err){
-        }
-    }, this);
-    helmet_slot = game.make.button(258,98 ,"helmetSlot", function() {
-         try { //Removing an item
-            var item = helmet_slot.getChildAt(0);
-            helmet_slot.removeChildAt(0);
-            pickUpItems.call(item, item, player);
-            helmetAvailability = true;
-        }
-        catch(err){
-
-        }
-    }, this);
-    chest_slot = game.make.button(258 ,146 ,"chestSlot", function() {
-         try { //Removing an item
-            var item = chest_slot.getChildAt(0);
-            chest_slot.removeChildAt(0);
-            pickUpItems.call(item, item, player);
-            chestAvailability = true;
-        }
-        catch(err){
-
-        }
-    }, this);
-
-    inventory.addChild(sword_slot);
-    inventory.addChild(helmet_slot);
-    inventory.addChild(chest_slot);
-    
-    items.armor0 = itemFrames.load('armor0', 1600, 1600); game.physics.enable(items.armor0, Phaser.Physics.ARCADE);
-    items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE);
-    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE);      
-
-    initShop();
+    loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
 
     cursors = game.input.keyboard.createCursorKeys(); 
     wasd = {
@@ -195,43 +131,12 @@ function create() {
             }
         }
     });
-
-    //temp shop
+    
     wasd.Q.onDown.add(function(){
-        if (shop.alive){
-            shop.kill();
-        } else shop.revive();
+        //mana pot
     });
 
-    wasd.C.onDown.add(function(){
-        if (inventoryDisplayed){
-            inventory.fixedToCamera = false;
-            inventory.x = (window.innerWidth)+200;
-            inventory.y =  (window.innerHeight)+200;
-            inventoryDisplayed = false;
-            inventory.fixedToCamera = true;
-        }
-        else {
-            inventory.fixedToCamera = false;
-            inventory.x = (window.innerWidth/2)-200;
-            inventory.y = (window.innerHeight/2)-200;
-            inventoryDisplayed = true;
-            inventory.fixedToCamera = true;
-        }
-    });
-    
-    
-    //Create NPCs   
-
-    textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
-
-    //Create wolfBoss
-    gold = game.add.sprite(30, 85, 'goldIcon');
-    goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
-    gold.addChild(goldText);
-
-    gold.fixedToCamera = true;
-    updateHealthBar();
+    wasd.C.onDown.add(toggleInventory); 
 }
 
 
@@ -264,7 +169,7 @@ function update() {
 
                 if (map.key==="map0"){
                     if (player.y===2435 && (player.x>3440 && player.x<3470)){
-                        loadMap('map2', 480, 928, 20, false);
+                        loadMap('map2', 480, 928, false);
                         player.animations.play("up")
                     }
                 }
@@ -276,7 +181,7 @@ function update() {
 
                 if (map.key==="map2"){
                     if (player.y>960){
-                        loadMap('map0', 3460, 2435, 20, false);
+                        loadMap('map0', 3460, 2435, false);
                         player.animations.play('down');
                     }
                 }
@@ -346,18 +251,7 @@ function update() {
                     mob.addChild(monHealthBar);
                 }
             });
-        }
-
-        //WolfBoss Collision
-        /*
-        if (game.time.now - damageTime > 700){
-            game.physics.arcade.overlap(player, wolfBoss, enemyCollisionHandler, null, this);            
-        }
-
-        if(game.time.now - atkTime > 500){
-            game.physics.arcade.overlap(atkBox, wolfBoss, attackCollisionHandler, null, wolfBoss);
-        }
-        */
+        }        
 
         if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false) {
             //dialogue = true;
@@ -371,13 +265,19 @@ function update() {
 }
 
 function render() {
-    enemys.spiders.forEach(function(mob){
-        //game.debug.body(mob);
-    });
-    game.debug.body(healerBox);
-    game.debug.body(kidBox);
-    game.debug.body(storeClerkBox);
+    
 }
+
+function resizeComponents(){
+    game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
+    
+    shop.cameraOffset.x = window.innerWidth/2-386; 
+    shop.cameraOffset.y = window.innerHeight/2-283;
+
+    inventory.cameraOffset.x = window.innerWidth/2-200; 
+    inventory.cameraOffset.y = window.innerHeight/2-200;
+}
+
 
 function updateHealthBar(){
     var pc = Math.ceil(player.health/player.maxHealth*10);
@@ -388,58 +288,6 @@ function updateHealthBar(){
           src: 'assets/HUD/hp_bar.png'          
         });
         hp.appendTo($("#red-bars"));
-    }
-}
-function inventoryCreator(){
-    var id = buttonCreated;
-    function generatedFunction(){
-        try { //equiping an item
-            var item = inventorySlots[id].getChildAt(0);
-            //Check item type
-
-            inventorySlots[id].removeChildAt(0);
-            inventoryAvailability[id] = true;
-            if (chestAvailability) { //There is a free chest armor space
-                chest_slot.addChild(item);
-                chestAvailability = false;
-            }
-            else { //there is no free chest armor space
-                var temp = chest_slot.getChildAt(0);
-                chest_slot.removeChildAt(0);
-                chest_slot.addChild(item);
-                pickUpItems.call(temp, temp, player);
-            }
-        }
-        catch(err){ //Adding an item
-            console.log(err);
-
-        }
-    }
-    return generatedFunction;
-}
-
-function pickUpItems(item, player) {
-
-    if (this.toString()[0] !="["){        
-        var sItem = itemFrames.load(this.toString(), 0, 0);
-        for (var i=0; i<24; i++){
-            if (inventoryAvailability[i]) {                
-                inventorySlots[i].addChild(sItem);
-                inventoryAvailability[i] = false;
-                break;
-            }
-        }
-    }
-    else{
-        for (var i=0; i<24; i++){
-            if (inventoryAvailability[i]) {
-                this.x = 0;
-                this.y = 0;
-                inventorySlots[i].addChild(this);
-                inventoryAvailability[i] = false;
-                break;
-            }
-        }
     }
 }
 
@@ -492,27 +340,3 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.addChild(monHealthBar);    
 }
 
-function createDialogue(collisionBox, player) {
-    var NPCname = (collisionBox.name).toString();
-    if (dialogue == false){
-        if (NPCname == "storeClerkBox") {
-            textBox.exists = true;
-            var clerkText = game.add.text(10, 10, "Clerk Text", niceTxtStyle);
-            textBox.addChild(clerkText);            
-
-        }
-        else if (NPCname == "kidBox") {
-            textBox.exists = true;
-            var kidText = game.add.text(15, 15, "The wind... is troubled today. But this wind is \nweeping just a little.", niceTxtStyle);
-            textBox.addChild(kidText);            
-        }
-        else if (NPCname == "healerBox") {
-            textBox.exists = true;           
-            var healerText = game.add.text(15, 15, "Hello, and welcome to the Poke- err, healing center. \nI've restored you to full health.", niceTxtStyle);
-            textBox.addChild(healerText);
-        }
-        
-    }
-    dialogue = true;
-
-}

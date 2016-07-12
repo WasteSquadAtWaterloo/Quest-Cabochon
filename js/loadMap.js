@@ -3,11 +3,12 @@ var NPC;
 var healer, kid, storeClerk;
 var healerBox, kidBox, storeClerkBox;
 
-function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
+function loadMap(key, spawn_x, spawn_y, bgn){
 	if (!bgn){
         for (var enemy in enemys){
             enemys[enemy].destroy();
         }
+
 		layer1.destroy();
 		layer2.destroy();
 		layer3.destroy();
@@ -23,22 +24,12 @@ function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
     layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
-
+    
+    if (key==='map0') game.world.bringToTop(NPC);
     initEnemys(key);
-    initPlayer(spawn_x, spawn_y, player_hp);
-    if (key=="map0"){
-        NPC = game.add.group();
-        NPC.enableBody = true;
-        NPC.physicsBodyType = Phaser.Physics.ARCADE;
 
-        healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healerBox";
-        kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kidBox";
-        storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
-        
-        healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
-        kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
-        storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
-    }
+    player.bringToTop();
+    player.x = spawn_x; player.y = spawn_y;
 
     layer5 = map.createLayer(4); layer5.smoothed = false; layer5.setScale(3);    
     layer1.resizeWorld(); 
@@ -49,13 +40,23 @@ function loadMap(key, spawn_x, spawn_y, player_hp, bgn){
     map.setCollisionByExclusion(stand,true,layer4);  
     map.setCollisionByExclusion(stand,true,layer5);
 
+    shop.bringToTop(); 
+    inventory.bringToTop();
+    textBox.bringToTop();
 }
 
 
 function initPlayer(spawnX, spawnY, hp){
+    atkBox = game.add.sprite(spawn.x-12,spawn.y-17, "attackBox");
+    game.physics.enable(atkBox, Phaser.Physics.ARCADE);
+
 	player = game.add.sprite(spawnX, spawnY, JSON.stringify(equip), playerFrames.down.walk[0]);
     player.maxHealth = maxHealth;
     player.setHealth(hp);
+
+    player.maxMana = 20;
+    player.mana = 20;
+
     player.kill = function(){ 
         this.body.velocity.x = 0; this.body.velocity.y = 0;        
         this.alive = false;
@@ -97,5 +98,57 @@ function initPlayer(spawnX, spawnY, hp){
 
     player.animations.add('dead', playerFrames.dead, 5, false); 
 
+    textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
+
+    gold = game.add.sprite(30, 85, 'goldIcon');
+    goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
+    gold.addChild(goldText);
+
+    gold.fixedToCamera = true;
+    updateHealthBar();
+
     game.camera.follow(player);
+}
+
+function initNPC(){
+    textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); 
+    textBox.fixedToCamera = true; 
+    textBox.exists = false;
+
+    NPC = game.add.group();
+    NPC.enableBody = true;
+    NPC.physicsBodyType = Phaser.Physics.ARCADE;
+
+    healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healerBox";
+    kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kidBox";
+    storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
+    
+    healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
+    kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
+    storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
+}
+
+function createDialogue(collisionBox, player) {
+    var NPCname = (collisionBox.name).toString();
+    if (dialogue == false){
+        if (NPCname == "storeClerkBox") {
+            textBox.exists = true;
+            var clerkText = game.add.text(10, 10, "Clerk Text", niceTxtStyle);
+            textBox.addChild(clerkText);            
+
+        }
+        else if (NPCname == "kidBox") {
+            textBox.exists = true;
+            var kidText = game.add.text(15, 15, "The wind... is troubled today. But this wind is \nweeping just a little.", niceTxtStyle);
+            textBox.addChild(kidText);            
+        }
+        else if (NPCname == "healerBox") {
+            textBox.exists = true;           
+            var healerText = game.add.text(15, 15, "Hello, and welcome to the Poke- err, healing center. \nI've restored you to full health.", niceTxtStyle);
+            textBox.addChild(healerText);
+        }
+        
+    }
+    dialogue = true;
+
 }

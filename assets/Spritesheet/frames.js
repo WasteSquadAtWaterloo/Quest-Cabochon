@@ -49,8 +49,8 @@ enemyFrames = {
 itemFrames = {
 	'hat0': 192,
 	'hat1': 190,
-	'hat2': 194,
-	'hat3': 195,
+	'hat2': 195,
+	'hat3': 194,
 	'armor0': 184,
 	'armor1': 186,
 	'armor2': 187,
