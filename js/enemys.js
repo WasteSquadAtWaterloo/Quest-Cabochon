@@ -7,18 +7,18 @@ function initEnemys(map){
     	enemys.spiders = game.add.group();
     	createEnemys(enemys.spiders, 'spider', 10, 5, 724, 336, 2108, 480, 2, 5, 1.5, 25);    	
 
-        enemys.spiders2 = game.add.group();
-        createEnemys(enemys.spiders2, 'spider', 10, 5, 3072, 4080, 1584, 482, 3, 4, 1.5, 25);
+        enemys.spiders2 = game.add.group(); 
+        createEnemys(enemys.spiders2, 'spider', 10, 5, 336, 3312, 2064, 336, 2, 5, 1.5, 25);
 
         //change atk,hp and gold of log monster
         enemys.logmonsters = game.add.group();
-        createEnemys(enemys.logmonsters, 'logmonster', 10, 5, 336, 3312, 2064, 336, 2, 5, 1.5, 100);
+        createEnemys(enemys.logmonsters, 'logmonster', 10, 5, 3072, 4080, 1584, 482, 3, 4, 1.5, 100);
 
         enemys.logmonsters2 = game.add.group();
-        createEnemys(enemys.logmonsters2, 'logmonster', 10, 5, 4076, 1008, 560, 2736, 7, 2, 1.5, 100);    
+        createEnemys(enemys.logmonsters2, 'logmonster', 10, 5, 336, 4032, 1872, 432, 2, 5, 1.5, 100);    
 
         enemys.scorpions = game.add.group();
-        createEnemys(enemys.scorpions, 'scorpion', 20, 15, 336, 4032, 1872, 432, 2, 5, 1.5, 100);  
+        createEnemys(enemys.scorpions, 'scorpion', 20, 15, 4076, 1008, 560, 2736, 7, 2, 1.5, 100);  
 
         enemys.wolfBoss = game.add.group();
         createWolfBoss('wolfBoss', 50, 5, 400, 600, 100, 100, 3, 300);
