@@ -205,9 +205,9 @@ function update() {
         }        
 
         //item pick up
-        game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, items.armor0);
-        game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, items.armor1);
-        game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);  
+        if (!items.armor0.inInv) game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, items.armor0);
+        if (!items.armor1.inInv) game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, items.armor1);
+        if (!items.armor2.inInv) game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);  
 
         game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
         game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);        
@@ -244,9 +244,7 @@ function update() {
             textBox.removeChildren();
             textBox.exists = false;
         } 
-    }
-
-       
+    }       
 }
 
 function render() {

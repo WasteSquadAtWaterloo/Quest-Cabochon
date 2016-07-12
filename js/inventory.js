@@ -95,8 +95,10 @@ function inventoryCreator(){
 }
 
 function pickUpItems(item, player) {
+	console.log(this.toString(), item); 
 
-    if (this.toString()[0] !="["){        
+    if (this.toString()[0] !="["){ 
+
         var sItem = itemFrames.load(this.toString(), 0, 0);
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {                
@@ -107,6 +109,7 @@ function pickUpItems(item, player) {
         }
     }
     else{
+    	item.inInv = true;
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {
                 this.x = 0;

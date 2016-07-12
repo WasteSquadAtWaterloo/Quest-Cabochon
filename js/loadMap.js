@@ -44,6 +44,10 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     inventory.bringToTop();
     textBox.bringToTop();
     gold.bringToTop();
+
+    for (var item in items){
+        items[item].bringToTop();
+    }
 }
 
 
