@@ -1,47 +1,5 @@
 var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
-
-function preload() {
-    game.load.tilemap('map0', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.tilemap('map2', 'assets/Map/level_3.json', null, Phaser.Tilemap.TILED_JSON);
-
-    game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
-    
-    game.load.image('attackBox', 'assets/blank.png');
-    game.load.image('shop', 'assets/HUD/realShop.png');
-    game.load.image('characterHud', 'assets/HUD/character_hud.png');
-    game.load.image('textHud', 'assets/HUD/text_hud.png');
-    game.load.image('emptySlot', 'assets/HUD/empty_slot.png');
-    game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
-    game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
-    game.load.image('swordSlot', 'assets/HUD/sword_slot.png');
-    game.load.image('goldIcon', 'assets/goldIcon.png');
-
-    game.load.image('healer', 'assets/Spritesheet/NPC/healer.png');
-    game.load.image('kid', 'assets/Spritesheet/NPC/kid.png');
-    game.load.image('clerk', 'assets/Spritesheet/NPC/storeClerk.png');
-
-    game.load.spritesheet('{"armor":"none","weapon":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
-    game.load.spritesheet('{"armor":"leather","weapon":"none"}', 'assets/Spritesheet/player/armor0.png', 64, 64);
-    game.load.spritesheet('{"armor":"plate","weapon":"none"}', 'assets/Spritesheet/player/armor1.png', 64, 64);
-    game.load.spritesheet('{"armor":"gold","weapon":"none"}', 'assets/Spritesheet/player/armor2.png', 64, 64);
-
-    game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
-    game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
-    game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
-    game.load.spritesheet('logmonster', 'assets/Spritesheet/monsters/logmonster.png', 45, 45);
-
-    game.load.spritesheet('wolfBoss', 'assets/Spritesheet/monsters/Boss_1.png', 32, 50);
-    game.load.spritesheet('skeleBoss','assets/Spritesheet/monsters/BOSS2.png', 50, 48);
-    game.load.spritesheet('knightBoss','assets/Spritesheet/monsters/BOSS3.png', 49, 48);
-
-    game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34);   
-
-    //for testing
-    game.load.image('rect', 'assets/HUD/hp_bar.png');
-}
-
-
 var map;
 var dialogueBox, textBox;
 var dialogue = false;
@@ -65,8 +23,8 @@ var player;
 var player_dir = 'down';
 var dir = playerFrames.down.walk[0];
 var equip = {
-    armor: "none",
-    weapon: "none",
+    armor: "none",    
+    hat: "none"
 }
 var playerAtk = 3;
 var enemys = {};

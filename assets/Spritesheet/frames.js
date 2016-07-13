@@ -63,7 +63,9 @@ itemFrames = {
 
 
 	load: function(item, x, y){
-		return game.add.sprite(x, y, 'items', this[item]);
+		var itemTR = game.add.sprite(x, y, 'items', this[item]);
+		itemTR.itemCode = item;
+		return itemTR;
 	}
 }
 

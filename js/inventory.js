@@ -87,6 +87,9 @@ function inventoryCreator(){
                     chest_slot.addChild(item);
                     pickUpItems.call(temp, temp, player);
                 }
+
+                equip.armor = item.itemCode;
+                player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
             }
             else if (itemName.indexOf('hat') > -1){
                 if (helmetAvailability) { //There is a free chest armor space
@@ -98,7 +101,9 @@ function inventoryCreator(){
                     helmet_slot.removeChildAt(0);
                     helmet_slot.addChild(item);
                     pickUpItems.call(temp, temp, player);
-                }                
+                }
+                equip.hat = item.itemCode;
+                player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);                
             }
             else if (itemName.indexOf('weapon') > -1){
                 if (swordAvailability) { //There is a free chest armor space
@@ -129,11 +134,8 @@ function inventoryCreator(){
     return generatedFunction;
 }
 
-function pickUpItems(item, player) {
-	console.log(this.toString(), item); 
-
+function pickUpItems(item, player) {	
     if (this.toString()[0] !="["){ 
-
         var sItem = itemFrames.load(this.toString(), 0, 0);
         sItem.name = this.toString();
         for (var i=0; i<24; i++){
