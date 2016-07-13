@@ -46,6 +46,7 @@ var niceTxtStyle = {
 };
 var spawn = {x:2400, y:2400};
 var maxHealth = 20;
+var spellTime = 0;
 
 function create() {   
 
@@ -58,24 +59,7 @@ function create() {
 
     loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
 
-    cursors = game.input.keyboard.createCursorKeys(); 
-    wasd = {
-        up: game.input.keyboard.addKey(Phaser.Keyboard.W),
-        left: game.input.keyboard.addKey(Phaser.Keyboard.A),
-        right: game.input.keyboard.addKey(Phaser.Keyboard.D),
-        down: game.input.keyboard.addKey(Phaser.Keyboard.S),
-        E: game.input.keyboard.addKey(Phaser.Keyboard.E),
-        Q: game.input.keyboard.addKey(Phaser.Keyboard.Q),
-        C: game.input.keyboard.addKey(Phaser.Keyboard.C)
-    };
-    game.input.mouse.capture = true;
-
-    //pots
-    wasd.E.onDown.add(usePot, 'hp');
-    
-    wasd.Q.onDown.add(usePot, 'mp');
-
-    wasd.C.onDown.add(toggleInventory); 
+    initInput();
 }
 
 
@@ -90,7 +74,10 @@ function update() {
 
         player.body.velocity.set(0);
 
-        if (player.animations.currentAnim.isFinished || player.animations.currentAnim.name.indexOf("melee") === -1){
+        var curAn = player.animations.currentAnim.name
+
+        //movement and its animation
+        if (player.animations.currentAnim.isFinished || (curAn.indexOf("melee")<0 && curAn.indexOf("spell")<0) ){
             if (cursors.left.isDown || wasd.left.isDown){
                 player.body.velocity.x = -500;
                 player.play('left');                
@@ -106,6 +93,7 @@ function update() {
                 player.play('up');                
                 player_dir = 'up';
 
+                //portal to map0
                 if (map.key==="map0"){
                     if (player.y===2435 && (player.x>3440 && player.x<3470)){
                         loadMap('map2', 480, 928, false);
@@ -118,6 +106,7 @@ function update() {
                 player.play('down');                
                 player_dir = 'down';
 
+                //portal to map2
                 if (map.key==="map2"){
                     if (player.y>960){
                         loadMap('map0', 3460, 2435, false);
@@ -125,10 +114,14 @@ function update() {
                     }
                 }
             }
+
+            if (player.animations.currentAnim.isFinished){        
+                player.frame = playerFrames[player_dir].walk[0];                
+            }   
         }
 
-        if (game.input.activePointer.leftButton.isDown){   
-            //Calculate direction        
+        //melee attack and its animation + hitbox
+        if (game.input.activePointer.leftButton.isDown){                   
             var player_screen_x = player.position.x - game.camera.x;
             var player_screen_y = player.position.y - game.camera.y;
             var dif_x = game.input.mousePointer.x - player_screen_x;
@@ -144,36 +137,45 @@ function update() {
             player.play(player_dir+"_melee");            
         }
 
-        if (game.time.now - manaRegenTick >= 2000){
-            manaRegenTick = game.time.now;
-            player.mana = Math.min(player.maxMana, player.mana+1);
-            updateManaBar();            
-        }        
-
-        if (player.animations.currentAnim.name.indexOf("melee") != -1 && !player.animations.currentAnim.isFinished){
+        if (curAn.indexOf("melee") > -1 && !player.animations.currentAnim.isFinished){
             atkBox.x = player.body.x+atkOpts[player_dir].x;
             atkBox.y = player.body.y+atkOpts[player_dir].y;
         } else{
             atkBox.x = -100;
             atkBox.y = -100; 
         }  
-            
-        if (player.animations.currentAnim.isFinished){        
-            player.frame = playerFrames[player_dir].walk[0];
-        }        
+
+        //spell attack and its animation
+        if (wasd.space.isDown){
+            player.play(player_dir+"_spell");            
+        }
+
+        if (curAn.indexOf("spell") > -1 && !player.animations.currentAnim.isFinished  && game.time.now - spellTime >=480 && player.mana>=5){
+            spellTime = game.time.now;
+            spellCast.call({
+                color: 'blue',
+                x: player.x,
+                y: player.y,
+                cx: game.input.mousePointer.x + game.camera.x,
+                cy: game.input.mousePointer.y + game.camera.y
+            });
+
+            player.mana -=5;
+            updateManaBar();
+
+        }
+
+        //pasive mana regen
+        if (game.time.now - manaRegenTick >= 2000){
+            manaRegenTick = game.time.now;
+            player.mana = Math.min(player.maxMana, player.mana+1);
+            updateManaBar();            
+        }             
 
         //item pick up
         if (!items.armor0.inInv) game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, items.armor0);
         if (!items.armor1.inInv) game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, items.armor1);
-        if (!items.armor2.inInv) game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);  
-
-        game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
-        game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);        
-
-        if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
-            shop.revive();
-        }else if (shop.alive) shop.kill();     
-        
+        if (!items.armor2.inInv) game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);      
 
         //ENemy collion + revive
         for (var enemyGroup in enemys){  
@@ -186,7 +188,7 @@ function update() {
             }
 
             enemys[enemyGroup].forEach(function(mob){                
-                if (enemyGroup.indexOf('Boss')===-1 &&!mob.alive && game.time.now - mob.deathTime >= 15000){
+                if (enemyGroup.indexOf('Boss')===-1 &&!mob.alive && game.time.now - mob.deathTime >= 20000){
                     mob.revive();
                     mob.setHealth(mob.maxHealth);
                     var madeBar = mobHealthBarManager(10, mob.health);
@@ -196,12 +198,20 @@ function update() {
             });
         }        
 
-        if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false) {
-            //dialogue = true;
+        //NPC stuff
+        game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
+        game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
+        if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
+            shop.revive();
+        }else if (shop.alive) shop.kill(); 
+
+        if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false) {            
             dialogue = false;
             textBox.removeChildren();
             textBox.exists = false;
-        } 
+        }
+
+          
     }       
 }
 
@@ -337,3 +347,13 @@ function usePot(){
     }
 }    
 
+function spellCast(){   
+    console.log(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));
+
+    var shot = game.add.sprite(this.x, this.y, this.color);
+    shot.scale.set(0.25)
+    game.physics.enable(shot, Phaser.Physics.ARCADE);
+
+    shot.body.velocity.x = 500*Math.cos(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));
+    shot.body.velocity.y = 500*Math.sin(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));
+}

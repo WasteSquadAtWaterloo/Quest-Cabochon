@@ -99,7 +99,12 @@ function initPlayer(spawnX, spawnY, hp){
     player.animations.add('down_melee', playerFrames.down.attack, 15, false);
     player.animations.add('left_melee', playerFrames.left.attack, 15, false);    
     player.animations.add('right_melee', playerFrames.right.attack, 15, false);
-    player.animations.add('up_melee', playerFrames.up.attack, 15, false); 
+    player.animations.add('up_melee', playerFrames.up.attack, 15, false);
+
+    player.animations.add('down_spell', playerFrames.down.spell, 15, false);    
+    player.animations.add('left_spell', playerFrames.left.spell, 15, false);    
+    player.animations.add('right_spell', playerFrames.right.spell, 15, false);
+    player.animations.add('up_spell', playerFrames.up.spell, 15, false);
 
     player.animations.add('dead', playerFrames.dead, 5, false); 
 
@@ -136,14 +141,8 @@ function initNPC(){
 
 function createDialogue(collisionBox, player) {
     var NPCname = (collisionBox.name).toString();
-    if (dialogue == false){
-        if (NPCname == "storeClerkBox") {
-            textBox.exists = true;
-            var clerkText = game.add.text(10, 10, "Clerk Text", niceTxtStyle);
-            textBox.addChild(clerkText);            
-
-        }
-        else if (NPCname == "kidBox") {
+    if (dialogue == false){        
+        if (NPCname == "kidBox") {
             textBox.exists = true;
             var kidText = game.add.text(15, 15, "The wind... is troubled today. But this wind is \nweeping just a little.", niceTxtStyle);
             textBox.addChild(kidText);            
@@ -161,3 +160,28 @@ function createDialogue(collisionBox, player) {
     dialogue = true;
 
 }
+
+function initInput(){
+    cursors = game.input.keyboard.createCursorKeys(); 
+    wasd = {
+        up: game.input.keyboard.addKey(Phaser.Keyboard.W),
+        left: game.input.keyboard.addKey(Phaser.Keyboard.A),
+        right: game.input.keyboard.addKey(Phaser.Keyboard.D),
+        down: game.input.keyboard.addKey(Phaser.Keyboard.S),
+        E: game.input.keyboard.addKey(Phaser.Keyboard.E),
+        Q: game.input.keyboard.addKey(Phaser.Keyboard.Q),
+        C: game.input.keyboard.addKey(Phaser.Keyboard.C),
+        space: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+    };
+    game.input.mouse.capture = true;
+
+    //pots
+    wasd.E.onDown.add(usePot, 'hp');
+    
+    wasd.Q.onDown.add(usePot, 'mp');
+
+    wasd.C.onDown.add(toggleInventory); 
+
+
+}
+

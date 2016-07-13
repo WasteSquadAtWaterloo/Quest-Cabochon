@@ -118,12 +118,34 @@ function inventoryCreator(){
                 }    
             }
             else if (itemName.indexOf('hp') > -1){
-                usePot.call('hp');
-                console.log('hp');
+            	//use hp pot at that slot
+                switch (item.frame){
+                    case 35: 
+                        player.heal(10);
+                        break;
+                    case 49: 
+                        player.heal(25);
+                        break;
+                    case 28: 
+                        player.heal(50);
+                        break;
+                }
+                updateHealthBar();                                
             }
             else if (itemName.indexOf('mp') > -1) {
-                usePot.call('mp');
-                console.log('mp');
+            	//use mp pot at that slot
+                switch (inventorySlots[i].getChildAt(0).frame){
+                    case 38: 
+                        player.mana = Math.min(player.maxMana, player.mana+10);
+                        break;
+                    case 52: 
+                        player.mana = Math.min(player.maxMana, player.mana+25);
+                        break;
+                    case 31: 
+                        player.mana = Math.min(player.maxMana, player.mana+50);
+                        break;
+                }
+                updateManaBar();
             }
         }
         catch(err){ //Adding an item

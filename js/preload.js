@@ -18,6 +18,11 @@ function preload() {
     game.load.image('kid', 'assets/Spritesheet/NPC/kid.png');
     game.load.image('clerk', 'assets/Spritesheet/NPC/storeClerk.png');
 
+    game.load.image('red', 'assets/red_shot.png');
+    game.load.image('green', 'assets/green_shot.png');
+    game.load.image('blue', 'assets/blue_shot.png');
+    game.load.image('yellow', 'assets/yellow_shot.png');
+
     game.load.spritesheet('{"armor":"none","hat":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
     game.load.spritesheet('{"armor":"none","hat":"hat0"}', 'assets/Spritesheet/player/hat0.png', 64, 64);
     game.load.spritesheet('{"armor":"none","hat":"hat1"}', 'assets/Spritesheet/player/hat1.png', 64, 64);
@@ -41,7 +46,6 @@ function preload() {
     game.load.spritesheet('{"armor":"armor2","hat":"hat1"}', 'assets/Spritesheet/player/armor2hat1.png', 64, 64);
     game.load.spritesheet('{"armor":"armor2","hat":"hat2"}', 'assets/Spritesheet/player/armor2hat2.png', 64, 64);
     game.load.spritesheet('{"armor":"armor2","hat":"hat3"}', 'assets/Spritesheet/player/armor2hat3.png', 64, 64);
-
 
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
