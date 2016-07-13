@@ -47,6 +47,21 @@ enemyFrames = {
 	"down":{
 		"walk": [0, 1, 2, 3, 4],
 	}
+},
+"skeleton": {
+	"down": {
+		"walk": [0, 1, 2, 3, 4, 5, 6]
+	}
+},
+"zombie": {
+	"down": {
+		"walk": [0, 1, 2, 3, 4, 5, 6]
+	}
+},
+"guard": {
+	"down": {
+		"walk": [0, 1, 2]
+	}
 }
 },
 
