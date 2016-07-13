@@ -58,7 +58,8 @@ function create() {
     initShop(); console.log('Shop loaded');
     initInventory(); console.log('Inventory loaded'); 
 
-    loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
+    //loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
+    loadMap('map1', 1274, 0, true); console.log('Map loaded');
 
     initInput();
 }

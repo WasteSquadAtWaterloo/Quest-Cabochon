@@ -29,10 +29,10 @@ function initEnemys(map){
         createSkeleBoss('skeleBoss', 200, 15, 1300, 1900, 100, 100, 2, 500);
 
         enemys.skeletons = game.add.group();
-        createEnemys(enemys.skeletons, 'skeleton', 20, 10, 384, 384, 1536, 480, 2, 7, 1.5, 70);
+        createEnemys(enemys.skeletons, 'skeleton', 20, 10, 284, 384, 1736, 580, 2, 6, 1.5, 70);
 
         enemys.zombies = game.add.group();
-        createEnemys(enemys.zombies, 'zombie', 25, 12, 600, 1152, 900, 700, 3, 4, 1.5 ,85);
+        createEnemys(enemys.zombies, 'zombie', 25, 12, 200, 1052, 1800, 700, 3, 4, 1.5 ,85);
     }
     else if (map === "map2") {
         enemys.knightBoss = game.add.group();
