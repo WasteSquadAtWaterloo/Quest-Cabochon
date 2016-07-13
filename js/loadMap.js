@@ -77,7 +77,11 @@ function initPlayer(spawnX, spawnY, hp){
         return this
     }
     player.revive = function () {     
-        this.x = spawn.x; this.y = spawn.y;
+        if (map.key != "map0") loadMap('map0', spawn.x, spawn.y, true);
+        else {
+            this.x = spawn.x; 
+            this.y = spawn.y;
+        }
 
         this.alive = true;
         this.exists = true;
