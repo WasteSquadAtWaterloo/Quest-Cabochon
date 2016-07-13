@@ -25,10 +25,12 @@ function initEnemys(map){
 
     }
     else if (map === "map1"){
-        createSkeleBoss('skeleBoss', 200, 10, 400, 600, 100, 100, 3, 500);
+        enemys.skeleBoss = game.add.group();
+        createSkeleBoss('skeleBoss', 200, 10, 1300, 1900, 100, 100, 2, 500);
     }
     else if (map === "map2") {
-        createKnightBoss('knightBoss', 400, 15, 400, 600, 100, 100, 3, 1000);
+        enemys.knightBoss = game.add.group();
+        createKnightBoss('knightBoss', 400, 15, 450, 370, 100, 100, 1.5, 1000);
     }    
 
 }
@@ -106,6 +108,74 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
 
 }
 function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
+    var skeleBoss = enemys.skeleBoss.create(topX, topY, 'skeleBoss');
+    skeleBoss.maxHealth = hp;
+    skeleBoss.setHealth(hp);
+    game.physics.enable(skeleBoss, Phaser.Physics.ARCADE);
+
+    var madeBar = mobHealthBarManager(skeleBoss.health, skeleBoss.health);
+    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
+    skeleBoss.addChild(monHealthBar);
+
+    skeleBoss.scale.set(scale);       
+    skeleBoss.animations.add('move', [0,1,2,3], 10, true);              
+    skeleBoss.play('move');            
+    skeleBoss.atk = atk;
+
+    skeleBoss.gold = goldAmount;
+    var tweenA = game.add.tween(skeleBoss).to( { 
+        x: skeleBoss.x + (Math.random()*80+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    var tweenB = game.add.tween(skeleBoss).to( {  
+        y: skeleBoss.y + (Math.random()*80+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    var tweenC = game.add.tween(skeleBoss).to( { 
+        x: skeleBoss.x - (Math.random()*80+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    var tweenD = game.add.tween(skeleBoss).to( { 
+        y: skeleBoss.y - (Math.random()*80+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
+
+    tweenA.start();
 }
 function createKnightBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
+    var knightBoss = enemys.knightBoss.create(topX, topY, 'knightBoss');
+    knightBoss.maxHealth = hp;
+    knightBoss.setHealth(hp);
+    game.physics.enable(knightBoss, Phaser.Physics.ARCADE);
+
+    var madeBar = mobHealthBarManager(knightBoss.health, knightBoss.health);
+    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
+    knightBoss.addChild(monHealthBar);
+
+    knightBoss.scale.set(scale);       
+    knightBoss.animations.add('move', [0,1,2,3], 10, true);              
+    knightBoss.play('move');            
+    knightBoss.atk = atk;
+
+    knightBoss.gold = goldAmount;
+    var tweenA = game.add.tween(knightBoss).to( { 
+        x: knightBoss.x + (Math.random()*40+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    var tweenB = game.add.tween(knightBoss).to( {  
+        y: knightBoss.y + (Math.random()*40+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    var tweenC = game.add.tween(knightBoss).to( { 
+        x: knightBoss.x - (Math.random()*40+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    var tweenD = game.add.tween(knightBoss).to( { 
+        y: knightBoss.y - (Math.random()*40+80)}, 
+    Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+
+    tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
+
+    tweenA.start();
 }
