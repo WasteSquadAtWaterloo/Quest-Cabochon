@@ -70,7 +70,7 @@ function update() {
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
         game.physics.arcade.collide(player, layer4);
-        //game.physics.arcade.collide(player, layer5);     
+        game.physics.arcade.collide(player, layer5);     
 
         player.body.velocity.set(0);
 
@@ -95,9 +95,16 @@ function update() {
 
                 //portal to map0
                 if (map.key==="map0"){
-                    if (player.y===2435 && (player.x>3440 && player.x<3470)){
+                    if (player.y<=0 && (player.x>4283 && player.x<4404)){
                         loadMap('map2', 480, 928, false);
-                        player.animations.play("up")
+                        player.play("up")
+                    }
+                }
+
+                else if (map.key==="map1"){
+                    if (player.y<=0 && (player.x>1115 && player.x<1379)){
+                        loadMap('map0', 2127.5, 4768, false);
+                        player.play("up")
                     }
                 }
             }
@@ -109,11 +116,18 @@ function update() {
                 //portal to map2
                 if (map.key==="map2"){
                     if (player.y>960){
-                        loadMap('map0', 3460, 2435, false);
-                        player.animations.play('down');
+                        loadMap('map0', 4343.5, 35, false);
+                        player.play('down');
                     }
                 }
-            }
+
+                else if (map.key==="map0"){
+                    if (player.y>=4800 && (player.x>2075 && player.x<2244)){
+                        loadMap('map1', 1274, 0, false);
+                        player.play('down');
+                    }
+                }
+            }            
 
             if (player.animations.currentAnim.isFinished){        
                 player.frame = playerFrames[player_dir].walk[0];                
@@ -209,9 +223,7 @@ function update() {
             dialogue = false;
             textBox.removeChildren();
             textBox.exists = false;
-        }
-
-          
+        }          
     }       
 }
 
