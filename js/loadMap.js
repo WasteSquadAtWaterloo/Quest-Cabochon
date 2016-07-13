@@ -41,6 +41,7 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     map.setCollisionByExclusion(stand,true,layer5);
 
     playerShots = game.add.group();
+    mobShots = game.add.group();
 
     shop.bringToTop(); 
     inventory.bringToTop();

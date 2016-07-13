@@ -47,6 +47,7 @@ var spawn = {x:2400, y:2400};
 var maxHealth = 20;
 var spellTime = 0;
 var playerShots;
+var mobShots;
 
 function create() {   
 
@@ -70,7 +71,7 @@ function update() {
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
         game.physics.arcade.collide(player, layer4);
-        game.physics.arcade.collide(player, layer5);     
+        //game.physics.arcade.collide(player, layer5);     
 
         player.body.velocity.set(0);
 
@@ -163,17 +164,16 @@ function update() {
         if (wasd.space.isDown){
             player.play(player_dir+"_spell");            
         }
-        console.log(player.animations.currentAnim.name.indexOf("spell") > -1 , !player.animations.currentAnim.isFinished  , game.time.now - spellTime >=500 , player.mana>=5)
+        
         if (player.animations.currentAnim.name.indexOf("spell") > -1 && !player.animations.currentAnim.isFinished  && game.time.now - spellTime >=500 && player.mana>=5){
             spellTime = game.time.now;
             spellCast.call({
                 color: 'blue',
                 x: player.x,
-                y: player.y,
-                cx: game.input.mousePointer.x + game.camera.x,
-                cy: game.input.mousePointer.y + game.camera.y,
+                y: player.y,            
+                scale: 0.25,
                 group: playerShots
-            });
+            },Phaser.Math.angleBetween(player.x,player.y,game.input.mousePointer.x + game.camera.x,game.input.mousePointer.y + game.camera.y));
 
             player.mana -=5;
             updateManaBar();
@@ -216,6 +216,31 @@ function update() {
                     mob.addChild(monHealthBar);
                 }
             });
+        }
+
+        if (game.time.now - damageTime > 500){
+                game.physics.arcade.overlap(player, mobShots, enemyCollisionHandler, null, this);          
+        }
+        
+        //Boss spells
+        
+        if (map.key==="map0" && game.time.now - enemys.wolfBoss.spellTime>=2000){
+            var boss = enemys.wolfBoss.getFirstAlive();
+            if (boss){
+                var shotAngle = Phaser.Math.angleBetween(boss.x, boss.y, player.x, player.y);
+                var spellOpts = {
+                    color: 'yellow',
+                    x: boss.x+boss.width/2,
+                    y: boss.y+boss.height/2,                     
+                    scale: 0.4,
+                    atk: 3,               
+                    group: mobShots
+                };
+                spellCast.call(spellOpts, shotAngle-Math.PI/8);                
+                spellCast.call(spellOpts, shotAngle);                
+                spellCast.call(spellOpts, shotAngle+Math.PI/8);
+        }
+            enemys.wolfBoss.spellTime = game.time.now;
         }
                 
 
@@ -284,7 +309,7 @@ function mobHealthBarManager(mobMaxHealth, mobHealth){
 }
 
 function enemyCollisionHandler(player, enemy) {
-    //console.log(enemy);
+    console.log(enemy);
     game.camera.shake(0.003, 500, true);
 
     damageTime = game.time.now;
@@ -304,7 +329,6 @@ function attackCollisionHandler(atkBox, enemy){
     tweenTxt.onComplete.add(function(){
         dmgTxt.destroy();
     });
-
     
 
     atkTime = game.time.now;
@@ -373,8 +397,8 @@ function usePot(){
     }
 }    
 
-function spellCast(){
-    var shot = this.group.create(player.x, player.y, this.color);
+function spellCast(angle){
+    var shot = this.group.create(this.x, this.y, this.color);
 
     game.physics.enable(shot, Phaser.Physics.ARCADE);
 
@@ -383,10 +407,10 @@ function spellCast(){
     shot.events.onKilled.add(function(){
         this.destroy();
     },shot);
-    shot.scale.set(0.25);    
+    shot.scale.set(this.scale);    
     
-    shot.body.velocity.x = 500*Math.cos(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));
-    shot.body.velocity.y = 500*Math.sin(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));  
+    shot.body.velocity.x = 500*Math.cos(angle);
+    shot.body.velocity.y = 500*Math.sin(angle);     
 
-      
+    shot.atk = this.atk;
 }

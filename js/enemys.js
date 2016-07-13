@@ -72,7 +72,7 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
     var wolfBoss = enemys.wolfBoss.create(topX, topY, 'wolfBoss');
     wolfBoss.maxHealth = hp;
     wolfBoss.setHealth(hp);
-    game.physics.enable(wolfBoss, Phaser.Physics.ARCADE);
+    game.physics.enable(wolfBoss, Phaser.Physics.ARCADE);   
 
     var madeBar = mobHealthBarManager(wolfBoss.health, wolfBoss.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
@@ -82,6 +82,8 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
     wolfBoss.animations.add('move', [0,1,2,3], 10, true);              
     wolfBoss.play('move');            
     wolfBoss.atk = atk;
+
+    enemys.wolfBoss.spellTime = 0;
 
     wolfBoss.gold = goldAmount;
     var tweenA = game.add.tween(wolfBoss).to( { 
