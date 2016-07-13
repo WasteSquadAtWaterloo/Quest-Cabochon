@@ -40,6 +40,8 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     map.setCollisionByExclusion(stand,true,layer4);  
     map.setCollisionByExclusion(stand,true,layer5);
 
+    playerShots = game.add.group();
+
     shop.bringToTop(); 
     inventory.bringToTop();
     textBox.bringToTop();
@@ -61,6 +63,9 @@ function initPlayer(spawnX, spawnY, hp){
 
     player.maxMana = 20;
     player.mana = 20;
+
+    player.atk = 3;
+    player.mAtk = 5;
 
     player.kill = function(){ 
         this.body.velocity.x = 0; this.body.velocity.y = 0;        
@@ -85,7 +90,8 @@ function initPlayer(spawnX, spawnY, hp){
         }
 
         return this;
-    }
+    }     
+     
 
     player.anchor.setTo(0.5,0.5);
     game.physics.enable(player, Phaser.Physics.ARCADE);

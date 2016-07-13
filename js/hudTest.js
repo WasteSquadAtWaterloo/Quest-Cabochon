@@ -26,7 +26,6 @@ var equip = {
     armor: "none",    
     hat: "none"
 }
-var playerAtk = 3;
 var enemys = {};
 var atkBox, NPCBox;
 var atkOpts = {
@@ -47,6 +46,7 @@ var niceTxtStyle = {
 var spawn = {x:2400, y:2400};
 var maxHealth = 20;
 var spellTime = 0;
+var playerShots;
 
 function create() {   
 
@@ -163,15 +163,16 @@ function update() {
         if (wasd.space.isDown){
             player.play(player_dir+"_spell");            
         }
-
-        if (curAn.indexOf("spell") > -1 && !player.animations.currentAnim.isFinished  && game.time.now - spellTime >=480 && player.mana>=5){
+        console.log(player.animations.currentAnim.name.indexOf("spell") > -1 , !player.animations.currentAnim.isFinished  , game.time.now - spellTime >=500 , player.mana>=5)
+        if (player.animations.currentAnim.name.indexOf("spell") > -1 && !player.animations.currentAnim.isFinished  && game.time.now - spellTime >=500 && player.mana>=5){
             spellTime = game.time.now;
             spellCast.call({
                 color: 'blue',
                 x: player.x,
                 y: player.y,
                 cx: game.input.mousePointer.x + game.camera.x,
-                cy: game.input.mousePointer.y + game.camera.y
+                cy: game.input.mousePointer.y + game.camera.y,
+                group: playerShots
             });
 
             player.mana -=5;
@@ -179,8 +180,11 @@ function update() {
 
         }
 
+        //destroy non-existent shots
+        if (game.time.now - spellTime >= 5000) playerShots.removeChildren();
+
         //pasive mana regen
-        if (game.time.now - manaRegenTick >= 2000){
+        if (game.time.now - manaRegenTick >= 20){
             manaRegenTick = game.time.now;
             player.mana = Math.min(player.maxMana, player.mana+1);
             updateManaBar();            
@@ -200,6 +204,8 @@ function update() {
             if(game.time.now - atkTime > 500){
                 game.physics.arcade.overlap(atkBox, enemys[enemyGroup], attackCollisionHandler, null, enemys[enemyGroup]);
             }
+            game.physics.arcade.overlap(playerShots, enemys[enemyGroup], attackCollisionHandler, null, enemys[enemyGroup]);
+            
 
             enemys[enemyGroup].forEach(function(mob){                
                 if (enemyGroup.indexOf('Boss')===-1 &&!mob.alive && game.time.now - mob.deathTime >= 20000){
@@ -210,7 +216,8 @@ function update() {
                     mob.addChild(monHealthBar);
                 }
             });
-        }        
+        }
+                
 
         //NPC stuff
         game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
@@ -277,7 +284,7 @@ function mobHealthBarManager(mobMaxHealth, mobHealth){
 }
 
 function enemyCollisionHandler(player, enemy) {
-    console.log(enemy);
+    //console.log(enemy);
     game.camera.shake(0.003, 500, true);
 
     damageTime = game.time.now;
@@ -288,7 +295,9 @@ function enemyCollisionHandler(player, enemy) {
 
 function attackCollisionHandler(atkBox, enemy){
     //Damage TExt
-    var dmgTxt = game.add.text(enemy.x+this.x, enemy.y+this.y, playerAtk.toString() ,dmgTxtStyle);
+    var atk = atkBox.key==="blue" ? player.mAtk : player.atk
+
+    var dmgTxt = game.add.text(enemy.x+this.x, enemy.y+this.y, atk.toString() ,dmgTxtStyle);
     game.add.tween(dmgTxt).to({y: dmgTxt.y-50}, 2000, Phaser.Easing.Default, true);
     var tweenTxt = game.add.tween(dmgTxt).to( { alpha: 0 }, 3000, "Linear", true);
     
@@ -296,8 +305,10 @@ function attackCollisionHandler(atkBox, enemy){
         dmgTxt.destroy();
     });
 
+    
+
     atkTime = game.time.now;
-    enemy.damage(playerAtk);
+    enemy.damage(atk);
 
     if (!enemy.alive) {
         enemy.deathTime = game.time.now;
@@ -308,11 +319,14 @@ function attackCollisionHandler(atkBox, enemy){
         gold.addChild(goldText);
 
     }
+    console.log(enemy.maxHealth, enemy.health);
     var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
 
     enemy.removeChildAt(0);
-    enemy.addChild(monHealthBar);    
+    enemy.addChild(monHealthBar);   
+
+    if (atkBox.key==="blue") atkBox.exists = false; 
 }
 
 function usePot(){       
@@ -359,13 +373,20 @@ function usePot(){
     }
 }    
 
-function spellCast(){   
-    console.log(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));
+function spellCast(){
+    var shot = this.group.create(player.x, player.y, this.color);
 
-    var shot = game.add.sprite(this.x, this.y, this.color);
-    shot.scale.set(0.25)
     game.physics.enable(shot, Phaser.Physics.ARCADE);
 
+    shot.outOfCameraBoundsKill= true;
+    shot.autoCull = true; 
+    shot.events.onKilled.add(function(){
+        this.destroy();
+    },shot);
+    shot.scale.set(0.25);    
+    
     shot.body.velocity.x = 500*Math.cos(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));
-    shot.body.velocity.y = 500*Math.sin(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));
+    shot.body.velocity.y = 500*Math.sin(Phaser.Math.angleBetween(this.x,this.y,this.cx,this.cy));  
+
+      
 }
