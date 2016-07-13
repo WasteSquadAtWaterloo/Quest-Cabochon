@@ -52,6 +52,9 @@ function preload() {
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
     game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
     game.load.spritesheet('logmonster', 'assets/Spritesheet/monsters/logmonster.png', 45, 45);
+    game.load.spritesheet('skeleton', 'assets/Spritesheet/monsters/skele.png', 34, 60);
+    game.load.spritesheet('zombie', 'assets/Spritesheet/monsters/zomb.png', 34, 60);
+    game.load.spritesheet('guard', 'assets/Spritesheet/monsters/g.png', 34, 35);
 
     game.load.spritesheet('wolfBoss', 'assets/Spritesheet/monsters/Boss_1.png', 32, 50);
     game.load.spritesheet('skeleBoss','assets/Spritesheet/monsters/BOSS2.png', 50, 48);
