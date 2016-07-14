@@ -46,6 +46,7 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     shop.bringToTop(); 
     inventory.bringToTop();
     textBox.bringToTop();
+    textBox2.bringToTop();
     gold.bringToTop();
 
     for (var item in items){
@@ -120,7 +121,7 @@ function initPlayer(spawnX, spawnY, hp){
     player.animations.add('dead', playerFrames.dead, 5, false); 
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
-
+    textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 150 , 'textHud2'); textBox2.fixedToCamera = true; textBox2.exists = false; 
     gold = game.add.sprite(30, 85, 'goldIcon');
     goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
     gold.addChild(goldText);
@@ -133,9 +134,14 @@ function initPlayer(spawnX, spawnY, hp){
 }
 
 function initNPC(){
+    /*
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); 
     textBox.fixedToCamera = true; 
     textBox.exists = false;
+
+    textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 180 , 'textHud2'); 
+    textBox2.fixedToCamera = true;
+    textBox2.exists = false; */
 
     NPC = game.add.group();
     NPC.enableBody = true;
@@ -144,10 +150,12 @@ function initNPC(){
     healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healerBox";
     kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kidBox";
     storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
-    
+    oldManBox =  game.add.sprite(-50, -50, "attackBox"); oldManBox.scale.set(5); game.physics.enable(oldManBox, Phaser.Physics.ARCADE); oldManBox.name = "oldManBox";
+
     healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
     kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
     storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
+    oldMan = NPC.create(3512, 2496, 'oldman'); oldMan.scale.set(1.2); oldMan.addChild(oldManBox);
 }
 
 function createDialogue(collisionBox, player) {
@@ -165,6 +173,33 @@ function createDialogue(collisionBox, player) {
 
             player.heal(100); player.mana = player.maxMana;
             updateHealthBar(); updateManaBar();
+        }
+        else if (NPCname == "oldManBox") {
+            textBox2.exists = true;
+            console.log('old man');
+            switch (gameProgress) {
+                case 0:
+                    var oldManText = game.add.text(15,15, "Adventurer! Welcome to our small town of Iaph. \nThe first gemstone you're searching for is held by \nthe Forest King located North-West of our city. \nBeware, many have been slain by his fiery breath.", niceTxtStyle);
+                    break;
+
+                case 1:
+                    var oldManText = game.add.text(15,15, 'Test message 2', niceTxtStyle);
+                    break;
+
+                case 2:
+                    var oldManText = game.add.text(15,15, 'Test message 3', niceTxtStyle);
+                    break;
+
+                case 3:
+                    var oldManText = game.add.text(15,15, 'Test message 4', niceTxtStyle);
+                    break;
+
+                case 4:
+                    var oldManText = game.add.text(15,15, 'Test message 5', niceTxtStyle);
+                    break;
+            }
+            
+            textBox2.addChild(oldManText);
         }
         
     }

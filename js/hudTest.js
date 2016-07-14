@@ -1,7 +1,8 @@
 var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 var map;
-var dialogueBox, textBox;
+var gameProgress = 0;
+var dialogueBox, textBox, textBox2;
 var dialogue = false;
 var playerGold = 100; var gold, goldText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
@@ -248,14 +249,18 @@ function update() {
         //NPC stuff
         game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
         game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
+        game.physics.arcade.overlap(oldManBox, player, createDialogue, null, this);
+
         if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
             shop.revive();
         }else if (shop.alive) shop.kill(); 
 
-        if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false) {            
+        if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false && player.overlap(oldManBox) == false) {            
             dialogue = false;
             textBox.removeChildren();
             textBox.exists = false;
+            textBox2.removeChildren();
+            textBox2.exists = false;
         }          
     }       
 }
