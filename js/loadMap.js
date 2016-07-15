@@ -48,10 +48,10 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     textBox.bringToTop();
     textBox2.bringToTop();
     gold.bringToTop();
-
+/*
     for (var item in items){
         items[item].bringToTop();
-    }
+    } */
 }
 
 

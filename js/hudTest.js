@@ -347,24 +347,38 @@ function attackCollisionHandler(atkBox, enemy){
         gold.removeChildAt(0);
         goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
         gold.addChild(goldText);
-        console.log(enemy.x, enemy.y);
+        console.log(enemy.name);
+        
 
-        if (enemy.name == "wolfBoss") {
+        if (enemy.name === "wolfBoss") {
             gameProgress = 1;
-            items.armor0 = itemFrames.load('armor0', enemy.x, enemy.y); game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
+            console.log('1');
+            items.armor0.x = enemy.x; items.armor0.y = enemy.y;
+            items.armor0.exists = true;
+            //items.armor0 = itemFrames.load('armor0', enemy.x, enemy.y); 
+            game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
             items.armor0.bringToTop();
 
         }
-        else if (enemy.name == "skeleBoss") {
+        else if (enemy.name === "skeleBoss") {
             gameProgress = 2;
-            items.armor1 = itemFrames.load('armor1', enemy.x, enemy.y); game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
+            console.log('2');
+            items.armor1.x = enemy.x; items.armor1.y = enemy.y;
+            items.armor1.exists = true;
+            //items.armor1 = itemFrames.load('armor1', enemy.x, enemy.y); 
+            game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
             items.armor1.bringToTop();
 
         }
-        else if (enemy.name == "knightBoss")
+        else if (enemy.name === "knightBoss") {
             gameProgress = 3;
-            items.armor2 = itemFrames.load('armor2', enemy.x, enemy.y); game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
+            console.log('3');
+            items.armor2.x = enemy.x; items.armor2.y = enemy.y;
+            items.armor2.exists = true;
+            //items.armor2 = itemFrames.load('armor2', enemy.x, enemy.y); 
+            game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
             items.armor2.bringToTop();
+        }
     }
     console.log(enemy.maxHealth, enemy.health);
     var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
