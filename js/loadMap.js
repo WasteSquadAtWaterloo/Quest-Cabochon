@@ -173,7 +173,7 @@ function createDialogue(collisionBox, player) {
         }
         else if (NPCname == "healerBox") {
             textBox.exists = true;           
-            var healerText = game.add.text(15, 15, "Hello, I am the cleric and healer of this village. \nHere, I'll treat any wounds you might have.", niceTxtStyle);
+            var healerText = game.add.text(15, 15, "Hello, I am the cleric and healer of this village. \nHere. I'll treat any wounds you might have.", niceTxtStyle);
             textBox.addChild(healerText);
 
             player.heal(100); player.mana = player.maxMana;
@@ -188,19 +188,19 @@ function createDialogue(collisionBox, player) {
                     break;
 
                 case 1:
-                    var oldManText = game.add.text(15,15, "Amazing! Thank you adventurer for saving our village \nfrom the Forest King... What? The body disintegrated \nand left a yellow glowing gem? This is quite \ntroubling. I'm sorry to trouble you further, but could \nyou visit the forest South-West of the town and \ninvestigate the Drarr graveyard?", niceTxtStyle);
+                    var oldManText = game.add.text(15,15, "Amazing! Thank you adventurer for saving our village \nfrom the Forest King... What? The body disintegrated \nand left a yellow glowing gem? This is troubling. \nI have a bad feeling about this. I'm sorry to bother \nyou further, but could you visit the South-West side \nof the town and investigate the Drarr graveyard?", niceTxtStyle);
                     break;
 
                 case 2:
-                    var oldManText = game.add.text(15,15, "...Uh-huh...I see. It is just as I feared. These gems \nyou found are the fabled Cursed Stones of Asc. These \n3 stones were created by the infamous First-Age mage, \nAsc. North-East of our village is the Usten Kingdom. \nPlease visit Lord Kinonn and ask him how we should \ndispose of these gems." niceTxtStyle);
+                    var oldManText = game.add.text(15,15, "...Uh-huh...I see. It is just as I feared. These gems \nyou found are the fabled Cursed Stones of Asc. These \nare 3 stones created by the infamous First-Age mage, \nAsc. North-East of our village is the Usten Kingdom. \nPlease visit Lord Kinonn and ask him how we should \ndispose of these gems.", niceTxtStyle);
                     break;
 
                 case 3:
-                    var oldManText = game.add.text(15,15, "What? Lord Kinonn was possessed by a gem himself? This \nis... this is... AMAZING. KEKEKEKE. NOT ONLY HAVE YOU \nCOLLECTED ALL 3 STONES FOR ME, BUT YOU HAVE ALSO \nDEFEATED THE ONLY ONE WHO CAN STOP ME. THAT IS RIGHT, \nI AM THE GREAT ASC. NOW THAT I HAVE ALL THE STONES, \nI CAN RETURN TO MY TRUE FORM.", niceTxtStyle);
+                    var oldManText = game.add.text(15,15, "What? Lord Kinonn was possessed by a gem? This \nis... this is... AMAZING. KEKEKE. NOT ONLY HAVE YOU \nCOLLECTED ALL 3 STONES FOR ME, BUT YOU HAVE ALSO \nDEFEATED THE ONLY ONE WHO CAN STOP ME. THAT IS RIGHT, \nI AM THE GREAT ASC. NOW THAT I HAVE ALL THE STONES, \nI CAN RETURN TO MY TRUE FORM.", niceTxtStyle);
                     break;
 
                 case 4:
-                    var oldManText = game.add.text(15,15, "Me, the great Asc? Defeated by a measly adventurer? Kekeke... What a world.", niceTxtStyle);
+                    var oldManText = game.add.text(15,15, "Me, the great Asc? Defeated by a measly \nadventurer? Kekeke... What a world.", niceTxtStyle);
                     break;
             }
             
