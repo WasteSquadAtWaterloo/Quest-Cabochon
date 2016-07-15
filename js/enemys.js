@@ -57,7 +57,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, rows, cols
             enemy.maxHealth = hp;
             enemy.setHealth(hp);            
 
-            var madeBar = mobHealthBarManager(10, enemy.health);
+            var madeBar = mobHealthBarManager(enemy.health, enemy.health);
             var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
             enemy.addChild(monHealthBar);
 
