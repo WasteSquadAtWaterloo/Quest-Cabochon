@@ -60,7 +60,7 @@ function create() {
     initInventory(); console.log('Inventory loaded'); 
 
     //loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
-    loadMap('map1', 1274, 0, true); console.log('Map loaded');
+    loadMap('map0', 3750, 2575, true); console.log('Map loaded');
 
     initInput();
 }
@@ -347,7 +347,24 @@ function attackCollisionHandler(atkBox, enemy){
         gold.removeChildAt(0);
         goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
         gold.addChild(goldText);
+        console.log(enemy.x, enemy.y);
 
+        if (enemy.name == "wolfBoss") {
+            gameProgress = 1;
+            items.armor0 = itemFrames.load('armor0', enemy.x, enemy.y); game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
+            items.armor0.bringToTop();
+
+        }
+        else if (enemy.name == "skeleBoss") {
+            gameProgress = 2;
+            items.armor1 = itemFrames.load('armor1', enemy.x, enemy.y); game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
+            items.armor1.bringToTop();
+
+        }
+        else if (enemy.name == "knightBoss")
+            gameProgress = 3;
+            items.armor2 = itemFrames.load('armor2', enemy.x, enemy.y); game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
+            items.armor2.bringToTop();
     }
     console.log(enemy.maxHealth, enemy.health);
     var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);

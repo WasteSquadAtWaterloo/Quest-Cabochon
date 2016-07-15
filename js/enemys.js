@@ -81,6 +81,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, rows, cols
 
 function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
     var wolfBoss = enemys.wolfBoss.create(topX, topY, 'wolfBoss');
+    wolfBoss.name = "wolfBoss";
     wolfBoss.maxHealth = hp;
     wolfBoss.setHealth(hp);
     game.physics.enable(wolfBoss, Phaser.Physics.ARCADE);   
@@ -120,6 +121,7 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
 }
 function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
     var skeleBoss = enemys.skeleBoss.create(topX, topY, 'skeleBoss');
+    skeleBoss.name = "skeleBoss";
     skeleBoss.maxHealth = hp;
     skeleBoss.setHealth(hp);
     game.physics.enable(skeleBoss, Phaser.Physics.ARCADE);
@@ -156,6 +158,7 @@ function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmo
 }
 function createKnightBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
     var knightBoss = enemys.knightBoss.create(topX, topY, 'knightBoss');
+    knightBoss.name = "knightBoss";
     knightBoss.maxHealth = hp;
     knightBoss.setHealth(hp);
     game.physics.enable(knightBoss, Phaser.Physics.ARCADE);

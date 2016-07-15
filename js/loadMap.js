@@ -121,7 +121,7 @@ function initPlayer(spawnX, spawnY, hp){
     player.animations.add('dead', playerFrames.dead, 5, false); 
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
-    textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 150 , 'textHud2'); textBox2.fixedToCamera = true; textBox2.exists = false; 
+    textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 160 , 'textHud2'); textBox2.fixedToCamera = true; textBox2.exists = false; 
     gold = game.add.sprite(30, 85, 'goldIcon');
     goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
     gold.addChild(goldText);
@@ -179,7 +179,7 @@ function createDialogue(collisionBox, player) {
             console.log('old man');
             switch (gameProgress) {
                 case 0:
-                    var oldManText = game.add.text(15,15, "Adventurer! Welcome to our small town of Iaph. \nThe first gemstone you're searching for is held by \nthe Forest King located North-West of our city. \nBeware, many have been slain by his fiery breath.", niceTxtStyle);
+                    var oldManText = game.add.text(15,15, "Ah! welcome! You must be the adventurer sent by the \nthe agency. I am Elmeld, the chief of this town. \nLately, we have been attacked by The Forest King, a \nbeast residing in the forest North-West of the city. \nPlease help us by defeating it and restoring peace \nto our town. ", niceTxtStyle);
                     break;
 
                 case 1:
