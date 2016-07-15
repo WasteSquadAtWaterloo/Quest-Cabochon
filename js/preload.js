@@ -1,4 +1,7 @@
 function preload() {
+    game.forceSingleUpdate = true;
+    game.camera.roundPx = false;
+
     game.load.tilemap('map0', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map1', 'assets/Map/level_2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map2', 'assets/Map/level_3.json', null, Phaser.Tilemap.TILED_JSON);

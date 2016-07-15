@@ -48,6 +48,7 @@ var maxHealth = 20;
 var spellTime = 0;
 var playerShots;
 var mobShots;
+var bossSpellTime = 0;
 
 function create() {   
 
@@ -59,7 +60,8 @@ function create() {
     initInventory(); console.log('Inventory loaded'); 
 
     //loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
-    loadMap('map1', 1274, 0, true); console.log('Map loaded');
+    //loadMap('map1', 1274, 0, true); console.log('Map loaded');
+    loadMap('map2', 480, 928, true); console.log('Map loaded');
 
     initInput();
 }
@@ -225,24 +227,65 @@ function update() {
         
         //Boss spells
         
-        if (map.key==="map0" && game.time.now - enemys.wolfBoss.spellTime>=2000){
+        if (game.time.now - bossSpellTime>=2500 && map.key==="map0"){
+            bossSpellTime = game.time.now;            
             var boss = enemys.wolfBoss.getFirstAlive();
             if (boss){
-                var shotAngle = Phaser.Math.angleBetween(boss.x, boss.y, player.x, player.y);
+                var shotAngle = Phaser.Math.angleBetween(boss.x, boss.y, player.x-60, player.y-60);
                 var spellOpts = {
                     color: 'yellow',
                     x: boss.x+boss.width/2,
                     y: boss.y+boss.height/2,                     
                     scale: 0.4,
-                    atk: 3,               
+                    atk: 3, //UPDATE                  
                     group: mobShots
                 };
-                spellCast.call(spellOpts, shotAngle-Math.PI/8);                
-                spellCast.call(spellOpts, shotAngle);                
-                spellCast.call(spellOpts, shotAngle+Math.PI/8);
+                for (var ang=-1; ang<=1; ang++){
+                    spellCast.call(spellOpts, shotAngle+(Math.PI/8)*ang);
+                }                         
+            }                                
         }
-            enemys.wolfBoss.spellTime = game.time.now;
+
+        if (game.time.now - bossSpellTime>=2000 && map.key==="map1"){
+            bossSpellTime = game.time.now;            
+            var boss = enemys.skeleBoss.getFirstAlive();
+            if (boss){
+                var shotAngle = Phaser.Math.angleBetween(boss.x, boss.y, player.x-60, player.y-60);
+                var spellOpts = {
+                    color: 'red',
+                    x: boss.x+boss.width/2,
+                    y: boss.y+boss.height/2,                     
+                    scale: 0.4,
+                    atk: 3, //UPDATE       
+                    group: mobShots
+                };
+                for (var ang=-2; ang<=2; ang++){
+                    spellCast.call(spellOpts, shotAngle+(Math.PI/8)*ang);
+                }
+            }                                
         }
+
+        if (game.time.now - bossSpellTime>=2000 && map.key==="map2"){
+            bossSpellTime = game.time.now;            
+            var boss = enemys.knightBoss.getFirstAlive();
+            if (boss){                
+                var spellOpts = {
+                    color: 'red',
+                    x: boss.x+boss.width/2,
+                    y: boss.y+boss.height/2,                     
+                    scale: 0.4,
+                    atk: 3, //UPDATE                
+                    group: mobShots
+                };
+                for (var ang=0; ang<=12; ang++){
+                    console.log(ang);
+                    spellCast.call(spellOpts, (Math.PI/6)*ang);
+                }
+            }                                
+        }
+
+
+        
                 
 
         //NPC stuff
@@ -409,6 +452,7 @@ function spellCast(angle){
         this.destroy();
     },shot);
     shot.scale.set(this.scale);    
+    shot.anchor.set(0.5,0.5);
     
     shot.body.velocity.x = 500*Math.cos(angle);
     shot.body.velocity.y = 500*Math.sin(angle);     
