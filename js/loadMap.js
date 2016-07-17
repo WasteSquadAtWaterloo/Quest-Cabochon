@@ -151,10 +151,10 @@ function initNPC(){
     storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
     oldManBox =  game.add.sprite(-50, -50, "attackBox"); oldManBox.scale.set(5); game.physics.enable(oldManBox, Phaser.Physics.ARCADE); oldManBox.name = "oldManBox";
 
-    healer = NPC.create(1060, 245, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
-    kid = NPC.create(1350, 580, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
-    storeClerk = NPC.create(533, 773, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
-    oldMan = NPC.create(1780, 676, 'oldman'); oldMan.scale.set(1.2); oldMan.addChild(oldManBox);
+    healer = NPC.create(1060, 230, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
+    kid = NPC.create(1350, 565, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
+    storeClerk = NPC.create(533, 758, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
+    oldMan = NPC.create(1780, 660, 'oldman'); oldMan.scale.set(1.2); oldMan.addChild(oldManBox);
 }
 
 function createDialogue(collisionBox, player) {

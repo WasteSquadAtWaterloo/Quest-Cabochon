@@ -255,28 +255,27 @@ function update() {
                     spellCast.call(spellOpts, (Math.PI/6)*ang);
                 }
             }                                
-        }
-
-
-        
+        }    
                 
 
         //NPC stuff
-        game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
-        game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
-        game.physics.arcade.overlap(oldManBox, player, createDialogue, null, this);
+        if (map.key === 'map0'){
+            game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
+            game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
+            game.physics.arcade.overlap(oldManBox, player, createDialogue, null, this);
 
-        if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
-            shop.revive();
-        }else if (shop.alive) shop.kill(); 
+            if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
+                shop.revive();
+            }else if (shop.alive) shop.kill(); 
 
-        if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false && player.overlap(oldManBox) == false) {            
-            dialogue = false;
-            textBox.removeChildren();
-            textBox.exists = false;
-            textBox2.removeChildren();
-            textBox2.exists = false;
-        }          
+            if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false && player.overlap(oldManBox) == false) {            
+                dialogue = false;
+                textBox.removeChildren();
+                textBox.exists = false;
+                textBox2.removeChildren();
+                textBox2.exists = false;
+            }     
+        }     
     }       
 }
 

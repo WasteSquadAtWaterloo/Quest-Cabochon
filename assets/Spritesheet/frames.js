@@ -105,7 +105,7 @@ for (var i=21; i<25; i++){
 }
 
 for (var i=25; i<31; i++){
-	for (var j=41; j<50; j++){
+	for (var j=45; j<50; j++){
 		stand.push (i*57+j);
 	}
 }
