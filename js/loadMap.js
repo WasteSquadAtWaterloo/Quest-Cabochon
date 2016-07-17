@@ -12,6 +12,10 @@ function loadMap(key, spawn_x, spawn_y, bgn){
         playerShots.destroy();
         mobShots.destroy();
 
+        NPC.forEach(function(spr){
+            spr.kill();
+        });
+
 		layer1.destroy();
 		layer2.destroy();
 		layer3.destroy();
@@ -26,9 +30,14 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     layer1 = map.createLayer(0); layer1.smoothed = false; layer1.setScale(3);
     layer2 = map.createLayer(1); layer2.smoothed = false; layer2.setScale(3);     
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
-    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
+    layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);    
     
-    if (key==='map0') game.world.bringToTop(NPC);
+    if (key==='map0'){
+        game.world.bringToTop(NPC);
+        NPC.forEach(function(spr){
+            spr.revive();
+        }); 
+    } 
     initEnemys(key);
 
     player.bringToTop();
@@ -179,8 +188,7 @@ function createDialogue(collisionBox, player) {
             updateHealthBar(); updateManaBar();
         }
         else if (NPCname == "oldManBox") {
-            textBox2.exists = true;
-            console.log('old man');
+            textBox2.exists = true;            
             switch (gameProgress) {
                 case 0:
                     var oldManText = game.add.text(15,15, "Ah! welcome! You must be the adventurer sent by the \nthe agency. I am Elmeld, the chief of this town. \nLately, we have been attacked by The Forest King, a \nbeast residing in the forest North-West of the city. \nPlease help us by defeating it and restoring peace \nto our town. ", niceTxtStyle);

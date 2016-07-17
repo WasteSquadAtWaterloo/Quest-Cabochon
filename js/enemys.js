@@ -13,11 +13,11 @@ function initEnemys(map){
     else if (map === 'map2'){
 
         enemys.spiders = game.add.group(); 
-        createEnemys(enemys.spiders, 'spider', 10, 5, 336, 3312, 2064, 336, 2, 5, 1.5, 25);
+        createEnemys(enemys.spiders, 'spider', 10, 5, 432, 432, 2064, 336, 2, 5, 1.5, 25);
 
         //change atk,hp and gold of log monster
         enemys.logmonsters = game.add.group();
-        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 3072, 4080, 1584, 482, 3, 4, 1.5, 50);
+        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 432, 1104, 1584, 482, 3, 4, 1.5, 50);
     }
     else if (map === "map3"){
         enemys.skeletons = game.add.group();
@@ -32,10 +32,10 @@ function initEnemys(map){
     else if(map === 'map4'){
 
         enemys.logmonsters = game.add.group();
-        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 336, 4032, 1872, 432, 2, 5, 1.5, 50);    
+        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 288, 4032, 1632, 480, 2, 5, 1.5, 50);    
 
         enemys.scorpions = game.add.group();
-        createEnemys(enemys.scorpions, 'scorpion', 30, 15, 4076, 1008, 560, 2736, 7, 2, 1.5, 100);  
+        createEnemys(enemys.scorpions, 'scorpion', 30, 15, 1392, 1008, 560, 2736, 7, 2, 1.5, 100);  
     }    
     else if (map === "map5") {
         enemys.knightBoss = game.add.group();
