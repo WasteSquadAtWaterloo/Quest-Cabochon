@@ -48,9 +48,9 @@ function initInventory(){
     inventory.addChild(helmet_slot);
     inventory.addChild(chest_slot);
 
-    items.armor0 = itemFrames.load('armor0', 1600, 1600); game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
-    items.armor1 = itemFrames.load('armor1', 1650, 1600); game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
-    items.armor2 = itemFrames.load('armor2', 1600, 1650); game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
+    items.armor0 = itemFrames.load('armor0'); items.armor0.exists = false;//game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
+    items.armor1 = itemFrames.load('armor1');items.armor1.exists = false;// game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
+    items.armor2 = itemFrames.load('armor2');items.armor2.exists = false; //game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
 
     inventory.kill();
 }

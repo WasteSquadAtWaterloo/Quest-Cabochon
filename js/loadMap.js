@@ -46,11 +46,12 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     shop.bringToTop(); 
     inventory.bringToTop();
     textBox.bringToTop();
+    textBox2.bringToTop();
     gold.bringToTop();
-
+/*
     for (var item in items){
         items[item].bringToTop();
-    }
+    } */
 }
 
 
@@ -120,7 +121,7 @@ function initPlayer(spawnX, spawnY, hp){
     player.animations.add('dead', playerFrames.dead, 5, false); 
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
-
+    textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 160 , 'textHud2'); textBox2.fixedToCamera = true; textBox2.exists = false; 
     gold = game.add.sprite(30, 85, 'goldIcon');
     goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
     gold.addChild(goldText);
@@ -133,9 +134,14 @@ function initPlayer(spawnX, spawnY, hp){
 }
 
 function initNPC(){
+    /*
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); 
     textBox.fixedToCamera = true; 
     textBox.exists = false;
+
+    textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 180 , 'textHud2'); 
+    textBox2.fixedToCamera = true;
+    textBox2.exists = false; */
 
     NPC = game.add.group();
     NPC.enableBody = true;
@@ -144,10 +150,12 @@ function initNPC(){
     healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healerBox";
     kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kidBox";
     storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "storeClerkBox";
-    
+    oldManBox =  game.add.sprite(-50, -50, "attackBox"); oldManBox.scale.set(5); game.physics.enable(oldManBox, Phaser.Physics.ARCADE); oldManBox.name = "oldManBox";
+
     healer = NPC.create(2790, 2050, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
     kid = NPC.create(3076, 2390, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
     storeClerk = NPC.create(2264, 2580, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
+    oldMan = NPC.create(3512, 2496, 'oldman'); oldMan.scale.set(1.2); oldMan.addChild(oldManBox);
 }
 
 function createDialogue(collisionBox, player) {
@@ -155,16 +163,48 @@ function createDialogue(collisionBox, player) {
     if (dialogue == false){        
         if (NPCname == "kidBox") {
             textBox.exists = true;
-            var kidText = game.add.text(15, 15, "The wind... is troubled today. But this wind is \nweeping just a little.", niceTxtStyle);
+            if (gameProgress < 2){
+                var kidText = game.add.text(15, 15, "Each month has its own birthstone. Mine is the Ruby. \nWhat is yours?", niceTxtStyle);
+            }
+            else if (gameProgress >= 2){
+                var kidText = game.add.text(15,15, "Some say that Asc was killed by his own creations; \nhowever, rumors have it that he is still alive.", niceTxtStyle);
+            }
             textBox.addChild(kidText);            
         }
         else if (NPCname == "healerBox") {
             textBox.exists = true;           
-            var healerText = game.add.text(15, 15, "Hello, and welcome to the Poke- err, healing center. \nI've restored you to full health.", niceTxtStyle);
+            var healerText = game.add.text(15, 15, "Hello, I am the cleric and healer of this village. \nHere. I'll treat any wounds you might have.", niceTxtStyle);
             textBox.addChild(healerText);
 
             player.heal(100); player.mana = player.maxMana;
             updateHealthBar(); updateManaBar();
+        }
+        else if (NPCname == "oldManBox") {
+            textBox2.exists = true;
+            console.log('old man');
+            switch (gameProgress) {
+                case 0:
+                    var oldManText = game.add.text(15,15, "Ah! welcome! You must be the adventurer sent by the \nthe agency. I am Elmeld, the chief of this town. \nLately, we have been attacked by The Forest King, a \nbeast residing in the forest North-West of the city. \nPlease help us by defeating it and restoring peace \nto our town. ", niceTxtStyle);
+                    break;
+
+                case 1:
+                    var oldManText = game.add.text(15,15, "Amazing! Thank you adventurer for saving our village \nfrom the Forest King... What? The body disintegrated \nand left a yellow glowing gem? This is troubling. \nI have a bad feeling about this. I'm sorry to bother \nyou further, but could you visit the South-West side \nof the town and investigate the Drarr graveyard?", niceTxtStyle);
+                    break;
+
+                case 2:
+                    var oldManText = game.add.text(15,15, "...Uh-huh...I see. It is just as I feared. These gems \nyou found are the fabled Cursed Stones of Asc. These \nare 3 stones created by the infamous First-Age mage, \nAsc. North-East of our village is the Usten Kingdom. \nPlease visit Lord Kinonn and ask him how we should \ndispose of these gems.", niceTxtStyle);
+                    break;
+
+                case 3:
+                    var oldManText = game.add.text(15,15, "What? Lord Kinonn was possessed by a gem? This \nis... this is... AMAZING. KEKEKE. NOT ONLY HAVE YOU \nCOLLECTED ALL 3 STONES FOR ME, BUT YOU HAVE ALSO \nDEFEATED THE ONLY ONE WHO CAN STOP ME. THAT IS RIGHT, \nI AM THE GREAT ASC. NOW THAT I HAVE ALL THE STONES, \nI CAN RETURN TO MY TRUE FORM.", niceTxtStyle);
+                    break;
+
+                case 4:
+                    var oldManText = game.add.text(15,15, "Me, the great Asc? Defeated by a measly \nadventurer? Kekeke... What a world.", niceTxtStyle);
+                    break;
+            }
+            
+            textBox2.addChild(oldManText);
         }
         
     }

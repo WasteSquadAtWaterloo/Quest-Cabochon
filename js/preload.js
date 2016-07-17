@@ -12,6 +12,7 @@ function preload() {
     game.load.image('shop', 'assets/HUD/realShop.png');
     game.load.image('characterHud', 'assets/HUD/character_hud.png');
     game.load.image('textHud', 'assets/HUD/text_hud.png');
+    game.load.image('textHud2', 'assets/HUD/text_hud2.png');
     game.load.image('emptySlot', 'assets/HUD/empty_slot.png');
     game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
     game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
@@ -21,6 +22,7 @@ function preload() {
     game.load.image('healer', 'assets/Spritesheet/NPC/healer.png');
     game.load.image('kid', 'assets/Spritesheet/NPC/kid.png');
     game.load.image('clerk', 'assets/Spritesheet/NPC/storeClerk.png');
+    game.load.image('oldman', 'assets/Spritesheet/NPC/oji-san.png');
 
     game.load.image('red', 'assets/red_shot.png');
     game.load.image('green', 'assets/green_shot.png');
@@ -53,7 +55,7 @@ function preload() {
 
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);
-    game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail1.png', 50, 50);
+    game.load.spritesheet('snail', 'assets/Spritesheet/monsters/snail2.png', 35, 40);
     game.load.spritesheet('logmonster', 'assets/Spritesheet/monsters/logmonster.png', 45, 45);
     game.load.spritesheet('skeleton', 'assets/Spritesheet/monsters/skele.png', 34, 60);
     game.load.spritesheet('zombie', 'assets/Spritesheet/monsters/zomb.png', 34, 60);
