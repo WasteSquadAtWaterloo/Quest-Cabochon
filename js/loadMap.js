@@ -237,14 +237,50 @@ function initInput(){
 
 function portalCheck(map){
     if (map==="map0"){
-        if ((player.y>227 && player.y<=303) && player.x<95){
+        if ((player.y>=227 && player.y<=303) && player.x<95){
             loadMap('map1', 1728, 2088, false);
+        }
+        else if ((player.x>=828 && player.x<=947) && player.y>1275){
+            loadMap('map2', 2616, 216, false);
         }
     }
 
     else if (map==='map1'){
         if ((player.y>=2051 && player.y<=2127) && player.x>1780){
             loadMap('map0', 96, 264, false);
+        }
+    }
+
+    else if (map==='map2'){
+        if ((player.x>=2556 && player.x<=2675) && player.y<200){
+            loadMap('map0', 888, 1248, false);
+        } 
+        else if((player.x>=2076 && player.x<=2243) && player.y>1900){
+            loadMap('map3', 1274, 0, false);
+        }
+        else if((player.y>=630 && player.y<=735) && player.x>3360){
+            loadMap('map4', 8, 3407, false);
+        }
+    }
+
+    else if (map==='map3'){
+        if (player.y<0){
+            loadMap('map2', 2160, 1872, false);
+        }
+    }
+
+    else if (map==="map4"){
+        if ((player.y>=3347 && player.y<=3471) && player.x<0){
+            loadMap('map2', 3344, 672, false);
+        }
+        else if ((player.x>=1548 && player.x<=1667) && player.y<0){
+            loadMap('map5', 480, 928, false);
+        }
+    }
+
+    else if (map==="map5"){
+        if (player.y>960){
+            loadMap('map4', 1612, 35, false);
         }
     }
 }
