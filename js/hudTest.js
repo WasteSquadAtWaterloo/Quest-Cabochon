@@ -112,7 +112,7 @@ function update() {
         portalCheck(map.key);
 
         //melee attack and its animation + hitbox
-        if (game.input.activePointer.leftButton.isDown){                   
+        if (game.input.activePointer.leftButton.isDown && !inventory.alive && !shop.alive){                   
             var player_screen_x = player.position.x - game.camera.x;
             var player_screen_y = player.position.y - game.camera.y;
             var dif_x = game.input.mousePointer.x - player_screen_x;
@@ -243,7 +243,7 @@ function update() {
             var boss = enemys.knightBoss.getFirstAlive();
             if (boss){                
                 var spellOpts = {
-                    color: 'red',
+                    color: 'green',
                     x: boss.x+boss.width/2,
                     y: boss.y+boss.height/2,                     
                     scale: 0.4,
@@ -251,7 +251,6 @@ function update() {
                     group: mobShots
                 };
                 for (var ang=0; ang<=12; ang++){
-                    console.log(ang);
                     spellCast.call(spellOpts, (Math.PI/6)*ang);
                 }
             }                                
@@ -291,6 +290,12 @@ function resizeComponents(){
 
     inventory.cameraOffset.x = window.innerWidth/2-200; 
     inventory.cameraOffset.y = window.innerHeight/2-200;
+
+    textBox.cameraOffset.x = window.innerWidth/2-245;
+    textBox.cameraOffset.y =  window.innerHeight-90;
+
+    textBox2.cameraOffset.x = window.innerWidth/2-245;
+    textBox2.cameraOffset.y = window.innerHeight-160;
 }
 
 

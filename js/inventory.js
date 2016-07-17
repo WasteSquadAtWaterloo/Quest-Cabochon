@@ -27,6 +27,10 @@ function initInventory(){
             helmet_slot.removeChildAt(0);
             pickUpItems.call(item, item, player);
             helmetAvailability = true;
+
+            equip.hat = "none";
+            player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+
         }
         catch(err){
 
@@ -38,6 +42,9 @@ function initInventory(){
             chest_slot.removeChildAt(0);
             pickUpItems.call(item, item, player);
             chestAvailability = true;
+
+            equip.armor = "none";
+            player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
         }
         catch(err){
 
