@@ -2,9 +2,12 @@ function preload() {
     game.forceSingleUpdate = true;
     game.camera.roundPx = false;
 
-    game.load.tilemap('map0', 'assets/Map/level_1.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.tilemap('map1', 'assets/Map/level_2.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.tilemap('map2', 'assets/Map/level_3.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map0', 'assets/Map/map_0.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map1', 'assets/Map/map_1.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map2', 'assets/Map/map_2.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map3', 'assets/Map/map_3.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map4', 'assets/Map/map_4.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map5', 'assets/Map/map_5.json', null, Phaser.Tilemap.TILED_JSON);
 
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     

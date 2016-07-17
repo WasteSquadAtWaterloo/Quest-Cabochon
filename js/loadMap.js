@@ -9,6 +9,9 @@ function loadMap(key, spawn_x, spawn_y, bgn){
             enemys[enemy].destroy();
         }
 
+        playerShots.destroy();
+        mobShots.destroy();
+
 		layer1.destroy();
 		layer2.destroy();
 		layer3.destroy();
@@ -48,10 +51,6 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     textBox.bringToTop();
     textBox2.bringToTop();
     gold.bringToTop();
-/*
-    for (var item in items){
-        items[item].bringToTop();
-    } */
 }
 
 
@@ -236,3 +235,16 @@ function initInput(){
 
 }
 
+function portalCheck(map){
+    if (map==="map0"){
+        if ((player.y>227 && player.y<=303) && player.x<95){
+            loadMap('map1', 1728, 2088, false);
+        }
+    }
+
+    else if (map==='map1'){
+        if ((player.y>=2051 && player.y<=2127) && player.x>1780){
+            loadMap('map0', 96, 264, false);
+        }
+    }
+}

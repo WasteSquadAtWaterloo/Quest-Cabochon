@@ -44,7 +44,7 @@ var niceTxtStyle = {
     font: "bold 14px Lucida Console",
     fill: "black",
 };
-var spawn = {x:2400, y:2400};
+var spawn = {x:1152, y:624};
 var maxHealth = 20;
 var spellTime = 0;
 var playerShots;
@@ -58,17 +58,11 @@ function create() {
     initNPC(); console.log('NPC loaded');
     initPlayer(0, 0, 20); console.log('Player loaded');
     initShop(); console.log('Shop loaded');
-    initInventory(); console.log('Inventory loaded'); 
+    initInventory(); console.log('Inventory loaded');     
 
-    //loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
-<<<<<<< HEAD
     //loadMap('map1', 1274, 0, true); console.log('Map loaded');
-    loadMap('map2', 480, 928, true); console.log('Map loaded');
-||||||| merged common ancestors
-    loadMap('map1', 1274, 0, true); console.log('Map loaded');
-=======
-    loadMap('map0', 3750, 2575, true); console.log('Map loaded');
->>>>>>> 090b81e4810e18e4faf8ea792b4778cb4490c7bd
+    //loadMap('map2', 480, 928, true); console.log('Map loaded');
+    loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
 
     initInput();
 }
@@ -102,48 +96,20 @@ function update() {
             else if (cursors.up.isDown || wasd.up.isDown){
                 player.body.velocity.y = -500;
                 player.play('up');                
-                player_dir = 'up';
-
-                //portal to map0
-                if (map.key==="map0"){
-                    if (player.y<=0 && (player.x>4283 && player.x<4404)){
-                        loadMap('map2', 480, 928, false);
-                        player.play("up")
-                    }
-                }
-
-                else if (map.key==="map1"){
-                    if (player.y<=0 && (player.x>1115 && player.x<1379)){
-                        loadMap('map0', 2127.5, 4768, false);
-                        player.play("up")
-                    }
-                }
+                player_dir = 'up';                                
             }
             else if (cursors.down.isDown || wasd.down.isDown){ 
                 player.body.velocity.y = 500;
                 player.play('down');                
-                player_dir = 'down';
-
-                //portal to map2
-                if (map.key==="map2"){
-                    if (player.y>960){
-                        loadMap('map0', 4343.5, 35, false);
-                        player.play('down');
-                    }
-                }
-
-                else if (map.key==="map0"){
-                    if (player.y>=4800 && (player.x>2075 && player.x<2244)){
-                        loadMap('map1', 1274, 0, false);
-                        player.play('down');
-                    }
-                }
+                player_dir = 'down';               
             }            
 
             if (player.animations.currentAnim.isFinished){        
                 player.frame = playerFrames[player_dir].walk[0];                
             }   
         }
+
+        portalCheck(map.key);
 
         //melee attack and its animation + hitbox
         if (game.input.activePointer.leftButton.isDown){                   
@@ -234,7 +200,7 @@ function update() {
         
         //Boss spells
         
-        if (game.time.now - bossSpellTime>=2500 && map.key==="map0"){
+        if (game.time.now - bossSpellTime>=2500 && map.key==="map1"){
             bossSpellTime = game.time.now;            
             var boss = enemys.wolfBoss.getFirstAlive();
             if (boss){
@@ -253,7 +219,7 @@ function update() {
             }                                
         }
 
-        if (game.time.now - bossSpellTime>=2000 && map.key==="map1"){
+        if (game.time.now - bossSpellTime>=2000 && map.key==="map3"){
             bossSpellTime = game.time.now;            
             var boss = enemys.skeleBoss.getFirstAlive();
             if (boss){
@@ -272,7 +238,7 @@ function update() {
             }                                
         }
 
-        if (game.time.now - bossSpellTime>=2000 && map.key==="map2"){
+        if (game.time.now - bossSpellTime>=2000 && map.key==="map5"){
             bossSpellTime = game.time.now;            
             var boss = enemys.knightBoss.getFirstAlive();
             if (boss){                
