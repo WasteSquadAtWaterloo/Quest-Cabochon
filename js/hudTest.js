@@ -50,6 +50,8 @@ var spellTime = 0;
 var playerShots;
 var mobShots;
 var bossSpellTime = 0;
+var weapon = 1;
+var OSattack = false;
 
 function create() {   
 
@@ -125,7 +127,8 @@ function update() {
                 player_dir = dif_y>=0 ? 'down' : 'up';
             }          
             
-            player.play(player_dir+"_melee");            
+            //if (weapon) player.OS(player_dir);
+            /*else*/ player.play(player_dir+"_melee");            
         }
 
         if (curAn.indexOf("melee") > -1 && !player.animations.currentAnim.isFinished){
@@ -135,6 +138,11 @@ function update() {
             atkBox.x = -100;
             atkBox.y = -100; 
         }  
+
+        if (OSattack && player.animations.currentAnim.isFinished){
+            player.loadTexture(JSON.stringify(equip));
+            OSattack = false;
+        }
 
         //spell attack and its animation
         if (wasd.space.isDown){
@@ -333,8 +341,7 @@ function mobHealthBarManager(mobMaxHealth, mobHealth){
     return bar;
 }
 
-function enemyCollisionHandler(player, enemy) {
-    console.log(enemy);
+function enemyCollisionHandler(player, enemy) {    
     game.camera.shake(0.003, 500, true);
 
     damageTime = game.time.now;
@@ -365,13 +372,11 @@ function attackCollisionHandler(atkBox, enemy){
 
         gold.removeChildAt(0);
         goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
-        gold.addChild(goldText);
-        console.log(enemy.name);
+        gold.addChild(goldText);        
         
 
         if (enemy.name === "wolfBoss") {
-            gameProgress = 1;
-            console.log('1');
+            gameProgress = 1;            
             items.armor0.x = enemy.x; items.armor0.y = enemy.y;
             items.armor0.exists = true;
             //items.armor0 = itemFrames.load('armor0', enemy.x, enemy.y); 
@@ -380,8 +385,7 @@ function attackCollisionHandler(atkBox, enemy){
 
         }
         else if (enemy.name === "skeleBoss") {
-            gameProgress = 2;
-            console.log('2');
+            gameProgress = 2;            
             items.armor1.x = enemy.x; items.armor1.y = enemy.y;
             items.armor1.exists = true;
             //items.armor1 = itemFrames.load('armor1', enemy.x, enemy.y); 
@@ -390,16 +394,14 @@ function attackCollisionHandler(atkBox, enemy){
 
         }
         else if (enemy.name === "knightBoss") {
-            gameProgress = 3;
-            console.log('3');
+            gameProgress = 3;            
             items.armor2.x = enemy.x; items.armor2.y = enemy.y;
             items.armor2.exists = true;
             //items.armor2 = itemFrames.load('armor2', enemy.x, enemy.y); 
             game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
             items.armor2.bringToTop();
         }
-    }
-    console.log(enemy.maxHealth, enemy.health);
+    }    
     var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
 

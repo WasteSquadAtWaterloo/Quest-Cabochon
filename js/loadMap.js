@@ -126,6 +126,20 @@ function initPlayer(spawnX, spawnY, hp){
     player.animations.add('right_spell', playerFrames.right.spell, 15, false);
     player.animations.add('up_spell', playerFrames.up.spell, 15, false);
 
+    player.animations.add('down_meleeOS', playerFrames.down.attackOS, 15, false);
+    player.animations.add('up_meleeOS', playerFrames.up.attackOS, 15, false);
+    player.animations.add('left_meleeOS', playerFrames.left.attackOS, 15, false);
+    player.animations.add('right_meleeOS', playerFrames.right.attackOS, 15, false);
+
+    player.OS = function(dir){
+        if (player.animations.currentAnim.isFinished) player.loadTexture(JSON.stringify(equip));
+        else {
+            player.loadTexture(JSON.stringify(equip)+weapon);
+            player.play(dir+"_meleeOS");
+            OSattack = true;
+        }
+    }
+
     player.animations.add('dead', playerFrames.dead, 5, false); 
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
