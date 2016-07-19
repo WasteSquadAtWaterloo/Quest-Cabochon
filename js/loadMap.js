@@ -111,33 +111,29 @@ function initPlayer(spawnX, spawnY, hp){
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.setSize(25, 20, 20, 45);
 
-    player.animations.add('down', playerFrames.down.walk, 10, false);
-    player.animations.add('left', playerFrames.left.walk, 10, false);    
-    player.animations.add('right', playerFrames.right.walk, 10, false);
-    player.animations.add('up', playerFrames.up.walk, 10, false); 
+    //loading animations
+    var dirs = ['down', 'up', 'left', 'right'];
+    var acts = ['_melee', '_spell'];
 
-    player.animations.add('down_melee', playerFrames.down.attack, 15, false);
-    player.animations.add('left_melee', playerFrames.left.attack, 15, false);    
-    player.animations.add('right_melee', playerFrames.right.attack, 15, false);
-    player.animations.add('up_melee', playerFrames.up.attack, 15, false);
+    for (var dir in dirs){
+        player.animations.add(dirs[dir], playerFrames[dirs[dir]].walk, 10, false);
 
-    player.animations.add('down_spell', playerFrames.down.spell, 15, false);    
-    player.animations.add('left_spell', playerFrames.left.spell, 15, false);    
-    player.animations.add('right_spell', playerFrames.right.spell, 15, false);
-    player.animations.add('up_spell', playerFrames.up.spell, 15, false);
-
-    player.animations.add('down_meleeOS', playerFrames.down.attackOS, 15, false);
-    player.animations.add('up_meleeOS', playerFrames.up.attackOS, 15, false);
-    player.animations.add('left_meleeOS', playerFrames.left.attackOS, 15, false);
-    player.animations.add('right_meleeOS', playerFrames.right.attackOS, 15, false);
-
-    player.OS = function(dir){
-        if (player.animations.currentAnim.isFinished) player.loadTexture(JSON.stringify(equip));
-        else {
-            player.loadTexture(JSON.stringify(equip)+weapon);
-            player.play(dir+"_meleeOS");
-            OSattack = true;
+        for (var act in acts){
+            player.animations.add(dirs[dir]+acts[act], playerFrames[dirs[dir]][acts[act].slice(1)], 15, false);
         }
+
+        for (var wp=1; wp<=3; wp++){
+            player.animations.add(dirs[dir]+"_meleeOS"+wp, playerFrames[dirs[dir]]['attackOS'+wp], 18, false).onComplete.add(function(){
+                player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+            });
+        }
+    }    
+
+    player.OS = function(dir){                
+        if (player.key != JSON.stringify(equip)+weapon) {
+            player.loadTexture(JSON.stringify(equip)+weapon);
+        }
+        player.play(dir+"_meleeOS"+weapon);       
     }
 
     player.animations.add('dead', playerFrames.dead, 5, false); 

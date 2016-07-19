@@ -34,6 +34,8 @@ function preload() {
 
     game.load.spritesheet('{"armor":"none","hat":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
     game.load.spritesheet('{"armor":"none","hat":"none"}1', 'assets/Spritesheet/player/weapon1.png', 192, 192);
+    game.load.spritesheet('{"armor":"none","hat":"none"}2', 'assets/Spritesheet/player/weapon2.png', 192, 192);
+    game.load.spritesheet('{"armor":"none","hat":"none"}3', 'assets/Spritesheet/player/weapon3.png', 192, 192);
 
     game.load.spritesheet('{"armor":"none","hat":"hat0"}', 'assets/Spritesheet/player/hat0.png', 64, 64);
     game.load.spritesheet('{"armor":"none","hat":"hat1"}', 'assets/Spritesheet/player/hat1.png', 64, 64);

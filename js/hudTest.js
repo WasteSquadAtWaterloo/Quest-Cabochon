@@ -127,8 +127,8 @@ function update() {
                 player_dir = dif_y>=0 ? 'down' : 'up';
             }          
             
-            //if (weapon) player.OS(player_dir);
-            /*else*/ player.play(player_dir+"_melee");            
+            if (weapon) player.OS(player_dir);
+            else player.play(player_dir+"_melee");            
         }
 
         if (curAn.indexOf("melee") > -1 && !player.animations.currentAnim.isFinished){
@@ -138,14 +138,10 @@ function update() {
             atkBox.x = -100;
             atkBox.y = -100; 
         }  
-
-        if (OSattack && player.animations.currentAnim.isFinished){
-            player.loadTexture(JSON.stringify(equip));
-            OSattack = false;
-        }
+       
 
         //spell attack and its animation
-        if (wasd.space.isDown){
+        if (wasd.space.isDown && player.animations.currentAnim.name.indexOf("melee") < 0){
             player.play(player_dir+"_spell");            
         }
         
