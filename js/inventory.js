@@ -14,50 +14,57 @@ function initInventory(){
     sword_slot = game.make.button(214,167 ,"swordSlot", function() {
          try { //Removing an item
             var item = sword_slot.getChildAt(0);
-            sword_slot.removeChildAt(0);
-            pickUpItems.call(item, item, player);
-            swordAvailability = true;
+            if (inventoryAvailability.indexOf(true) > -1){
+                sword_slot.removeChildAt(0); 
+                pickUpItems.call(item, item, player);           
+                swordAvailability = true;
+
+                weapon = "";
+            }            
         }
-        catch(err){
-        }
+        catch(err){}
     }, this);
+
     helmet_slot = game.make.button(258,98 ,"helmetSlot", function() {
          try { //Removing an item
-            var item = helmet_slot.getChildAt(0);
-            helmet_slot.removeChildAt(0);
-            pickUpItems.call(item, item, player);
-            helmetAvailability = true;
+            var item = helmet_slot.getChildAt(0); 
+            if (inventoryAvailability.indexOf(true) > -1){             
+                helmet_slot.removeChildAt(0);    
+                pickUpItems.call(item, item, player);       
+                helmetAvailability = true;     
 
-            equip.hat = "none";
-            player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
-
+                equip.hat = "none";                
+                player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+            }
         }
-        catch(err){
-
-        }
+        catch(err){}        
     }, this);
+
     chest_slot = game.make.button(258 ,146 ,"chestSlot", function() {
          try { //Removing an item
             var item = chest_slot.getChildAt(0);
-            chest_slot.removeChildAt(0);
-            pickUpItems.call(item, item, player);
-            chestAvailability = true;
+            if (inventoryAvailability.indexOf(true) > -1){
+                chest_slot.removeChildAt(0);
+                pickUpItems.call(item, item, player);
+                chestAvailability = true;
 
-            equip.armor = "none";
-            player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+                equip.armor = "none";
+                player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+            }
         }
-        catch(err){
-
-        }
+        catch(err){}
     }, this);
 
     inventory.addChild(sword_slot);
     inventory.addChild(helmet_slot);
     inventory.addChild(chest_slot);
 
-    items.armor0 = itemFrames.load('armor0'); items.armor0.exists = false;//game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
-    items.armor1 = itemFrames.load('armor1');items.armor1.exists = false;// game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
-    items.armor2 = itemFrames.load('armor2');items.armor2.exists = false; //game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
+    items.armor0 = itemFrames.load('armor0'); items.armor0.kill();
+    items.armor1 = itemFrames.load('armor1'); items.armor1.kill();
+    items.armor2 = itemFrames.load('armor2'); items.armor2.kill(); 
+    items.weapon1 = itemFrames.load('weapon1'); items.weapon1.kill();
+    items.weapon2 = itemFrames.load('weapon2'); items.weapon2.kill();
+    items.weapon3 = itemFrames.load('weapon3'); items.weapon3.kill();
 
     inventory.kill();
 }
@@ -83,46 +90,45 @@ function inventoryCreator(){
             inventorySlots[id].removeChildAt(0);
             inventoryAvailability[id] = true;
 
-            if (itemName.indexOf('armor') > -1){
-                if (chestAvailability) { //There is a free chest armor space
-                    chest_slot.addChild(item);
-                    chestAvailability = false;
-                }
-                else { //there is no free chest armor space
+            if (itemName.indexOf('armor') > -1){                
+                if (!chestAvailability) { //there is no free chest armor space
                     var temp = chest_slot.getChildAt(0);
-                    chest_slot.removeChildAt(0);
-                    chest_slot.addChild(item);
+                    chest_slot.removeChildAt(0);                    
                     pickUpItems.call(temp, temp, player);
                 }
+
+                chestAvailability = false;
+                chest_slot.addChild(item);
 
                 equip.armor = item.itemCode;
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
             }
-            else if (itemName.indexOf('hat') > -1){
-                if (helmetAvailability) { //There is a free chest armor space
-                    helmet_slot.addChild(item);
-                    helmetAvailability = false;
-                }
-                else { //there is no free chest armor space
+
+            else if (itemName.indexOf('hat') > -1){                            
+                if (!helmetAvailability) { //there is no free helmet armor space
                     var temp = helmet_slot.getChildAt(0);
-                    helmet_slot.removeChildAt(0);
-                    helmet_slot.addChild(item);
+                    helmet_slot.removeChildAt(0);                    
                     pickUpItems.call(temp, temp, player);
                 }
+
+                helmetAvailability = false;
+                helmet_slot.addChild(item);
+
                 equip.hat = item.itemCode;
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);                
             }
+
             else if (itemName.indexOf('weapon') > -1){
-                if (swordAvailability) { //There is a free chest armor space
-                    sword_slot.addChild(item);
-                    swordAvailability = false;
-                }
-                else { //there is no free chest armor space
+                if (!swordAvailability){ //there is no free chest armor space
                     var temp = sword_slot.getChildAt(0);
-                    sword_slot.removeChildAt(0);
-                    sword_slot.addChild(item);
+                    sword_slot.removeChildAt(0);                    
                     pickUpItems.call(temp, temp, player);
-                }    
+                }
+
+                swordAvailability = false; 
+                sword_slot.addChild(item);
+
+                weapon = itemName.charAt(6);   
             }
             else if (itemName.indexOf('hp') > -1){
             	//use hp pot at that slot
@@ -170,21 +176,31 @@ function pickUpItems(item, player) {
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {                
                 inventorySlots[i].addChild(sItem);
-                inventoryAvailability[i] = false;
+                inventoryAvailability[i] = false;                
                 break;
             }
         }
     }
-    else{
-    	item.inInv = true;
+    else{    	
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {
                 this.x = 0;
                 this.y = 0;
                 inventorySlots[i].addChild(this);
                 inventoryAvailability[i] = false;
+                item.inInv = true;
                 break;
             }
         }
-    }
+    }    
+}
+
+function dropItem(item, itemName, x, y, gameProg){
+    if (gameProg) gameProgress = gameProg; 
+    console.log(item);           
+    item.reset(x, y);            
+    game.physics.enable(item, Phaser.Physics.ARCADE); 
+    item.name = itemName;
+    item.bringToTop();
+
 }

@@ -85,13 +85,15 @@ itemFrames = {
 	'armor0': 184,
 	'armor1': 186,
 	'armor2': 187,
+	'weapon1': 116,
+	'weapon2': 79,
+	'weapon3': 122,
 	'hp0': 35,
 	'hp1': 49,
 	'hp2': 28,
 	'mp0': 38,
 	'mp1': 52,
 	'mp2': 31,
-
 
 	load: function(item, x, y){
 		var itemTR = game.add.sprite(x, y, 'items', this[item]);
@@ -116,8 +118,8 @@ for (var i=21; i<25; i++){
     }
 }
 
-for (var i=25; i<31; i++){
-	for (var j=45; j<50; j++){
+for (var i=25; i<28; i++){
+	for (var j=41; j<50; j++){
 		stand.push (i*57+j);
 	}
 }

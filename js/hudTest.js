@@ -50,8 +50,9 @@ var spellTime = 0;
 var playerShots;
 var mobShots;
 var bossSpellTime = 0;
-var weapon = 1;
+var weapon;
 var OSattack = false;
+var unlockedWep = [false, false, false];
 
 function create() {   
 
@@ -60,10 +61,7 @@ function create() {
     initNPC(); console.log('NPC loaded');
     initPlayer(0, 0, 20); console.log('Player loaded');
     initShop(); console.log('Shop loaded');
-    initInventory(); console.log('Inventory loaded');     
-
-    //loadMap('map1', 1274, 0, true); console.log('Map loaded');
-    //loadMap('map2', 480, 928, true); console.log('Map loaded');
+    initInventory(); console.log('Inventory loaded');   
     loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
 
     initInput();
@@ -173,7 +171,10 @@ function update() {
         //item pick up
         if (!items.armor0.inInv) game.physics.arcade.overlap(items.armor0, player, pickUpItems, null, items.armor0);
         if (!items.armor1.inInv) game.physics.arcade.overlap(items.armor1, player, pickUpItems, null, items.armor1);
-        if (!items.armor2.inInv) game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);      
+        if (!items.armor2.inInv) game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);
+        if (!items.weapon1.inInv) game.physics.arcade.overlap(items.weapon1, player, pickUpItems, null, items.weapon1); 
+        if (!items.weapon2.inInv) game.physics.arcade.overlap(items.weapon2, player, pickUpItems, null, items.weapon2); 
+        if (!items.weapon3.inInv) game.physics.arcade.overlap(items.weapon3, player, pickUpItems, null, items.weapon3);       
 
         //ENemy collion + revive
         for (var enemyGroup in enemys){  
@@ -366,37 +367,39 @@ function attackCollisionHandler(atkBox, enemy){
         enemy.deathTime = game.time.now;
         playerGold += enemy.gold;
 
-        gold.removeChildAt(0);
-        goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
-        gold.addChild(goldText);        
+        gold.getChildAt(0).setText(playerGold); 
         
+        switch (enemy.key){
+            case "wolfBoss":
+                dropItem(items.armor0, 'armor0', enemy.x, enemy.y, 1);
+                break;
+            case "skeleBoss":
+                dropItem(items.armor1, 'armor1', enemy.x, enemy.y, 2);
+                break;
+            case "knightBoss":
+                dropItem(items.armor2, 'armor2', enemy.x, enemy.y, 3);
+                break;   
+            case "spider":
+                if (!unlockedWep[0] && Math.random()>0.5){
+                    dropItem(items.weapon1, 'weapon1', enemy.x+this.x, enemy.y+this.y);
+                    unlockedWep[0] = true;
+                }
+                break
+            case "skeleton":
+                if (!unlockedWep[1] && Math.random()>0.5){
+                    dropItem(items.weapon2, 'weapon2', enemy.x+this.x, enemy.y+this.y);
+                    unlockedWep[1] = true;
+                }
+                break 
+            case "scorpion":
+                if (!unlockedWep[2] && Math.random()>0.5){
+                    dropItem(items.weapon3, 'weapon3', enemy.x+this.x, enemy.y+this.y);
+                    unlockedWep[2] = true;
+                }
+                break          
+        }      
 
-        if (enemy.name === "wolfBoss") {
-            gameProgress = 1;            
-            items.armor0.x = enemy.x; items.armor0.y = enemy.y;
-            items.armor0.exists = true;
-            //items.armor0 = itemFrames.load('armor0', enemy.x, enemy.y); 
-            game.physics.enable(items.armor0, Phaser.Physics.ARCADE); items.armor0.name = "armor0";
-            items.armor0.bringToTop();
-
-        }
-        else if (enemy.name === "skeleBoss") {
-            gameProgress = 2;            
-            items.armor1.x = enemy.x; items.armor1.y = enemy.y;
-            items.armor1.exists = true;
-            //items.armor1 = itemFrames.load('armor1', enemy.x, enemy.y); 
-            game.physics.enable(items.armor1, Phaser.Physics.ARCADE); items.armor1.name = "armor1";
-            items.armor1.bringToTop();
-
-        }
-        else if (enemy.name === "knightBoss") {
-            gameProgress = 3;            
-            items.armor2.x = enemy.x; items.armor2.y = enemy.y;
-            items.armor2.exists = true;
-            //items.armor2 = itemFrames.load('armor2', enemy.x, enemy.y); 
-            game.physics.enable(items.armor2, Phaser.Physics.ARCADE); items.armor2.name = "armor2";
-            items.armor2.bringToTop();
-        }
+        
     }    
     var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
@@ -404,6 +407,7 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.removeChildAt(0);
     enemy.addChild(monHealthBar);   
 
+    //for when atkBox is a projectile
     if (atkBox.key==="blue") atkBox.exists = false; 
 }
 

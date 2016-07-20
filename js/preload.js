@@ -72,8 +72,5 @@ function preload() {
     game.load.spritesheet('skeleBoss','assets/Spritesheet/monsters/BOSS2.png', 50, 48);
     game.load.spritesheet('knightBoss','assets/Spritesheet/monsters/BOSS3.png', 49, 48);
 
-    game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34);   
-
-    //for testing
-    game.load.image('rect', 'assets/HUD/hp_bar.png');
+    game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34); 
 }
