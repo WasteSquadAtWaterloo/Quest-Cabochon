@@ -32,33 +32,55 @@ function preload() {
     game.load.image('blue', 'assets/blue_shot.png');
     game.load.image('yellow', 'assets/yellow_shot.png');
 
-    game.load.spritesheet('{"armor":"none","hat":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
-    game.load.spritesheet('{"armor":"none","hat":"none"}1', 'assets/Spritesheet/player/weapon1.png', 192, 192);
-    game.load.spritesheet('{"armor":"none","hat":"none"}2', 'assets/Spritesheet/player/weapon2.png', 192, 192);
-    game.load.spritesheet('{"armor":"none","hat":"none"}3', 'assets/Spritesheet/player/weapon3.png', 192, 192);
+    function loadWeps(key, url){
+        for (var i=1; i<4; i++){
+        game.load.spritesheet(key+i, url+'weapon'+i+'.png', 192, 192);    
+        }
+    }
 
+    game.load.spritesheet('{"armor":"none","hat":"none"}', 'assets/Spritesheet/player/default.png', 64, 64);
+    loadWeps('{"armor":"none","hat":"none"}', 'assets/Spritesheet/player/default');
     game.load.spritesheet('{"armor":"none","hat":"hat0"}', 'assets/Spritesheet/player/hat0.png', 64, 64);
+    loadWeps('{"armor":"none","hat":"hat0"}', 'assets/Spritesheet/player/hat0');    
     game.load.spritesheet('{"armor":"none","hat":"hat1"}', 'assets/Spritesheet/player/hat1.png', 64, 64);
+    loadWeps('{"armor":"none","hat":"hat1"}','assets/Spritesheet/player/hat1');
     game.load.spritesheet('{"armor":"none","hat":"hat2"}', 'assets/Spritesheet/player/hat2.png', 64, 64);
+    loadWeps('{"armor":"none","hat":"hat2"}','assets/Spritesheet/player/hat2');
     game.load.spritesheet('{"armor":"none","hat":"hat3"}', 'assets/Spritesheet/player/hat3.png', 64, 64);
+    loadWeps('{"armor":"none","hat":"hat3"}','assets/Spritesheet/player/hat3');
 
     game.load.spritesheet('{"armor":"armor0","hat":"none"}', 'assets/Spritesheet/player/armor0.png', 64, 64);
+    loadWeps('{"armor":"armor0","hat":"none"}','assets/Spritesheet/player/armor0');
     game.load.spritesheet('{"armor":"armor0","hat":"hat0"}', 'assets/Spritesheet/player/armor0hat0.png', 64, 64);
+    loadWeps('{"armor":"armor0","hat":"hat0"}', 'assets/Spritesheet/player/armor0hat0');
     game.load.spritesheet('{"armor":"armor0","hat":"hat1"}', 'assets/Spritesheet/player/armor0hat1.png', 64, 64);
+    loadWeps('{"armor":"armor0","hat":"hat1"}', 'assets/Spritesheet/player/armor0hat1');
     game.load.spritesheet('{"armor":"armor0","hat":"hat2"}', 'assets/Spritesheet/player/armor0hat2.png', 64, 64);
+    loadWeps('{"armor":"armor0","hat":"hat2"}', 'assets/Spritesheet/player/armor0hat2');
     game.load.spritesheet('{"armor":"armor0","hat":"hat3"}', 'assets/Spritesheet/player/armor0hat3.png', 64, 64);
+    loadWeps('{"armor":"armor0","hat":"hat3"}', 'assets/Spritesheet/player/armor0hat3');
 
     game.load.spritesheet('{"armor":"armor1","hat":"none"}', 'assets/Spritesheet/player/armor1.png', 64, 64);
+    loadWeps('{"armor":"armor1","hat":"none"}', 'assets/Spritesheet/player/armor1');
     game.load.spritesheet('{"armor":"armor1","hat":"hat0"}', 'assets/Spritesheet/player/armor1hat0.png', 64, 64);
+    loadWeps('{"armor":"armor1","hat":"hat0"}', 'assets/Spritesheet/player/armor1hat0');
     game.load.spritesheet('{"armor":"armor1","hat":"hat1"}', 'assets/Spritesheet/player/armor1hat1.png', 64, 64);
+    loadWeps('{"armor":"armor1","hat":"hat1"}', 'assets/Spritesheet/player/armor1hat1');
     game.load.spritesheet('{"armor":"armor1","hat":"hat2"}', 'assets/Spritesheet/player/armor1hat2.png', 64, 64);
+    loadWeps('{"armor":"armor1","hat":"hat2"}', 'assets/Spritesheet/player/armor1hat2');
     game.load.spritesheet('{"armor":"armor1","hat":"hat3"}', 'assets/Spritesheet/player/armor1hat3.png', 64, 64);
+    loadWeps('{"armor":"armor1","hat":"hat3"}', 'assets/Spritesheet/player/armor1hat3');
 
     game.load.spritesheet('{"armor":"armor2","hat":"none"}', 'assets/Spritesheet/player/armor2.png', 64, 64);
+    loadWeps('{"armor":"armor2","hat":"none"}', 'assets/Spritesheet/player/armor2');
     game.load.spritesheet('{"armor":"armor2","hat":"hat0"}', 'assets/Spritesheet/player/armor2hat0.png', 64, 64);
+    loadWeps('{"armor":"armor2","hat":"hat0"}', 'assets/Spritesheet/player/armor2hat0');
     game.load.spritesheet('{"armor":"armor2","hat":"hat1"}', 'assets/Spritesheet/player/armor2hat1.png', 64, 64);
+    loadWeps('{"armor":"armor2","hat":"hat1"}', 'assets/Spritesheet/player/armor2hat1');
     game.load.spritesheet('{"armor":"armor2","hat":"hat2"}', 'assets/Spritesheet/player/armor2hat2.png', 64, 64);
+    loadWeps('{"armor":"armor2","hat":"hat2"}', 'assets/Spritesheet/player/armor2hat2');
     game.load.spritesheet('{"armor":"armor2","hat":"hat3"}', 'assets/Spritesheet/player/armor2hat3.png', 64, 64);
+    loadWeps('{"armor":"armor2","hat":"hat3"}', 'assets/Spritesheet/player/armor2hat3');
 
     game.load.spritesheet('spider', 'assets/Spritesheet/monsters/spider.png', 35, 35);
     game.load.spritesheet('scorpion', 'assets/Spritesheet/monsters/scorpion.png', 32, 33);

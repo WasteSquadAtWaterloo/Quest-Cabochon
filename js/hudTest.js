@@ -284,7 +284,7 @@ function update() {
 }
 
 function render() {
-    
+    game.debug.body(atkBox);
 }
 
 function resizeComponents(){
