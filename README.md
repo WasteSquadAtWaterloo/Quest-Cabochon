@@ -1,3 +1,5 @@
+#Github works in China but it's such a fricken pain. Need to push 10 times before it actually pushes cause the internet here sucks.
+
 # WasteRPG
 ## WORK IN PROGRESS, TEST [HERE](https://wastesquadatwaterloo.github.io/WasteRPG/)
 Controls:
