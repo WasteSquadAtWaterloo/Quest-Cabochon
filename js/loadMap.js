@@ -23,7 +23,7 @@ function loadMap(key, spawn_x, spawn_y, bgn){
 		layer5.destroy();
 		map.destroy();
 	}
-
+    
 	map = game.add.tilemap(key);   
     map.addTilesetImage('roguelikeSheet_transparent','tiles');
 
@@ -59,7 +59,7 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     inventory.bringToTop();
     textBox.bringToTop();
     textBox2.bringToTop();
-    gold.bringToTop();
+    gold.bringToTop();    
 }
 
 
@@ -74,8 +74,13 @@ function initPlayer(spawnX, spawnY, hp){
     player.maxMana = 20;
     player.mana = 20;
 
+    player.lvl = 1;
+    player.exp = 0;    
+
     player.atk = 3;
     player.mAtk = 5;
+
+    player.dmgMultiplyer = 1;
 
     player.kill = function(){ 
         this.body.velocity.x = 0; this.body.velocity.y = 0;        
@@ -123,20 +128,23 @@ function initPlayer(spawnX, spawnY, hp){
         }
 
         for (var wp=1; wp<=3; wp++){
-            player.animations.add(dirs[dir]+"_meleeOS"+wp, playerFrames[dirs[dir]]['attackOS'+wp], 18, false).onComplete.add(function(){
+            player.animations.add(dirs[dir]+"_meleeOS"+wp, playerFrames[dirs[dir]]['attackOS'+wp], 15, false).onComplete.add(function(){
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+                player.body.setSize(25, 20, 19, 43);
+                //atkBox.body.setSize(30, 30, 0, 0);
             });
         }
-    }    
+    }
+    player.animations.add('dead', playerFrames.dead, 5, false);     
 
-    player.OS = function(dir){                
+    player.OS = function(dir){     
+
         if (player.key != JSON.stringify(equip)+weapon) {
-            player.loadTexture(JSON.stringify(equip)+weapon);
+            player.loadTexture(JSON.stringify(equip)+weapon);            
+            player.body.setSize(25, 20 , 83, 107);
         }
         player.play(dir+"_meleeOS"+weapon);       
-    }
-
-    player.animations.add('dead', playerFrames.dead, 5, false); 
+    }    
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
     textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 160 , 'textHud2'); textBox2.fixedToCamera = true; textBox2.exists = false; 
@@ -301,4 +309,12 @@ function portalCheck(map){
             loadMap('map4', 1612, 35, false);
         }
     }
+}
+
+function levelUp(){
+    player.maxHealth += 5;
+    player.heal(5);
+    player.maxMana += 5;
+    player.mana += 5;
+    player.mAtk += 1;
 }

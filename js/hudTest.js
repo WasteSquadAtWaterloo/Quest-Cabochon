@@ -29,12 +29,6 @@ var equip = {
 }
 var enemys = {};
 var atkBox, NPCBox;
-var atkOpts = {
-    "up": {x:-2.5, y:-30},
-    "down": {x:-2.5, y:15},
-    "right": {x:25, y:-12.5},
-    "left": {x:-25, y:-12.5}
-};
 var items = {};
 var dmgTxtStyle = {
     font: "bold 18px Courier",
@@ -53,6 +47,7 @@ var bossSpellTime = 0;
 var weapon;
 var OSattack = false;
 var unlockedWep = [false, false, false];
+var expReq = [10, 20, 30, 40, 50, 60, 70, 80, 100, 999999999999999999999];
 
 function create() {   
 
@@ -65,6 +60,14 @@ function create() {
     loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
 
     initInput();
+
+    //FOR TESTING
+    dropItem(items.armor0, 'armor0', 1100, 700);
+    dropItem(items.armor1, 'armor1', 1150, 700);
+    dropItem(items.armor2, 'armor2', 1200, 700);
+    dropItem(items.weapon1, 'weapon1', 1100, 750);
+    dropItem(items.weapon2, 'weapon2', 1150, 750);
+    dropItem(items.weapon3, 'weapon3', 1200, 750);
 }
 
 
@@ -130,8 +133,18 @@ function update() {
         }
 
         if (curAn.indexOf("melee") > -1 && !player.animations.currentAnim.isFinished){
-            atkBox.x = player.body.x+atkOpts[player_dir].x;
-            atkBox.y = player.body.y+atkOpts[player_dir].y;
+            var wep = weapon ? parseInt(weapon):0;
+            //Setting size of atkBox
+            if (wep){
+                var orntn = (player_dir==="right" || player_dir==="left") ? "hrzntl":"vrtcl";
+                var boxWidth = wepBoxSize[weapon][orntn].width;
+                var boxHeight = wepBoxSize[weapon][orntn].height;
+                atkBox.body.setSize(boxWidth, boxHeight, 0, 0);
+            }
+
+            //Setting coordinates for atkBox                   
+            atkBox.x = player.body.x+atkOpts[player_dir][wep].x;
+            atkBox.y = player.body.y+atkOpts[player_dir][wep].y;
         } else{
             atkBox.x = -100;
             atkBox.y = -100; 
@@ -285,6 +298,7 @@ function update() {
 
 function render() {
     game.debug.body(atkBox);
+    game.debug.body(player, "rgba(255,0,0,0.5)");
 }
 
 function resizeComponents(){
@@ -328,6 +342,18 @@ function updateManaBar(){
     }
 }
 
+function updateExpBar(){
+    var pc = Math.ceil(player.exp/expReq[player.lvl-1]*10);
+
+    $("#green-bars").empty();
+    for (var i=0; i<pc; i++){
+        var hp = $('<img />', {           
+          src: 'assets/HUD/exp_bar.png'          
+        });
+        hp.appendTo($("#green-bars"));
+    }
+}
+
 function mobHealthBarManager(mobMaxHealth, mobHealth){
     var bar = game.add.bitmapData(32,2);
     var barProgress = (mobHealth/mobMaxHealth)*32;
@@ -342,7 +368,7 @@ function enemyCollisionHandler(player, enemy) {
     game.camera.shake(0.003, 500, true);
 
     damageTime = game.time.now;
-    player.damage(enemy.atk);
+    player.damage(enemy.atk*player.dmgMultiplyer);
     
     updateHealthBar();   
 }
@@ -357,8 +383,7 @@ function attackCollisionHandler(atkBox, enemy){
     
     tweenTxt.onComplete.add(function(){
         dmgTxt.destroy();
-    });
-    
+    });    
 
     atkTime = game.time.now;
     enemy.damage(atk);
@@ -366,6 +391,14 @@ function attackCollisionHandler(atkBox, enemy){
     if (!enemy.alive) {
         enemy.deathTime = game.time.now;
         playerGold += enemy.gold;
+
+        player.exp += enemy.exp;
+        if (player.exp >= expReq[player.lvl-1]){
+            player.lvl++;
+            player.exp = player.exp - expReq[player.lvl-1];
+            levelUp();
+        }
+        updateExpBar();
 
         gold.getChildAt(0).setText(playerGold); 
         

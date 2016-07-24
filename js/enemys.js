@@ -2,10 +2,10 @@ function initEnemys(map){
     if (map === 'map1'){
         //change snail stats
         enemys.snails = game.add.group();
-        createEnemys(enemys.snails, 'snail', 7, 3, 1392, 1196, 2065, 480, 2, 5, 1.5, 15);        
+        createEnemys(enemys.snails, 'snail', 7, 3, 1392, 1196, 2065, 480, 2, 5, 1.5, 15, 2);        
 
     	enemys.spiders = game.add.group();
-    	createEnemys(enemys.spiders, 'spider', 10, 5, 724, 336, 2108, 480, 2, 5, 1.5, 25);
+    	createEnemys(enemys.spiders, 'spider', 10, 5, 724, 336, 2108, 480, 2, 5, 1.5, 25, 3);
 
         enemys.wolfBoss = game.add.group();
         createWolfBoss('wolfBoss', 50, 5, 400, 600, 100, 100, 3, 300);
@@ -13,41 +13,40 @@ function initEnemys(map){
     else if (map === 'map2'){
 
         enemys.spiders = game.add.group(); 
-        createEnemys(enemys.spiders, 'spider', 10, 5, 432, 432, 2064, 336, 2, 5, 1.5, 25);
+        createEnemys(enemys.spiders, 'spider', 10, 5, 432, 432, 2064, 336, 2, 5, 1.5, 25, 3);
 
         //change atk,hp and gold of log monster
         enemys.logmonsters = game.add.group();
-        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 432, 1104, 1584, 482, 3, 4, 1.5, 50);
+        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 432, 1104, 1584, 482, 3, 4, 1.5, 50, 5);
     }
     else if (map === "map3"){
         enemys.skeletons = game.add.group();
-        createEnemys(enemys.skeletons, 'skeleton', 20, 10, 284, 384, 1736, 580, 2, 6, 1.5, 70);
+        createEnemys(enemys.skeletons, 'skeleton', 20, 10, 284, 384, 1736, 580, 2, 6, 1.5, 70, 6);
 
         enemys.zombies = game.add.group();
-        createEnemys(enemys.zombies, 'zombie', 25, 12, 200, 1052, 1800, 700, 3, 4, 1.5 ,85);
+        createEnemys(enemys.zombies, 'zombie', 25, 12, 200, 1052, 1800, 700, 3, 4, 1.5 , 85, 7);
 
         enemys.skeleBoss = game.add.group();
         createSkeleBoss('skeleBoss', 200, 15, 1300, 1900, 100, 100, 2, 500);
     }
     else if(map === 'map4'){
-
         enemys.logmonsters = game.add.group();
-        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 288, 4032, 1632, 480, 2, 5, 1.5, 50);    
+        createEnemys(enemys.logmonsters, 'logmonster', 15, 7, 288, 4032, 1632, 480, 2, 5, 1.5, 50, 5);    
 
         enemys.scorpions = game.add.group();
-        createEnemys(enemys.scorpions, 'scorpion', 30, 15, 1392, 1008, 560, 2736, 7, 2, 1.5, 100);  
+        createEnemys(enemys.scorpions, 'scorpion', 30, 15, 1392, 1008, 560, 2736, 7, 2, 1.5, 100, 8);  
     }    
     else if (map === "map5") {
         enemys.knightBoss = game.add.group();
         createKnightBoss('knightBoss', 400, 15, 450, 370, 100, 100, 1.5, 1000);
 
         enemys.guards = game.add.group();
-        createEnemys(enemys.guards, 'guard', 45, 20, 130, 528, 624, 288, 1, 4, 2, 150);
+        createEnemys(enemys.guards, 'guard', 45, 20, 130, 528, 624, 288, 1, 4, 2, 150, 10);
     }    
 
 }
 
-function createEnemys(group, key, hp, atk, topX, topY, width, height, rows, cols, scale, goldAmount){
+function createEnemys(group, key, hp, atk, topX, topY, width, height, rows, cols, scale, goldAmount, xp){
     group.enableBody = true;
     group.physicsBodyType = Phaser.Physics.ARCADE;
 
@@ -68,6 +67,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, rows, cols
             enemy.animations.add('move', enemyFrames[key].down.walk, 10, true);              
             enemy.play('move');            
             enemy.atk = atk;
+            enemy.exp = xp;
 
             enemy.deathTime = 0;            
             enemy.gold = goldAmount;
@@ -84,7 +84,7 @@ function createEnemys(group, key, hp, atk, topX, topY, width, height, rows, cols
 
 function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
     var wolfBoss = enemys.wolfBoss.create(topX, topY, 'wolfBoss');
-    wolfBoss.name = "wolfBoss";
+
     wolfBoss.maxHealth = hp;
     wolfBoss.setHealth(hp);
     game.physics.enable(wolfBoss, Phaser.Physics.ARCADE);   
@@ -97,6 +97,7 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
     wolfBoss.animations.add('move', [0,1,2,3], 10, true);              
     wolfBoss.play('move');            
     wolfBoss.atk = atk;
+    wolfBoss.exp = 10;
 
     wolfBoss.gold = goldAmount;
     var tweenA = game.add.tween(wolfBoss).to( { 
@@ -122,7 +123,7 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
 }
 function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
     var skeleBoss = enemys.skeleBoss.create(topX, topY, 'skeleBoss');
-    skeleBoss.name = "skeleBoss";
+    
     skeleBoss.maxHealth = hp;
     skeleBoss.setHealth(hp);
     game.physics.enable(skeleBoss, Phaser.Physics.ARCADE);
@@ -135,6 +136,7 @@ function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmo
     skeleBoss.animations.add('move', [0,1,2,3], 10, true);              
     skeleBoss.play('move');            
     skeleBoss.atk = atk;
+    skeleBoss.exp = 20;
 
     skeleBoss.gold = goldAmount;
     var tweenA = game.add.tween(skeleBoss).to( { 
@@ -159,7 +161,7 @@ function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmo
 }
 function createKnightBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
     var knightBoss = enemys.knightBoss.create(topX, topY, 'knightBoss');
-    knightBoss.name = "knightBoss";
+    
     knightBoss.maxHealth = hp;
     knightBoss.setHealth(hp);
     game.physics.enable(knightBoss, Phaser.Physics.ARCADE);
@@ -172,6 +174,7 @@ function createKnightBoss(key, hp, atk, topX, topY, width, height, scale, goldAm
     knightBoss.animations.add('move', [0,1,2,3], 10, true);              
     knightBoss.play('move');            
     knightBoss.atk = atk;
+    knightBoss.exp = 30;
 
     knightBoss.gold = goldAmount;
     var tweenA = game.add.tween(knightBoss).to( { 

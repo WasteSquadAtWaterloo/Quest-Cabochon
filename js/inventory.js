@@ -20,6 +20,8 @@ function initInventory(){
                 swordAvailability = true;
 
                 weapon = "";
+                player.atk -= item.dmg;
+                atkBox.body.setSize(30, 30, 0, 0);
             }            
         }
         catch(err){}
@@ -35,6 +37,7 @@ function initInventory(){
 
                 equip.hat = "none";                
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+                player.dmgMultiplyer -= item.dmgReduc;
             }
         }
         catch(err){}        
@@ -50,6 +53,7 @@ function initInventory(){
 
                 equip.armor = "none";
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+                player.dmgMultiplyer -= item.dmgReduc;
             }
         }
         catch(err){}
@@ -86,7 +90,8 @@ function inventoryCreator(){
         try { //equiping an item
             var item = inventorySlots[id].getChildAt(0);
             //Check item type
-            var itemName = (item.name).toString();
+            
+            var itemName = (item.itemCode).toString();
             inventorySlots[id].removeChildAt(0);
             inventoryAvailability[id] = true;
 
@@ -95,6 +100,7 @@ function inventoryCreator(){
                     var temp = chest_slot.getChildAt(0);
                     chest_slot.removeChildAt(0);                    
                     pickUpItems.call(temp, temp, player);
+                    player.dmgMultiplyer += temp.dmgReduc;
                 }
 
                 chestAvailability = false;
@@ -102,6 +108,8 @@ function inventoryCreator(){
 
                 equip.armor = item.itemCode;
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+
+                player.dmgMultiplyer -= item.dmgReduc;
             }
 
             else if (itemName.indexOf('hat') > -1){                            
@@ -109,13 +117,16 @@ function inventoryCreator(){
                     var temp = helmet_slot.getChildAt(0);
                     helmet_slot.removeChildAt(0);                    
                     pickUpItems.call(temp, temp, player);
+                    player.dmgMultiplyer += temp.dmgReduc;
                 }
 
                 helmetAvailability = false;
                 helmet_slot.addChild(item);
 
                 equip.hat = item.itemCode;
-                player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);                
+                player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
+
+                player.dmgMultiplyer -= item.dmgReduc;                
             }
 
             else if (itemName.indexOf('weapon') > -1){
@@ -123,12 +134,15 @@ function inventoryCreator(){
                     var temp = sword_slot.getChildAt(0);
                     sword_slot.removeChildAt(0);                    
                     pickUpItems.call(temp, temp, player);
+                    player.atk -= temp.dmg;
                 }
 
                 swordAvailability = false; 
                 sword_slot.addChild(item);
 
                 weapon = itemName.charAt(6);   
+
+                player.atk += item.dmg;
             }
             else if (itemName.indexOf('hp') > -1){
             	//use hp pot at that slot
@@ -163,7 +177,6 @@ function inventoryCreator(){
         }
         catch(err){ //Adding an item
             console.log(err);
-
         }
     }
     return generatedFunction;
@@ -197,10 +210,9 @@ function pickUpItems(item, player) {
 
 function dropItem(item, itemName, x, y, gameProg){
     if (gameProg) gameProgress = gameProg; 
-    console.log(item);           
+           
     item.reset(x, y);            
-    game.physics.enable(item, Phaser.Physics.ARCADE); 
-    item.name = itemName;
+    game.physics.enable(item, Phaser.Physics.ARCADE);   
     item.bringToTop();
 
 }

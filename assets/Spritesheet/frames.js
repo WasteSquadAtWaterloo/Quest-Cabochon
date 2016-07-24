@@ -97,7 +97,40 @@ itemFrames = {
 
 	load: function(item, x, y){
 		var itemTR = game.add.sprite(x, y, 'items', this[item]);
-		itemTR.itemCode = item;
+		itemTR.itemCode = item;		
+		switch (item) {
+			case 'armor0': 
+				itemTR.dmgReduc = 0.1; 
+				break;
+			case 'armor1': 
+				itemTR.dmgReduc = 0.2; 
+				break;
+			case 'armor2': 
+				itemTR.dmgReduc = 0.3; 
+				break;
+			case 'hat0': 
+				itemTR.dmgReduc = 0.05; 
+				break;
+			case 'hat1': 
+				itemTR.dmgReduc = 0.1; 
+				break;
+			case 'hat2': 
+				itemTR.dmgReduc = 0.15; 
+				break;
+			case 'hat3': 
+				itemTR.dmgReduc = 0.2; 	
+				break;
+			case 'weapon1': 
+				itemTR.dmg = 2; 
+				break;
+			case 'weapon2': 
+				itemTR.dmg = 5; 	
+				break;
+			case 'weapon3': 
+				itemTR.dmg = 10; 			
+				break;
+		}		
+
 		return itemTR;
 	}
 }
@@ -118,6 +151,7 @@ for (var i=21; i<25; i++){
     }
 }
 
+
 for (var i=25; i<28; i++){
 	for (var j=41; j<50; j++){
 		stand.push (i*57+j);
@@ -125,3 +159,63 @@ for (var i=25; i<28; i++){
 }
 
 stand.push(541, 542, 543, 544, 545, 546, 547, 548, 549, 593, 650, 583, 584, 585, 586, 587, 588);
+
+var atkOpts = {
+    "up": [
+    	{x:-2.5, y:-30},
+    	{x:11.5, y:-75},
+    	{x:-23.5, y:-50},
+    	{x:6.5, y:-80}
+    ],
+    "down": [
+    	{x:-2.5, y:15},
+    	{x:-0.5, y:-5},
+    	{x:-20.5, y:20},
+    	{x:-5.5, y:0}
+    ],
+    "right": [
+    	{x:25, y:-12.5},
+    	{x:25, y:-9},
+    	{x:25, y:-27.5},
+    	{x:25, y:-12.5}
+    ],
+    "left": [
+    	{x:-25, y:-12.5},
+    	{x:-55, y:-9},
+    	{x:-50, y:-27.5},
+    	{x:-65, y:-12.5}
+    ]
+};
+
+var wepBoxSize = {
+	'1': {
+		'hrzntl': {
+			'width': 60,
+			'height': 20 
+		},
+		'vrtcl': {
+			'width': 20,
+			'height': 60
+		}
+	},
+	'2': {
+		'hrzntl': {
+			'width': 50,
+			'height': 40 
+		},
+		'vrtcl': {
+			'width': 70,
+			'height': 50
+		}
+	},
+	'3': {
+		'hrzntl': {
+			'width': 65,
+			'height': 30 
+		},
+		'vrtcl': {
+			'width': 30,
+			'height': 65
+		}
+	} 
+}
