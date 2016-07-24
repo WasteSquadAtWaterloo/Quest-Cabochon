@@ -1,6 +1,7 @@
+#LOL Hackthenorth website gets blocked by the great firewall. RIP
 # WasteRPG
 ## WORK IN PROGRESS, TEST [HERE](https://wastesquadatwaterloo.github.io/WasteRPG/)
-Controls:
+##Controls:
 * WASD or Arrow Keys to move
 * Click in a direction for a melee attack
 * C to toggle inventory
@@ -10,7 +11,7 @@ Controls:
 
 Walking close to NPCs will active their abilities (dialogue, healing, or shop interface). Walking over items will pick them up and place them in the player inventory. Click on items in the inventory screen will "use" them (e.g. Equiping armor, using potions, equiping weapons). 
 
-Known Issues to be Addressed:
+##Known Issues to be addressed:
 * Lag when moving around active projectiles
 * Final boss battle not implemented
 * ~~Unequiping items in the inventory does not remove them from the actual game sprite; however, equiping another item of the same class (helmets/chestplates/weapons) will replace the existing item.~~
