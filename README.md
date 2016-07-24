@@ -1,3 +1,4 @@
+#LOL Hackthenorth website gets blocked by the great firewall. RIP
 # WasteRPG
 ## WORK IN PROGRESS, TEST [HERE](https://wastesquadatwaterloo.github.io/WasteRPG/)
 ##Controls:
