@@ -14,7 +14,8 @@ Walking close to NPCs will active their abilities (dialogue, healing, or shop in
 * Lag when moving around active projectiles
 * Final boss battle not implemented
 * ~~Unequiping items in the inventory does not remove them from the actual game sprite; however, equiping another item of the same class (helmets/chestplates/weapons) will replace the existing item.~~
-* Mobs respawn with messed up health bars
+* Mobs respawn with messed up health bars (The health bars do not decrease when the mobs take damage)
+* Unequiping and re-equiping armor will end up compounding the armor's protection stats
 * Dying instantly when loading back into the main map?
 * Walking through trees (left in for testing purposes)
 * Buying items from the store does not take away from the player's coins (left in for testing purposes)
