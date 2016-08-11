@@ -1,0 +1,34 @@
+#container {
+  	position: relative;
+}
+.hud {  
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+.hud .bar {
+	right: 10;
+}
+.ps {  
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#red-bars {  
+  position: fixed;
+  top: 27px;
+  left: 107px;
+}
+
+#blue-bars {  
+  position: fixed;
+  top: 48px;
+  left: 107px;
+}
+
+#green-bars {  
+  position: fixed;
+  top: 68px;
+  left: 107px;
+}
