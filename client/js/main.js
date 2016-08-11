@@ -1,6 +1,6 @@
 var socket = io();
 
-var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render }, false);//, false);
 
 var map;
 var layer1, layer2, layer3, layer4, layer5;
@@ -13,7 +13,8 @@ var equip = {
 
 var selfId = null;
 
-function create(){
+function create(){	
+	//game.time.desiredFps = 80;
 	$(window).resize(resizeComponents);
 
 	loadMap('map0', 1152, 624, true);
@@ -23,12 +24,16 @@ function create(){
 			selfId = data.selfId;
 		}
 
-		for (var i=0; i<data.players.length; i++){		
-			if (!Player.list[data.players[i].id]){
-				console.log('NEW PLAYER');
-				var player = new Player(data.players[i], data.selfId);
+		if (data.players.length){
+			for (var i=0; i<data.players.length; i++){		
+				if (!Player.list[data.players[i].id]){					
+					var player = new Player(data.players[i], data.selfId);
+					console.log('NEW PLAYER',data.selfId, player.id);
+					if (data.selfId || player.map === 'map0')
+						player.load();										
+				}				
 			}
-		}
+		}			
 	});
 
 	socket.on('update', function(data){
@@ -39,9 +44,17 @@ function create(){
 				p.x = pack.x;
 				p.y = pack.y;
 				p.maxHP = pack.maxHP;
-				p.dir = pack.dir;
-				if (pack.anim)
-					p.sprite.play(pack.anim);
+				if (pack.dir) p.dir = pack.dir;
+				if (pack.anim) p.sprite.play(pack.anim);
+				if (pack.map !== map.key){					
+					if (pack.id === selfId)
+						loadMap(pack.map, pack.x, pack.y, false);
+					else if (p.sprite.alive)
+						p.sprite.kill();
+				}
+				else if (pack.id !== selfId && !p.sprite.alive){
+					p.load();
+				}
 			}			
 		}
 	});
@@ -54,8 +67,7 @@ function create(){
 	});
 
 	initInput();
-
-
+	
 	socket.emit('ready');
 }
 
@@ -74,19 +86,19 @@ function update(){
 		player.body.velocity.set(0);
 
 		if (cursors.left.isDown || wasd.left.isDown){
-	        player.body.velocity.x = -500;	       
+	        player.body.velocity.x = -750;	       
 	        socket.emit('playAnim', {id:selfId, anim:'left'});
 	    }
 	    else if (cursors.right.isDown || wasd.right.isDown){
-	        player.body.velocity.x = 500;	                       
+	        player.body.velocity.x = 750;	                       
 	        socket.emit('playAnim', {id:selfId, anim: 'right'});
 	    }
 	    else if (cursors.up.isDown || wasd.up.isDown){
-	        player.body.velocity.y = -500;	                      
+	        player.body.velocity.y = -750;	                      
 	    	socket.emit('playAnim', {id:selfId, anim: 'up'});
 	    }
 	    else if (cursors.down.isDown || wasd.down.isDown){ 
-	        player.body.velocity.y = 500;	                       
+	        player.body.velocity.y = 750;	                       
 	        socket.emit('playAnim', {id:selfId, anim: 'down'});
 	    }
 
@@ -95,7 +107,7 @@ function update(){
     
     for (var i in Player.list){
     	var pl = Player.list[i];
-    	if (pl.sprite.animations.currentAnim.isFinished){
+    	if (pl.sprite.animations.currentAnim.isFinished){    		
     		pl.sprite.frame = playerFrames[pl.dir].walk[0];
     	}
     }      

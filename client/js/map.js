@@ -1,6 +1,6 @@
 var map;
 
-function loadMap(key, spawn_x, spawn_y, bgn){
+var loadMap = function(key, spawn_x, spawn_y, bgn){
 	if (!bgn){
 		layer1.destroy();
 		layer2.destroy();
@@ -18,9 +18,13 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);
 
-   	if (selfId){
-   		Player.list[selfId].sprite.bringToTop();   		
-   	}   	
+    if (selfId){
+    	Player.list[selfId].sprite.x = spawn_x;
+   		Player.list[selfId].sprite.y = spawn_y;
+    }
+   	Player.loadAllOnMap(key);
+
+   	loadLastLayer(); 	
    	layer1.resizeWorld();
 
    	map.setCollisionByExclusion(stand,true,layer1);      

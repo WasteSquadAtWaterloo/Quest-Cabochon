@@ -5,12 +5,14 @@ var Player = function(initPack, selfId){
 		y: initPack.y,
 		HP: initPack.HP,
 		maxHP: initPack.maxHP,
-		dir: initPack.dir,
+		map: initPack.map,
+		dir: 'down',
 	};
 
 	//setup player properties	
 	self.sprite = game.add.sprite(self.x, self.y, JSON.stringify(equip), playerFrames[self.dir].walk[0]);
-	loadLastLayer();
+	self.sprite.kill();
+	
 	self.sprite.anchor.setTo(0.5,0.5);
     game.physics.enable(self.sprite, Phaser.Physics.ARCADE);
     self.sprite.body.setSize(25, 20, 20, 45);
@@ -42,6 +44,12 @@ var Player = function(initPack, selfId){
     	self.sprite.y = self.y;     	
     }
 
+    self.load = function(){
+    	self.sprite.revive();
+    	self.sprite.bringToTop();
+    	loadLastLayer();
+    }
+
     Player.list[self.id] = self;
     return self;
 }
@@ -51,4 +59,16 @@ Player.update = function(){
 	for (var i in Player.list){
 		if (Player.list[i].id !== selfId) Player.list[i].update();
 	}
+}
+
+Player.loadAllOnMap = function(key){
+	for (var i in Player.list){		
+   		for (var i in Player.list){   			
+   			if (Player.list[i].map === key){
+   				game.add.existing(Player.list[i].sprite);
+   			}   			
+   		}
+   		Player.list[selfId].sprite.bringToTop();
+	}
+	loadLastLayer();
 }
