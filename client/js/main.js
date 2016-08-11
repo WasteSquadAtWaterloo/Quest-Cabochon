@@ -81,13 +81,14 @@ function update(){
 	    }
 
 	    socket.emit('updatePos', {id:selfId, x:player.x, y:player.y});    
-	}        
-
-    /*
-    if (player.animations.currentAnim.isFinished){        
-        player.frame = playerFrames[player_dir].walk[0];                
-    }
-    */
+	}
+    
+    for (var i in Player.list){
+    	var pl = Player.list[i];
+    	if (pl.sprite.animations.currentAnim.isFinished){
+    		pl.sprite.frame = playerFrames[pl.dir].walk[0];
+    	}
+    }      
 }
 
 function render(){

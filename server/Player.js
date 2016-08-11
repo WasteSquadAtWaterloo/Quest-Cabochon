@@ -63,6 +63,7 @@ Player.onConnect = function(socket, x, y, map, initPack){
 
 	socket.on('playAnim', function(data){
 		player.anim = data.anim;
+		player.dir = data.anim;
 	});
 
 	socket.emit('init', {
