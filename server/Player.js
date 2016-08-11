@@ -54,7 +54,7 @@ Player.getAllInitPack = function(){
 }
 
 Player.onConnect = function(socket, x, y, map, initPack){
-	var player = Player(socket.id, x, y, map, initPack);
+	var player = Player(socket.id, x, y, map, initPack);	
 
 	socket.on('updatePos', function(data){
 		player.x = data.x;

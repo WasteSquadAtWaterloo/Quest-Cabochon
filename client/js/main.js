@@ -16,6 +16,8 @@ var selfId = null;
 function create(){
 	$(window).resize(resizeComponents);
 
+	loadMap('map0', 1152, 624, true);
+
 	socket.on('init', function(data){				
 		if (data.selfId){			
 			selfId = data.selfId;
@@ -53,13 +55,21 @@ function create(){
 
 	initInput();
 
+
 	socket.emit('ready');
 }
 
 function update(){
 	if (selfId){
 		Player.update();
+
 		var player = Player.list[selfId].sprite;
+
+		game.physics.arcade.collide(player, layer1);
+        game.physics.arcade.collide(player, layer2);
+        game.physics.arcade.collide(player, layer3);
+        game.physics.arcade.collide(player, layer4);
+        //game.physics.arcade.collide(player, layer5); 
 
 		player.body.velocity.set(0);
 

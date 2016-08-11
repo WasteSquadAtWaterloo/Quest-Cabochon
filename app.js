@@ -27,7 +27,7 @@ io.sockets.on('connection', function(socket){
 	SOCKET_LIST[socket.id] = socket;
 
 	socket.on('ready', function(){
-		Player.onConnect(socket, 100/*1152*/, 100/*624*/, 'map0', initPack);
+		Player.onConnect(socket, 1152, 624, 'map0', initPack);
 	});
 
 	socket.on('disconnect', function(){
