@@ -70,7 +70,7 @@ Player.onConnect = function(socket, x, y, map, initPack){
 			selfId: socket.id,
 			players: Player.getAllInitPack(),
 		});
-	}, 1000);	
+	}, 5000);	
 }
 
 
