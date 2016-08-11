@@ -26,7 +26,9 @@ io.sockets.on('connection', function(socket){
 	console.log(socket.id.toString().substring(0,5)+" connected");
 	SOCKET_LIST[socket.id] = socket;
 
-	Player.onConnect(socket, 100/*1152*/, 100/*624*/, 'map0', initPack);
+	socket.on('ready', function(){
+		Player.onConnect(socket, 100/*1152*/, 100/*624*/, 'map0', initPack);
+	});
 
 	socket.on('disconnect', function(){
 		delete SOCKET_LIST[socket.id];
@@ -49,7 +51,7 @@ setInterval(function(){
 	};
 
 	for (var i in SOCKET_LIST){
-		var socket = SOCKET_LIST[i];
+		var socket = SOCKET_LIST[i];		
 		socket.emit('init', initPack);
 		socket.emit('update', pack);
 		socket.emit('remove', removePack);

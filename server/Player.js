@@ -65,12 +65,11 @@ Player.onConnect = function(socket, x, y, map, initPack){
 		player.anim = data.anim;
 	});
 
-	setTimeout(function(){
-		socket.emit('init', {
-			selfId: socket.id,
-			players: Player.getAllInitPack(),
-		});
-	}, 5000);	
+	socket.emit('init', {
+		selfId: socket.id,
+		players: Player.getAllInitPack(),
+	});
+		
 }
 
 

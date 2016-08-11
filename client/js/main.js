@@ -16,13 +16,16 @@ var selfId = null;
 function create(){
 	$(window).resize(resizeComponents);
 
-	socket.on('init', function(data){	
+	socket.on('init', function(data){				
 		if (data.selfId){			
 			selfId = data.selfId;
 		}
 
-		for (var i=0; i<data.players.length; i++){
-			var player = new Player(data.players[i], data.selfId);
+		for (var i=0; i<data.players.length; i++){		
+			if (!Player.list[data.players[i].id]){
+				console.log('NEW PLAYER');
+				var player = new Player(data.players[i], data.selfId);
+			}
 		}
 	});
 
@@ -49,12 +52,13 @@ function create(){
 	});
 
 	initInput();
+
+	socket.emit('ready');
 }
 
 function update(){
-	Player.update();
-
 	if (selfId){
+		Player.update();
 		var player = Player.list[selfId].sprite;
 
 		player.body.velocity.set(0);

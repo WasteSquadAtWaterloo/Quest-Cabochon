@@ -9,6 +9,7 @@ var Player = function(initPack, selfId){
 	};
 
 	//setup player properties
+	console.log("YO");
 	self.sprite = game.add.sprite(self.x, self.y, JSON.stringify(equip), playerFrames[self.dir].walk[0]);
 	self.sprite.anchor.setTo(0.5,0.5);
     game.physics.enable(self.sprite, Phaser.Physics.ARCADE);
