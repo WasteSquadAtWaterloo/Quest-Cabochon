@@ -10,7 +10,7 @@ app.get('/', function(req, res){
 
 app.use('/client', express.static(__dirname+'/client'));
 
-serv.listen(5550);
+serv.listen(process.env.port || 5550);
 console.log('Server Initialized');
 
 var Player = require('./server/Player');
