@@ -12,9 +12,11 @@ function loadMap(key, spawn_x, spawn_y, bgn){
         playerShots.destroy();
         mobShots.destroy();
 
-        NPC.forEach(function(spr){
-            spr.kill();
-        });
+        if (map.key != "map0"){
+            NPC.forEach(function(spr){                           
+                spr.kill();                     
+            });           
+        }        
 
 		layer1.destroy();
 		layer2.destroy();
@@ -32,12 +34,12 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     layer3 = map.createLayer(2); layer3.smoothed = false; layer3.setScale(3);
     layer4 = map.createLayer(3); layer4.smoothed = false; layer4.setScale(3);    
     
-    if (key==='map0'){
+    if (key==='map0'){        
         game.world.bringToTop(NPC);
         NPC.forEach(function(spr){
             spr.revive();
         }); 
-    } 
+    }   
     initEnemys(key);
 
     player.bringToTop();
