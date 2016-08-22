@@ -20,6 +20,7 @@ function preload() {
     game.load.image('helmetSlot', 'assets/HUD/helmet_slot.png');
     game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
     game.load.image('swordSlot', 'assets/HUD/sword_slot.png');
+    game.load.image('reviveBtn', 'assets/HUD/revive_btn.png');
     game.load.image('goldIcon', 'assets/goldIcon.png');
     game.load.image('gold_and_exp_hud', 'assets/HUD/other_hud_player.png');
 

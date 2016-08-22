@@ -92,10 +92,15 @@ function initPlayer(spawnX, spawnY, hp){
 
         if (inventoryDisplayed) toggleInventory();
 
-        //var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-100, "lol rip", deathTxtStyle); 
-        //deathText.fixedToCamera = true;        
-        
+        var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-50, "lol rip", deathTxtStyle); 
+        deathText.fixedToCamera = true;
 
+        var reviveBtn = game.add.button(window.innerWidth/2-80, window.innerHeight/2+50, "reviveBtn", function(){
+            deathText.destroy();
+            player.revive();
+            reviveBtn.destroy();
+        }, this);
+        reviveBtn.fixedToCamera = true;
 
         return this;
     }
