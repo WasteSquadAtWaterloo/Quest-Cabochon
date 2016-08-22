@@ -21,6 +21,7 @@ function preload() {
     game.load.image('chestSlot', 'assets/HUD/chest_slot.png');
     game.load.image('swordSlot', 'assets/HUD/sword_slot.png');
     game.load.image('goldIcon', 'assets/goldIcon.png');
+    game.load.image('gold_and_exp_hud', 'assets/HUD/other_hud_player.png');
 
     game.load.image('healer', 'assets/Spritesheet/NPC/healer.png');
     game.load.image('kid', 'assets/Spritesheet/NPC/kid.png');

@@ -59,7 +59,9 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     inventory.bringToTop();
     textBox.bringToTop();
     textBox2.bringToTop();
-    gold.bringToTop();    
+    goldHud.bringToTop();
+    gold.bringToTop();
+    levelIcon.bringToTop();   
 }
 
 
@@ -148,8 +150,20 @@ function initPlayer(spawnX, spawnY, hp){
 
     textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); textBox.fixedToCamera = true; textBox.exists = false; 
     textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 160 , 'textHud2'); textBox2.fixedToCamera = true; textBox2.exists = false; 
-    gold = game.add.sprite(30, 85, 'goldIcon');
-    goldText = game.add.text(40,8,playerGold.toString(), niceTxtStyle);
+    
+    goldHud = game.add.sprite(0, 80, 'gold_and_exp_hud');
+    goldHud.scale.set(1.2);
+    goldHud.fixedToCamera = true;
+
+    levelIcon = itemFrames.load("levelIcon", 180, 85);
+    levelIcon.scale.set(0.8);
+    levelText = game.add.text(-15, 12, player.lvl.toString(), niceTxtStyle);
+    levelIcon.addChild(levelText);
+    levelIcon.fixedToCamera = true;
+
+    gold = game.add.sprite(30, 88, 'goldIcon');
+    gold.scale.set(0.8);
+    goldText = game.add.text(35,9,playerGold.toString(), niceTxtStyle);
     gold.addChild(goldText);
 
     gold.fixedToCamera = true;
