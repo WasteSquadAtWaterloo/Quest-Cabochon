@@ -213,9 +213,12 @@ function update() {
                 if (enemyGroup.indexOf('Boss')===-1 &&!mob.alive && game.time.now - mob.deathTime >= 20000){
                     mob.revive();
                     mob.setHealth(mob.maxHealth);
+                    mob.removeChildAt(0);
+
                     var madeBar = mobHealthBarManager(mob.health, mob.health);
                     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
                     mob.addChild(monHealthBar);
+                    console.log(mob.children);
                 }
             });
         }
@@ -397,6 +400,7 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.damage(atk);
 
     if (!enemy.alive) {
+
         enemy.deathTime = game.time.now;
         playerGold += enemy.gold;
 
