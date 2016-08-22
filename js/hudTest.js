@@ -4,7 +4,8 @@ var map;
 var gameProgress = 0;
 var dialogueBox, textBox, textBox2;
 var dialogue = false;
-var playerGold = 100; var gold, goldText;
+var playerGold = 100; var gold, goldText, goldHud;
+var levelIcon, levelText;
 var inventory, inventoryDisplayed; inventoryDisplayed = false;
 var inventorySlots = [];
 var inventoryAvailability = [];
@@ -409,6 +410,7 @@ function attackCollisionHandler(atkBox, enemy){
         updateExpBar();
 
         gold.getChildAt(0).setText(playerGold); 
+        levelIcon.getChildAt(0).setText(player.lvl);
         
         switch (enemy.key){
             case "wolfBoss":

@@ -94,6 +94,7 @@ itemFrames = {
 	'mp0': 38,
 	'mp1': 52,
 	'mp2': 31,
+	'levelIcon': 364,
 
 	load: function(item, x, y){
 		var itemTR = game.add.sprite(x, y, 'items', this[item]);
