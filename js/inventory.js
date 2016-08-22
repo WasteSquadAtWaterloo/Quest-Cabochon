@@ -74,7 +74,7 @@ function initInventory(){
 }
 
 function toggleInventory(){
-    if (player.alive){
+    if (gameState == states.alive){
         if (inventoryDisplayed){
             inventory.kill();
             inventoryDisplayed = false;            

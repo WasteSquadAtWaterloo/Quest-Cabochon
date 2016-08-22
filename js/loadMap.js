@@ -87,6 +87,8 @@ function initPlayer(spawnX, spawnY, hp){
     player.dmgMultiplyer = 1;
 
     player.kill = function(){ 
+        gameState = states.dead;
+
         this.body.velocity.x = 0; this.body.velocity.y = 0;        
         this.alive = false;
         this.events.onKilled$dispatch(this);
@@ -106,12 +108,20 @@ function initPlayer(spawnX, spawnY, hp){
 
         return this;
     }
-    player.revive = function () {     
+    player.revive = function () {
         if (map.key != "map0") loadMap('map0', spawn.x, spawn.y, false);
         else {
             this.x = spawn.x; 
             this.y = spawn.y;
         }
+
+        gameState = states.alive;
+
+        this.exp = 0;
+        updateExpBar();
+
+        playerGold = Math.floor(playerGold/2);
+        gold.getChildAt(0).setText(playerGold); 
 
         this.alive = true;
         this.exists = true;

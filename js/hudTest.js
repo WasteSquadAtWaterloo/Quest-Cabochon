@@ -56,6 +56,8 @@ var weapon;
 var OSattack = false;
 var unlockedWep = [false, false, false];
 var expReq = [10, 20, 30, 40, 50, 60, 70, 80, 100, 999999999999999999999];
+var gameState = 0;
+var states = {alive:0, dead:1, dialogue:2};
 
 function create() {   
 
@@ -81,7 +83,7 @@ function create() {
 
 function update() { 
 
-    if (player.alive){     
+    if (gameState = states.alive){     
         game.physics.arcade.collide(player, layer1);
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
@@ -459,7 +461,7 @@ function attackCollisionHandler(atkBox, enemy){
 }
 
 function usePot(){  
-    if (player.alive){     
+    if (gameState = states.alive){     
         for (var i=0; i<24; i++){
             if (inventorySlots[i].children.length){
                 var tempChild = (inventorySlots[i].getChildAt(0)).name;      
