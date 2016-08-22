@@ -38,6 +38,13 @@ var niceTxtStyle = {
     font: "bold 14px Lucida Console",
     fill: "black",
 };
+var deathTxtStyle = {
+    font: "30px Lucida Console",
+    fill: "black",
+    align: "center",
+    boundsAlignH: "center",
+    boundsAlignV: "center",
+};
 var spawn = {x:1152, y:624};
 var maxHealth = 20;
 var spellTime = 0;
@@ -394,8 +401,9 @@ function attackCollisionHandler(atkBox, enemy){
 
         player.exp += enemy.exp;
         if (player.exp >= expReq[player.lvl-1]){
-            player.lvl++;
+            console.log(player.lvl, player.exp, expReq[player.lvl-1]);
             player.exp = player.exp - expReq[player.lvl-1];
+            player.lvl++;            
             levelUp();
         }
         updateExpBar();
@@ -444,46 +452,48 @@ function attackCollisionHandler(atkBox, enemy){
     if (atkBox.key==="blue") atkBox.exists = false; 
 }
 
-function usePot(){       
-    for (var i=0; i<24; i++){
-        if (inventorySlots[i].children.length){
-            var tempChild = (inventorySlots[i].getChildAt(0)).name;      
-            if (this.toString()==="hp" && (tempChild.indexOf('hp') > -1)){                   
-                switch (inventorySlots[i].getChildAt(0).frame){
-                    case 35: 
-                        player.heal(10);
-                        break;
-                    case 49: 
-                        player.heal(25);
-                        break;
-                    case 28: 
-                        player.heal(50);
-                        break;
+function usePot(){  
+    if (player.alive){     
+        for (var i=0; i<24; i++){
+            if (inventorySlots[i].children.length){
+                var tempChild = (inventorySlots[i].getChildAt(0)).name;      
+                if (this.toString()==="hp" && (tempChild.indexOf('hp') > -1)){                   
+                    switch (inventorySlots[i].getChildAt(0).frame){
+                        case 35: 
+                            player.heal(10);
+                            break;
+                        case 49: 
+                            player.heal(25);
+                            break;
+                        case 28: 
+                            player.heal(50);
+                            break;
+                    }
+                    updateHealthBar();
+                    inventorySlots[i].removeChildAt(0);
+                    inventoryAvailability[i] = true;
+                    break;                    
                 }
-                updateHealthBar();
-                inventorySlots[i].removeChildAt(0);
-                inventoryAvailability[i] = true;
-                break;                    
+
+                else if (this.toString()==="mp" && (tempChild.indexOf('mp') > -1)){
+                    switch (inventorySlots[i].getChildAt(0).frame){
+                        case 38: 
+                            player.mana = Math.min(player.maxMana, player.mana+10);
+                            break;
+                        case 52: 
+                            player.mana = Math.min(player.maxMana, player.mana+25);
+                            break;
+                        case 31: 
+                            player.mana = Math.min(player.maxMana, player.mana+50);
+                            break;
+                    }
+                    updateManaBar();
+
+                    inventorySlots[i].removeChildAt(0);
+                    inventoryAvailability[i] = true;
+                    break; 
+                }                
             }
-
-            else if (this.toString()==="mp" && (tempChild.indexOf('mp') > -1)){
-                switch (inventorySlots[i].getChildAt(0).frame){
-                    case 38: 
-                        player.mana = Math.min(player.maxMana, player.mana+10);
-                        break;
-                    case 52: 
-                        player.mana = Math.min(player.maxMana, player.mana+25);
-                        break;
-                    case 31: 
-                        player.mana = Math.min(player.maxMana, player.mana+50);
-                        break;
-                }
-                updateManaBar();
-
-                inventorySlots[i].removeChildAt(0);
-                inventoryAvailability[i] = true;
-                break; 
-            }                
         }
     }
 }    

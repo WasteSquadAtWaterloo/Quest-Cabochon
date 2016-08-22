@@ -37,7 +37,7 @@ function initInventory(){
 
                 equip.hat = "none";                
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
-                player.dmgMultiplyer -= item.dmgReduc;
+                player.dmgMultiplyer += item.dmgReduc;
             }
         }
         catch(err){}        
@@ -53,7 +53,7 @@ function initInventory(){
 
                 equip.armor = "none";
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
-                player.dmgMultiplyer -= item.dmgReduc;
+                player.dmgMultiplyer += item.dmgReduc;
             }
         }
         catch(err){}
@@ -74,14 +74,16 @@ function initInventory(){
 }
 
 function toggleInventory(){
-    if (inventoryDisplayed){
-        inventory.kill();
-        inventoryDisplayed = false;            
+    if (player.alive){
+        if (inventoryDisplayed){
+            inventory.kill();
+            inventoryDisplayed = false;            
+        }
+        else {
+            inventory.revive();
+            inventoryDisplayed = true;            
+    	}
     }
-    else {
-        inventory.revive();
-        inventoryDisplayed = true;            
-	}
 }
 
 function inventoryCreator(){

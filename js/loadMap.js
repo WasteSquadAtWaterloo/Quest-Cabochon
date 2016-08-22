@@ -88,7 +88,14 @@ function initPlayer(spawnX, spawnY, hp){
         this.events.onKilled$dispatch(this);
         this.animations.play('dead');  
 
-        return this
+        if (inventoryDisplayed) toggleInventory();
+
+        //var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-100, "lol rip", deathTxtStyle); 
+        //deathText.fixedToCamera = true;        
+        
+
+
+        return this;
     }
     player.revive = function () {     
         if (map.key != "map0") loadMap('map0', spawn.x, spawn.y, false);
