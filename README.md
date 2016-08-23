@@ -6,9 +6,10 @@
 * C to toggle inventory
 * E to use health potion (If available)
 * Q to use mana potion (If available)
+* Z to interact with NPC you are near
 * Space Bar to shoot a magic attack in the direction of the mouse pointer
 
-Walking close to NPCs will active their abilities (dialogue, healing, or shop interface). Walking over items will pick them up and place them in the player inventory. Click on items in the inventory screen will "use" them (e.g. Equiping armor, using potions, equiping weapons). 
+Walking over items will pick them up and place them in the player inventory. Click on items in the inventory screen will "use" them (e.g. Equiping armor, using potions, equiping weapons). 
 
 ###Known Issues to be addressed:
 * Lag when moving around active projectiles
