@@ -31,12 +31,17 @@ var equip = {
 var enemys = {};
 var atkBox, NPCBox;
 var items = {};
+
+google: {
+  families: ['Finger Paint']
+}
+
 var dmgTxtStyle = {
     font: "bold 18px Courier",
     fill: "red",
 };
 var niceTxtStyle = {
-    font: "bold 14px Lucida Console",
+    font: "bold 14px Finger Paint",
     fill: "black",
 };
 var deathTxtStyle = {
