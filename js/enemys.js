@@ -5,7 +5,7 @@ function initEnemys(map){
         createEnemys(enemys.snails, 'snail', 7, 3, 1392, 1196, 2065, 480, 2, 5, 1.5, 15, 2);        
 
     	enemys.spiders = game.add.group();
-    	createEnemys(enemys.spiders, 'spider', 10, 5, 724, 336, 2108, 480, 2, 5, 1.5, 25, 3);
+    	createEnemys(enemys.spiders, 'spider', 10, 5, 800, 336, 2108, 480, 2, 5, 1.5, 25, 3);
 
         enemys.wolfBoss = game.add.group();
         createWolfBoss('wolfBoss', 50, 5, 400, 600, 100, 100, 3, 300);
@@ -27,7 +27,7 @@ function initEnemys(map){
         createEnemys(enemys.zombies, 'zombie', 25, 12, 200, 1052, 1800, 700, 3, 4, 1.5 , 85, 7);
 
         enemys.skeleBoss = game.add.group();
-        createSkeleBoss('skeleBoss', 200, 15, 1300, 1900, 100, 100, 2, 500);
+        createSkeleBoss('skeleBoss', 200, 15, 1450, 1970, 100, 100, 2, 500);
     }
     else if(map === 'map4'){
         enemys.logmonsters = game.add.group();
