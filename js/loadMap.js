@@ -191,13 +191,13 @@ function initPlayer(spawnX, spawnY, hp){
 
     levelIcon = itemFrames.load("levelIcon", 180, 85);
     levelIcon.scale.set(0.8);
-    levelText = game.add.text(-15, 12, player.lvl.toString(), niceTxtStyle);
+    levelText = game.add.text(-15, 9, player.lvl.toString(), niceTxtStyle);
     levelIcon.addChild(levelText);
     levelIcon.fixedToCamera = true;
 
     gold = game.add.sprite(30, 88, 'goldIcon');
     gold.scale.set(0.8);
-    goldText = game.add.text(35,9,playerGold.toString(), niceTxtStyle);
+    goldText = game.add.text(35,6,playerGold.toString(), niceTxtStyle);
     gold.addChild(goldText);
 
     gold.fixedToCamera = true;
