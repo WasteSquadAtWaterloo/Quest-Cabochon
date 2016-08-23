@@ -42,7 +42,7 @@ var dmgTxtStyle = {
 };
 var niceTxtStyle = {
     font: "bold 14px Finger Paint",
-    fill: "black",
+    fill: "white",
 };
 var deathTxtStyle = {
     font: "30px Lucida Console",
@@ -73,7 +73,7 @@ function create() {
     initPlayer(0, 0, 20); console.log('Player loaded');
     initShop(); console.log('Shop loaded');
     initInventory(); console.log('Inventory loaded');   
-    loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');
+    loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');    
 
     initInput();
 
@@ -84,6 +84,8 @@ function create() {
     dropItem(items.weapon1, 'weapon1', 1100, 750);
     dropItem(items.weapon2, 'weapon2', 1150, 750);
     dropItem(items.weapon3, 'weapon3', 1200, 750);
+
+    resizeComponents();
 }
 
 
@@ -91,19 +93,15 @@ function update() {
     player.body.velocity.set(0);
 
     if (gameState === states.dialogue){        
-        if (game.input.activePointer.isDown && game.time.now - dialogueTimer > 250){
-            var mx = game.input.mousePointer.x;
-            var my = game.input.mousePointer.y;
-                        
-            if (!(curDialogueBox.name === "clerk" && (mx>shop.cameraOffset.x && mx<shop.cameraOffset.x+shop.width && my>shop.cameraOffset.y && my<shop.cameraOffset.y+shop.height))){
-                dialogueTimer = game.time.now;
+        if (wasd.Z.isDown && game.time.now - dialogueTimer > 250){
+            dialogueTimer = game.time.now;
 
-                curDialogueBox.exists = false;                
-                if (curDialogueBox.children.length) curDialogueBox.removeChildAt(0);
-                if (shop.alive) shop.kill();
+            curDialogueBox.exists = false;                
+            if (curDialogueBox.children.length) curDialogueBox.removeChildAt(0);
+            if (shop.alive) shop.kill();
 
-                gameState = states.alive;
-            }            
+            gameState = states.alive;
+                     
         }
     }
 
@@ -311,42 +309,26 @@ function update() {
 
         //NPC stuff
         if (map.key === 'map0'){
-            if (game.input.activePointer.isDown){
+            if (wasd.Z.isDown){
                 game.physics.arcade.overlap(oldManBox, player, createDialogue, null, this);
                 game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
                 game.physics.arcade.overlap(clericBox, player, createDialogue, null, this);
                 game.physics.arcade.overlap(clerkBox, player, createDialogue, null, this);
-            }            
-            
+            }           
 
-            /*
-            if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
-                shop.revive();
-            }else if (shop.alive) shop.kill(); 
-
-            if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false && player.overlap(oldManBox) == false) {            
-                dialogue = false;
-                
-                textBox.removeChildren();
-                textBox.exists = false;
-                textBox2.removeChildren();
-                textBox2.exists = false;
-                
-            }     
-            */
         }     
     }       
 }
 
 function render() {
-    game.debug.body(atkBox);
-    game.debug.body(player, "rgba(255,0,0,0.5)");
+    //game.debug.body(atkBox);
+    //game.debug.body(player, "rgba(255,0,0,0.5)");
 }
 
 function resizeComponents(){
     game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
     
-    shop.cameraOffset.x = window.innerWidth/2-386; 
+    shop.cameraOffset.x = window.innerWidth>1235 ? Math.max(window.innerWidth/2-400, 440):(window.innerWidth-772); 
     shop.cameraOffset.y = window.innerHeight/2-283;
 
     inventory.cameraOffset.x = window.innerWidth/2-200; 
@@ -356,14 +338,6 @@ function resizeComponents(){
     kidText.cameraOffset.y = window.innerHeight-720;
     clerkText.cameraOffset.y = window.innerHeight-720;
     clericText.cameraOffset.y = window.innerHeight-720;
-
-    /*
-    textBox.cameraOffset.x = window.innerWidth/2-245;
-    textBox.cameraOffset.y =  window.innerHeight-90;
-
-    textBox2.cameraOffset.x = window.innerWidth/2-245;
-    textBox2.cameraOffset.y = window.innerHeight-160;
-    */
 }
 
 
@@ -464,24 +438,25 @@ function attackCollisionHandler(atkBox, enemy){
             case "knightBoss":
                 dropItem(items.armor2, 'armor2', enemy.x, enemy.y, 3);
                 break;   
+
             case "spider":
-                if (!unlockedWep[0] && Math.random()>0.5){
+                if (!unlockedWep[0] && Math.random()>0.5){ //CHANGE CHANCE LATER
                     dropItem(items.weapon1, 'weapon1', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[0] = true;
                 }
-                break
+                break;
             case "skeleton":
                 if (!unlockedWep[1] && Math.random()>0.5){
                     dropItem(items.weapon2, 'weapon2', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[1] = true;
                 }
-                break 
+                break;
             case "scorpion":
                 if (!unlockedWep[2] && Math.random()>0.5){
                     dropItem(items.weapon3, 'weapon3', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[2] = true;
                 }
-                break          
+                break;          
         }      
 
         

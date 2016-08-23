@@ -5,7 +5,7 @@ function initEnemys(map){
         createEnemys(enemys.snails, 'snail', 7, 3, 1392, 1196, 2065, 480, 2, 5, 1.5, 15, 2);        
 
     	enemys.spiders = game.add.group();
-    	createEnemys(enemys.spiders, 'spider', 10, 5, 800, 336, 2108, 480, 2, 5, 1.5, 25, 3);
+    	createEnemys(enemys.spiders, 'spider', 10, 5, 950, 336, 2158, 480, 2, 5, 1.5, 25, 3);
 
         enemys.wolfBoss = game.add.group();
         createWolfBoss('wolfBoss', 50, 5, 400, 600, 100, 100, 3, 300);

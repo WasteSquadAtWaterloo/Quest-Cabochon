@@ -189,15 +189,15 @@ function initPlayer(spawnX, spawnY, hp){
     goldHud.scale.set(1.2);
     goldHud.fixedToCamera = true;
 
-    levelIcon = itemFrames.load("levelIcon", 180, 85);
+    levelIcon = itemFrames.load("levelIcon", 180, 87);
     levelIcon.scale.set(0.8);
-    levelText = game.add.text(-15, 9, player.lvl.toString(), niceTxtStyle);
+    levelText = game.add.text(-20, -5, player.lvl.toString(), niceTxtStyle); levelText.fontSize = 30;
     levelIcon.addChild(levelText);
     levelIcon.fixedToCamera = true;
 
     gold = game.add.sprite(30, 88, 'goldIcon');
     gold.scale.set(0.8);
-    goldText = game.add.text(35,6,playerGold.toString(), niceTxtStyle);
+    goldText = game.add.text(35,0,playerGold.toString(), niceTxtStyle); goldText.fontSize = 20;
     gold.addChild(goldText);
 
     gold.fixedToCamera = true;
@@ -247,6 +247,7 @@ function initInput(){
         E: game.input.keyboard.addKey(Phaser.Keyboard.E),
         Q: game.input.keyboard.addKey(Phaser.Keyboard.Q),
         C: game.input.keyboard.addKey(Phaser.Keyboard.C),
+        Z: game.input.keyboard.addKey(Phaser.Keyboard.Z),
         space: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
     };
     game.input.mouse.capture = true;
