@@ -496,8 +496,8 @@ function attackCollisionHandler(atkBox, enemy){
     if (atkBox.key==="blue") atkBox.exists = false; 
 }
 
-function usePot(){  
-    if (gameState = states.alive){     
+function usePot(){
+    if (gameState === states.alive){     
         for (var i=0; i<24; i++){
             if (inventorySlots[i].children.length){
                 var tempChild = (inventorySlots[i].getChildAt(0)).name;      

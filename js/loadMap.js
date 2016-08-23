@@ -1,6 +1,6 @@
 var map;
 var NPC;
-var healer, kid, storeClerk;
+var healer, kid, storeClerk, oldMan;
 var healerBox, kidBox, storeClerkBox;
 
 function loadMap(key, spawn_x, spawn_y, bgn){
@@ -14,7 +14,7 @@ function loadMap(key, spawn_x, spawn_y, bgn){
 
         if (map.key != "map0"){
             NPC.forEach(function(spr){                           
-                spr.kill();                     
+                if (!spr.alive) spr.kill();                     
             });           
         }        
 

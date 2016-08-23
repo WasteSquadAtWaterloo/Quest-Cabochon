@@ -28,7 +28,7 @@ function createDialogue(collisionBox, player) {
 			case "oldman":
 				curDialogueBox = oldmanText;
 				oldmanText.exists = true;
-				text = game.add.text(495, 510, dialogueText.oldman[gameProgress], niceTxtStyle);				
+				text = game.add.text(495, 500, dialogueText.oldman[gameProgress], niceTxtStyle);				
 				break;
 
 			case "kid":
