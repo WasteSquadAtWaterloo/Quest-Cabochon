@@ -29,6 +29,14 @@ function preload() {
     game.load.image('clerk', 'assets/Spritesheet/NPC/storeClerk.png');
     game.load.image('oldman', 'assets/Spritesheet/NPC/oji-san.png');
 
+    game.load.image('oldmanDialogue', 'assets/characterArt/oldManText.png');
+    game.load.image('clericDialogue', 'assets/characterArt/clericText.png');
+    game.load.image('clerkDialogue', 'assets/characterArt/clerkText.png');
+    game.load.image('kidDialogue', 'assets/characterArt/kidText.png');
+    game.load.image('knightBossDialogue', 'assets/characterArt/knightBossText.png');
+    game.load.image('wolfBossDialogue', 'assets/characterArt/wolfBossText.png');
+    game.load.image('skeleBossDialogue', 'assets/characterArt/skeleBossText.png');
+
     game.load.image('red', 'assets/red_shot.png');
     game.load.image('green', 'assets/green_shot.png');
     game.load.image('blue', 'assets/blue_shot.png');

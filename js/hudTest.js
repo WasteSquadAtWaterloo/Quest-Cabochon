@@ -2,7 +2,7 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 
 var map;
 var gameProgress = 0;
-var dialogueBox, textBox, textBox2;
+var oldmanText, kidText, clerkText, clericText;
 var dialogue = false;
 var playerGold = 100; var gold, goldText, goldHud;
 var levelIcon, levelText;
@@ -58,6 +58,7 @@ var unlockedWep = [false, false, false];
 var expReq = [10, 20, 30, 40, 50, 60, 70, 80, 100, 999999999999999999999];
 var gameState = 0;
 var states = {alive:0, dead:1, dialogue:2};
+var curDialogueBox, dialogueTimer = 0;
 
 function create() {   
 
@@ -82,15 +83,23 @@ function create() {
 
 
 function update() { 
+    console.log(gameState);
+    player.body.velocity.set(0);
 
-    if (gameState = states.alive){     
+    if (gameState === states.dialogue){        
+        if (game.input.activePointer.isDown && game.time.now - dialogueTimer > 500){
+            dialogueTimer = game.time.now;
+            curDialogueBox.exists = false;
+            gameState = states.alive;
+        }
+    }
+
+    else if (gameState === states.alive){
         game.physics.arcade.collide(player, layer1);
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
         game.physics.arcade.collide(player, layer4);
-        //game.physics.arcade.collide(player, layer5);     
-
-        player.body.velocity.set(0);
+        //game.physics.arcade.collide(player, layer5);        
 
         var curAn = player.animations.currentAnim.name
 
@@ -285,13 +294,12 @@ function update() {
                     spellCast.call(spellOpts, (Math.PI/6)*ang);
                 }
             }                                
-        }    
-                
+        }                
 
         //NPC stuff
         if (map.key === 'map0'){
-            game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
-            game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
+            //game.physics.arcade.overlap(kidBox, player, createDialogue, null, this);
+            //game.physics.arcade.overlap(healerBox, player, createDialogue, null, this);
             game.physics.arcade.overlap(oldManBox, player, createDialogue, null, this);
 
             if (game.physics.arcade.intersects(player.body, storeClerkBox.body)){
@@ -300,10 +308,12 @@ function update() {
 
             if (player.overlap(kidBox) == false && player.overlap(healerBox) == false && player.overlap(storeClerkBox) == false && player.overlap(oldManBox) == false) {            
                 dialogue = false;
+                /*
                 textBox.removeChildren();
                 textBox.exists = false;
                 textBox2.removeChildren();
                 textBox2.exists = false;
+                */
             }     
         }     
     }       
@@ -323,11 +333,18 @@ function resizeComponents(){
     inventory.cameraOffset.x = window.innerWidth/2-200; 
     inventory.cameraOffset.y = window.innerHeight/2-200;
 
+    oldmanText.cameraOffset.y = window.innerHeight-720;
+    kidText.cameraOffset.y = window.innerHeight-720;
+    clerkText.cameraOffset.y = window.innerHeight-720;
+    clericText.cameraOffset.y = window.innerHeight-720;
+
+    /*
     textBox.cameraOffset.x = window.innerWidth/2-245;
     textBox.cameraOffset.y =  window.innerHeight-90;
 
     textBox2.cameraOffset.x = window.innerWidth/2-245;
     textBox2.cameraOffset.y = window.innerHeight-160;
+    */
 }
 
 
