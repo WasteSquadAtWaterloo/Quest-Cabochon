@@ -19,7 +19,7 @@ dialogueText = {
 }
 
 function createDialogue(collisionBox, player) {
-	if (gameState===states.alive && game.input.activePointer.isDown && game.time.now - dialogueTimer > 500){	
+	if (gameState===states.alive && game.time.now - dialogueTimer > 250){	
 		dialogueTimer = game.time.now;
 
 		gameState = states.dialogue;
@@ -30,9 +30,29 @@ function createDialogue(collisionBox, player) {
 			case "oldman":
 				curDialogueBox = oldmanText;
 				oldmanText.exists = true;
-				text = game.add.text(15, 15, dialogueText.oldman[gameProgress], niceTxtStyle);
-				break;				
+				text = game.add.text(495, 510, dialogueText.oldman[gameProgress], niceTxtStyle);				
+				break;
+
+			case "kid":
+				curDialogueBox = kidText;
+				kidText.exists = true;
+				text = game.add.text(495, 510, dialogueText.kid[gameProgress/2], niceTxtStyle);		
+				break;		
+
+			case "cleric":
+				curDialogueBox = clericText;
+				clericText.exists = true;
+				text = game.add.text(495, 510, dialogueText.cleric, niceTxtStyle);		
+				break;	
+
+			case "clerk":
+				curDialogueBox = clerkText;
+				clerkText.exists = true;
+				text = game.add.text(495, 510, dialogueText.clerk, niceTxtStyle);		
+				break;	
 		}
+
+		curDialogueBox.addChild(text);
 	}
 
 

@@ -61,6 +61,9 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     inventory.bringToTop();
 
     oldmanText.bringToTop();
+    kidText.bringToTop();
+    clericText.bringToTop();
+    clerkText.bringToTop();
 
     /*
     textBox.bringToTop();
@@ -218,20 +221,20 @@ function initNPC(){
     NPC.enableBody = true;
     NPC.physicsBodyType = Phaser.Physics.ARCADE;
 
-    healerBox =  game.add.sprite(-50, -50, "attackBox"); healerBox.scale.set(5); game.physics.enable(healerBox, Phaser.Physics.ARCADE); healerBox.name = "healer";
+    clericBox =  game.add.sprite(-50, -50, "attackBox"); clericBox.scale.set(5); game.physics.enable(clericBox, Phaser.Physics.ARCADE); clericBox.name = "cleric";
     kidBox =  game.add.sprite(-50, -50, "attackBox"); kidBox.scale.set(5); game.physics.enable(kidBox, Phaser.Physics.ARCADE); kidBox.name = "kid";
-    storeClerkBox = game.add.sprite(-50, -50, "attackBox"); storeClerkBox.scale.set(5); game.physics.enable(storeClerkBox, Phaser.Physics.ARCADE); storeClerkBox.name = "clerk";
+    clerkBox = game.add.sprite(-50, -50, "attackBox"); clerkBox.scale.set(5); game.physics.enable(clerkBox, Phaser.Physics.ARCADE); clerkBox.name = "clerk";
     oldManBox =  game.add.sprite(-50, -50, "attackBox"); oldManBox.scale.set(5); game.physics.enable(oldManBox, Phaser.Physics.ARCADE); oldManBox.name = "oldman";
 
-    healer = NPC.create(1060, 230, 'healer'); healer.scale.set(1.2); healer.addChild(healerBox); 
+    healer = NPC.create(1060, 230, 'healer'); healer.scale.set(1.2); healer.addChild(clericBox); 
     kid = NPC.create(1350, 565, 'kid'); kid.scale.set(1.2); kid.addChild(kidBox);
-    storeClerk = NPC.create(533, 758, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(storeClerkBox); 
+    storeClerk = NPC.create(533, 758, 'clerk'); storeClerk.scale.set(1.2); storeClerk.addChild(clerkBox); 
     oldMan = NPC.create(1780, 660, 'oldman'); oldMan.scale.set(1.2); oldMan.addChild(oldManBox);
 
     oldmanText = game.add.sprite(0, window.innerHeight-720, "oldmanDialogue"); oldmanText.fixedToCamera = true; oldmanText.exists = false;
-    kidText = game.add.sprite(0, window.innerHeight-720, "oldmanDialogue"); kidText.fixedToCamera = true; kidText.exists = false;
-    clerkText = game.add.sprite(0, window.innerHeight-720, "oldmanDialogue"); clerkText.fixedToCamera = true; clerkText.exists = false;
-    clericText = game.add.sprite(0, window.innerHeight-720, "oldmanDialogue"); clericText.fixedToCamera = true; clericText.exists = false
+    kidText = game.add.sprite(0, window.innerHeight-720, "kidDialogue"); kidText.fixedToCamera = true; kidText.exists = false;
+    clerkText = game.add.sprite(0, window.innerHeight-720, "clerkDialogue"); clerkText.fixedToCamera = true; clerkText.exists = false;
+    clericText = game.add.sprite(0, window.innerHeight-720, "clericDialogue"); clericText.fixedToCamera = true; clericText.exists = false
 }
 
 function initInput(){
