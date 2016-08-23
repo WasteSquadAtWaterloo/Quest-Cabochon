@@ -4,9 +4,7 @@ dialogueText = {
 			"Some say that Asc was killed by his own creations; \nhowever, rumors have it that he is still alive."
 			],
 
-	healer: "Hello, I am the cleric and healer of this village. \nHere. I'll treat any wounds you might have.",
-
-	clerk: 	"Welcome to the shop!",
+	cleric: "Hello, I am the cleric and healer of this village. \nHere. I'll treat any wounds you might have.",	
 
 	oldman: [
 			"Ah! welcome! You must be the adventurer sent by the \nthe agency. I am Elmeld, the chief of this town. \nLately, we have been attacked by The Forest King, a \nbeast residing in the forest North-West of the city. \nPlease help us by defeating it and restoring peace \nto our town. ",
@@ -19,7 +17,7 @@ dialogueText = {
 }
 
 function createDialogue(collisionBox, player) {
-	if (gameState===states.alive && game.time.now - dialogueTimer > 250){	
+	if (gameState===states.alive && !inventory.alive && game.time.now - dialogueTimer > 250){	
 		dialogueTimer = game.time.now;
 
 		gameState = states.dialogue;
@@ -41,18 +39,21 @@ function createDialogue(collisionBox, player) {
 
 			case "cleric":
 				curDialogueBox = clericText;
-				clericText.exists = true;
-				text = game.add.text(495, 510, dialogueText.cleric, niceTxtStyle);		
+				text = game.add.text(495, 510, dialogueText.cleric, niceTxtStyle);
+				clericText.exists = true;		
+
+				player.heal(100); player.mana = player.maxMana;
+            	updateHealthBar(); updateManaBar();			
 				break;	
 
 			case "clerk":
 				curDialogueBox = clerkText;
 				clerkText.exists = true;
-				text = game.add.text(495, 510, dialogueText.clerk, niceTxtStyle);		
+				shop.revive();	
 				break;	
 		}
-
-		curDialogueBox.addChild(text);
+		curDialogueBox.name = NPCname;
+		if (text) curDialogueBox.addChild(text);
 	}
 
 

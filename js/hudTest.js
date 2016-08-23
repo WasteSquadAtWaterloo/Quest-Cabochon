@@ -87,10 +87,18 @@ function update() {
 
     if (gameState === states.dialogue){        
         if (game.input.activePointer.isDown && game.time.now - dialogueTimer > 250){
-            dialogueTimer = game.time.now;
-            curDialogueBox.exists = false;
-            curDialogueBox.removeChildAt(0);
-            gameState = states.alive;
+            var mx = game.input.mousePointer.x;
+            var my = game.input.mousePointer.y;
+                        
+            if (!(curDialogueBox.name === "clerk" && (mx>shop.cameraOffset.x && mx<shop.cameraOffset.x+shop.width && my>shop.cameraOffset.y && my<shop.cameraOffset.y+shop.height))){
+                dialogueTimer = game.time.now;
+
+                curDialogueBox.exists = false;                
+                if (curDialogueBox.children.length) curDialogueBox.removeChildAt(0);
+                if (shop.alive) shop.kill();
+
+                gameState = states.alive;
+            }            
         }
     }
 
