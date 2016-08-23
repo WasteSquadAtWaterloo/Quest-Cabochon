@@ -112,10 +112,10 @@ function update() {
         game.physics.arcade.collide(player, layer4);
         //game.physics.arcade.collide(player, layer5);        
 
-        var curAn = player.animations.currentAnim.name
+        //var curAn = player.animations.currentAnim.name
 
         //movement and its animation
-        if (player.animations.currentAnim.isFinished || (curAn.indexOf("melee")<0 && curAn.indexOf("spell")<0) ){
+        if (player.animations.currentAnim.isFinished || (player.animations.currentAnim.name.indexOf("melee")<0 && player.animations.currentAnim.name.indexOf("spell")<0) ){
             if (cursors.left.isDown || wasd.left.isDown){
                 player.body.velocity.x = -500;
                 player.play('left');                
@@ -145,7 +145,7 @@ function update() {
         portalCheck(map.key);
 
         //melee attack and its animation + hitbox
-        if (game.input.activePointer.leftButton.isDown && !inventory.alive && !shop.alive){                   
+        if (game.input.activePointer.leftButton.isDown && !inventory.alive && !shop.alive && ((player.animations.currentAnim.name.indexOf("spell") < 0) || (player.animations.currentAnim.name.indexOf("spell") > 0 && player.animations.currentAnim.isFinished))){                   
             var player_screen_x = player.position.x - game.camera.x;
             var player_screen_y = player.position.y - game.camera.y;
             var dif_x = game.input.mousePointer.x - player_screen_x;
@@ -162,7 +162,7 @@ function update() {
             else player.play(player_dir+"_melee");            
         }
 
-        if (curAn.indexOf("melee") > -1 && !player.animations.currentAnim.isFinished){
+        if (player.animations.currentAnim.name.indexOf("melee") > -1 && !player.animations.currentAnim.isFinished){
             var wep = weapon ? parseInt(weapon):0;
             //Setting size of atkBox
             if (wep){
@@ -182,7 +182,7 @@ function update() {
        
 
         //spell attack and its animation
-        if (wasd.space.isDown && player.animations.currentAnim.name.indexOf("melee") < 0){
+        if (wasd.space.isDown && player.animations.currentAnim.name.indexOf("melee") < 0 || wasd.space.isDown && player.animations.currentAnim.name.indexOf("melee") > 0 && player.animations.currentAnim.isFinished){
             player.play(player_dir+"_spell");            
         }
         
