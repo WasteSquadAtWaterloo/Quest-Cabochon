@@ -2,6 +2,7 @@ var map;
 var NPC;
 var healer, kid, storeClerk, oldMan;
 var healerBox, kidBox, storeClerkBox;
+var woosh, wep1_sound, wep2_sound, wep3_sound, spellSound, spellImpactSound, wolfDeathSound, skeleDeathSound, knightDeathSound, raidBossDeathSound;
 
 function loadMap(key, spawn_x, spawn_y, bgn){
 	if (!bgn){
@@ -153,20 +154,50 @@ function initPlayer(spawnX, spawnY, hp){
     //loading animations
     var dirs = ['down', 'up', 'left', 'right'];
     var acts = ['_melee', '_spell'];
+    var anim;
 
     for (var dir in dirs){
         player.animations.add(dirs[dir], playerFrames[dirs[dir]].walk, 10, false);
 
         for (var act in acts){
-            player.animations.add(dirs[dir]+acts[act], playerFrames[dirs[dir]][acts[act].slice(1)], 15, false);
+            anim = player.animations.add(dirs[dir]+acts[act], playerFrames[dirs[dir]][acts[act].slice(1)], 15, false);            
+            if (acts[act]==='_melee'){                 
+                anim.onStart.add(function(){                    
+                    woosh.restart('', 0, 0.25);
+                });
+            }else {
+                anim.onStart.add(function(){                    
+                    spellSound.restart('', 0, 0.25);
+                });
+            }
         }
 
         for (var wp=1; wp<=3; wp++){
-            player.animations.add(dirs[dir]+"_meleeOS"+wp, playerFrames[dirs[dir]]['attackOS'+wp], 15, false).onComplete.add(function(){
+            anim = player.animations.add(dirs[dir]+"_meleeOS"+wp, playerFrames[dirs[dir]]['attackOS'+wp], 15, false);
+            anim.onComplete.add(function(){
                 player.loadTexture(JSON.stringify(equip), playerFrames[player_dir].walk[0]);
-                player.body.setSize(25, 20, 19, 43);
-                //atkBox.body.setSize(30, 30, 0, 0);
+                player.body.setSize(25, 20, 19, 43);                
             });
+
+            switch (wp){
+                case (1): 
+                    anim.onStart.add(function(){                                         
+                        wep1_sound.restart('', 0, 0.25);
+                    });
+                    break;
+                case (2):
+                    anim.onStart.add(function(){                                        
+                        wep2_sound.restart('', 0, 0.25);
+                    });
+                    break;
+                case (3):
+                    anim.onStart.add(function(){                                            
+                        wep3_sound.restart('', 0, 0.25);
+                    });
+                    break;
+            }
+
+            
         }
     }
     player.animations.add('dead', playerFrames.dead, 5, false);     
@@ -318,4 +349,19 @@ function levelUp(){
     player.maxMana += 5;
     player.mana += 5;
     player.mAtk += 1;
+}
+
+function initAudio(){
+    woosh = game.add.audio('woosh');
+    wep1_sound = game.add.audio('wep1');
+    wep2_sound = game.add.audio('wep2');
+    wep3_sound = game.add.audio('wep3');
+
+    spellSound = game.add.audio('spell');
+    spellImpactSound = game.add.audio('spell_impact');
+
+    wolfDeathSound = game.add.audio('wolfDeath');
+    skeleDeathSound = game.add.audio('skeleDeath');
+    knightDeathSound = game.add.audio('knightDeath');
+    raidBossDeathSound = game.add.audio('raidBossDeath');
 }

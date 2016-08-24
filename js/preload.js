@@ -105,4 +105,15 @@ function preload() {
     game.load.spritesheet('knightBoss','assets/Spritesheet/monsters/BOSS3.png', 49, 48);
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34); 
+
+    game.load.audio('woosh', 'assets/audio/woosh.mp3');
+    game.load.audio('wep1', 'assets/audio/wep1.mp3');
+    game.load.audio('wep2', 'assets/audio/wep2.mp3');
+    game.load.audio('wep3', 'assets/audio/wep3.mp3');
+    game.load.audio('spell', 'assets/audio/spell.mp3');
+    game.load.audio('spell_impact', 'assets/audio/spell_impact.ogg');
+    game.load.audio('wolfDeath', 'assets/audio/wolfDeath.mp3');
+    game.load.audio('skeleDeath', 'assets/audio/skeleDeath.mp3');
+    game.load.audio('knightDeath', 'assets/audio/knightDeath.mp3');
+    game.load.audio('raidBossDeath', 'assets/audio/raidBossDeath.mp3');
 }
