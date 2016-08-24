@@ -69,11 +69,14 @@ function create() {
 
     $(window).resize(resizeComponents);        
 
-    initNPC(); console.log('NPC loaded');
+    initNPC(); console.log('NPC loaded'); 
     initPlayer(0, 0, 20); console.log('Player loaded');
     initShop(); console.log('Shop loaded');
-    initInventory(); console.log('Inventory loaded');   
+    initInventory(); console.log('Inventory loaded');
     loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');    
+
+    $("#player-hud").css('display', 'inline'); 
+    $("#loading").remove();  
 
     initInput();
 

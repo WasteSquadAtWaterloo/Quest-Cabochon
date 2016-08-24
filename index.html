@@ -5,6 +5,7 @@
 		
 		<title>Phaser Map Test</title>
 		<script type="text/javascript" src="js/lib/jquery-3.0.0.min.js"></script>
+		<script type="text/javascript" src="js/loading.js"></script>
 		<script type="text/javascript" src="js/lib/phaser.min.js"></script>
 		<script type="text/javascript" src="assets/Spritesheet/frames.js"></script>
 		<script type="text/javascript" src="js/preload.js"></script>		
@@ -28,16 +29,19 @@
 
 	</head>
 	<body>
-		<div id="container">
+		<div id="container">			
   			<div class="ps" id="phaser-example"></div>
   			
-  			<div class="hud">
-  				<img src="assets/HUD/health_hud_player.png" alt="Stats Hud">
+  			<div class="hud">  				
+  				<div id="loading">
+					<img src="assets/loading.jpg">
+					<div id="loading-bar"></div>
+				</div>
+  				<img id="player-hud" src="assets/HUD/health_hud_player.png" alt="Stats Hud" style="display: none">  				
   				<div id="red-bars"> </div>
   				<div id="blue-bars"> </div>
   				<div id="green-bars"> </div>
-  			</div>
-  			
+  			</div>  			
 		</div>
 		<script type="text/javascript" src="js/hudTest.js"></script>
 	</body>

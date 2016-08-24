@@ -1,6 +1,33 @@
 #container {
   	position: relative;
 }
+
+#loading{
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+}
+
+#loading > img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -28px;
+  margin-left: -350px;
+}
+
+#loading-bar{
+  background-color: #fff;
+  position: fixed;  
+  width: 0px;  
+  height: 28px;
+  top: 50%;
+  left: 50%;
+  margin-top: -4px;
+  margin-left: -345px;
+  transition: all 10s ease 0s;
+}
+
 .hud {  
   position: absolute;
   top: 15px;
