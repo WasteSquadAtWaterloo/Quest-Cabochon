@@ -66,7 +66,7 @@ var states = {alive:0, dead:1, dialogue:2};
 var curDialogueBox, dialogueTimer = 0;
 
 var easystar;
-var timeStep;
+var timeStep = 0;
 var level;
 
 var currentNextPointX; 
@@ -300,7 +300,7 @@ function update() {
                     x: boss.x+boss.width/2,
                     y: boss.y+boss.height/2,                     
                     scale: 0.4,
-                    atk: 3, //UPDATE       
+                    atk: 8, //UPDATE       
                     group: mobShots
                 };
                 for (var ang=-2; ang<=2; ang++){
@@ -318,7 +318,25 @@ function update() {
                     x: boss.x+boss.width/2,
                     y: boss.y+boss.height/2,                     
                     scale: 0.4,
-                    atk: 3, //UPDATE                
+                    atk: 15, //UPDATE                
+                    group: mobShots
+                };
+                for (var ang=0; ang<=12; ang++){
+                    spellCast.call(spellOpts, (Math.PI/6)*ang);
+                }
+            }                                
+        } 
+
+        if (game.time.now - bossSpellTime>=1500 && map.key==="map6"){
+            bossSpellTime = game.time.now;            
+            var boss = enemys.raidBoss.getFirstAlive();
+            if (boss){                
+                var spellOpts = {
+                    color: 'yellow',
+                    x: boss.x+boss.width/2,
+                    y: boss.y+boss.height/2,                     
+                    scale: 0.4,
+                    atk: 20, //UPDATE                
                     group: mobShots
                 };
                 for (var ang=0; ang<=12; ang++){
