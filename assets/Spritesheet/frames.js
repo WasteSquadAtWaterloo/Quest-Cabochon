@@ -146,6 +146,12 @@ for (var i=0; i<25; i++){
     }
 }
 
+for (var i=15; i<=23; i++){
+	for (var j=0; j<=4; j++){
+		stand.push(i*57+j);
+	}
+}
+
 for (var i=21; i<25; i++){
     for (var j=13; j<41; j++){
         stand.push(i*57+j);
