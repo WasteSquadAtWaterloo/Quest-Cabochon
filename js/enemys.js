@@ -7,8 +7,10 @@ function initEnemys(map){
     	enemys.spiders = game.add.group();
     	createEnemys(enemys.spiders, 'spider', 10, 5, 950, 336, 2158, 480, 2, 5, 1.5, 25, 3);
 
-        enemys.wolfBoss = game.add.group();
-        createWolfBoss('wolfBoss', 50, 5, 400, 600, 100, 100, 3, 300);
+        if (gameProgress<1){
+            enemys.wolfBoss = game.add.group();
+            createWolfBoss('wolfBoss', 50, 5, 400, 600, 100, 100, 3, 300);
+        }
     }
     else if (map === 'map2'){
 
@@ -26,8 +28,10 @@ function initEnemys(map){
         enemys.zombies = game.add.group();
         createEnemys(enemys.zombies, 'zombie', 25, 12, 200, 1052, 1800, 700, 3, 4, 1.5 , 85, 7);
 
-        enemys.skeleBoss = game.add.group();
-        createSkeleBoss('skeleBoss', 200, 15, 1450, 1970, 100, 100, 2, 500);
+        if (gameProgress<2){
+            enemys.skeleBoss = game.add.group();
+            createSkeleBoss('skeleBoss', 200, 15, 1450, 1970, 100, 100, 2, 500);
+        }
     }
     else if(map === 'map4'){
         enemys.logmonsters = game.add.group();
@@ -37,8 +41,10 @@ function initEnemys(map){
         createEnemys(enemys.scorpions, 'scorpion', 30, 15, 1392, 1008, 560, 2736, 7, 2, 1.5, 100, 8);  
     }    
     else if (map === "map5") {
-        enemys.knightBoss = game.add.group();
-        createKnightBoss('knightBoss', 400, 15, 450, 370, 100, 100, 1.5, 1000);
+        if (gameProgress<3){
+            enemys.knightBoss = game.add.group();
+            createKnightBoss('knightBoss', 400, 15, 450, 370, 100, 100, 1.5, 1000);
+        }
 
         enemys.guards = game.add.group();
         createEnemys(enemys.guards, 'guard', 45, 20, 130, 528, 624, 288, 1, 4, 2, 150, 10);

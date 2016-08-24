@@ -257,8 +257,7 @@ function update() {
 
                     var madeBar = mobHealthBarManager(mob.health, mob.health);
                     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
-                    mob.addChild(monHealthBar);
-                    console.log(mob.children);
+                    mob.addChild(monHealthBar);                    
                 }
             });
         }
@@ -272,7 +271,7 @@ function update() {
         }
         //Boss spells
         
-        if (game.time.now - bossSpellTime>=2500 && map.key==="map1"){
+        if (enemys.wolfBoss && game.time.now - bossSpellTime>=2500 && map.key==="map1"){
             bossSpellTime = game.time.now;            
             var boss = enemys.wolfBoss.getFirstAlive();
             if (boss){
@@ -291,7 +290,7 @@ function update() {
             }                                
         }
 
-        if (game.time.now - bossSpellTime>=2000 && map.key==="map3"){
+        if (enemys.skeleBoss && game.time.now - bossSpellTime>=2000 && map.key==="map3"){
             bossSpellTime = game.time.now;            
             var boss = enemys.skeleBoss.getFirstAlive();
             if (boss){
@@ -310,7 +309,7 @@ function update() {
             }                                
         }
 
-        if (game.time.now - bossSpellTime>=2000 && map.key==="map5"){
+        if (enemys.knightBoss && game.time.now - bossSpellTime>=2000 && map.key==="map5"){
             bossSpellTime = game.time.now;            
             var boss = enemys.knightBoss.getFirstAlive();
             if (boss){                
@@ -432,14 +431,19 @@ function attackCollisionHandler(atkBox, enemy){
     atkTime = game.time.now;
     enemy.damage(atk);
 
+    var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
+    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
+
+    enemy.removeChildAt(0);
+    enemy.addChild(monHealthBar);
+
     if (!enemy.alive) {
 
         enemy.deathTime = game.time.now;
         playerGold += enemy.gold;
 
         player.exp += enemy.exp;
-        if (player.exp >= expReq[player.lvl-1]){
-            console.log(player.lvl, player.exp, expReq[player.lvl-1]);
+        if (player.exp >= expReq[player.lvl-1]){            
             player.exp = player.exp - expReq[player.lvl-1];
             player.lvl++;            
             levelUp();
@@ -447,46 +451,48 @@ function attackCollisionHandler(atkBox, enemy){
         updateExpBar();
 
         gold.getChildAt(0).setText(playerGold); 
-        levelIcon.getChildAt(0).setText(player.lvl);
+        levelIcon.getChildAt(0).setText(player.lvl);        
         
         switch (enemy.key){
             case "wolfBoss":
-                dropItem(items.armor0, 'armor0', enemy.x, enemy.y, 1);
+                wolfDeathSound.restart('', 0, 0.25);
+                game.camera.shake(0.01, 1000, true);
+                dropItem(items.armor0, 'armor0', enemy.x, enemy.y, 1);  
+                enemy.destroy();
                 break;
             case "skeleBoss":
-                dropItem(items.armor1, 'armor1', enemy.x, enemy.y, 2);
+                skeleDeathSound.restart('', 0, 0.25);
+                game.camera.shake(0.01, 1000, true);
+                dropItem(items.armor1, 'armor1', enemy.x, enemy.y, 2);     
+                enemy.destroy();           
                 break;
             case "knightBoss":
-                dropItem(items.armor2, 'armor2', enemy.x, enemy.y, 3);
+                knightDeathSound.restart('', 0, 0.25);
+                game.camera.shake(0.01, 1000, true);
+                dropItem(items.armor2, 'armor2', enemy.x, enemy.y, 3); 
+                enemy.destroy();               
                 break;   
 
             case "spider":
-                if (!unlockedWep[0] && Math.random()>0.5){ //CHANGE CHANCE LATER
+                if (!unlockedWep[0] && Math.random()>0.2){ //CHANGE CHANCE LATER
                     dropItem(items.weapon1, 'weapon1', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[0] = true;
                 }
                 break;
             case "skeleton":
-                if (!unlockedWep[1] && Math.random()>0.5){
+                if (!unlockedWep[1] && Math.random()>0.2){
                     dropItem(items.weapon2, 'weapon2', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[1] = true;
                 }
                 break;
             case "scorpion":
-                if (!unlockedWep[2] && Math.random()>0.5){
+                if (!unlockedWep[2] && Math.random()>0.2){
                     dropItem(items.weapon3, 'weapon3', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[2] = true;
                 }
                 break;          
-        }      
-
-        
-    }    
-    var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
-    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
-
-    enemy.removeChildAt(0);
-    enemy.addChild(monHealthBar);   
+        }               
+    }
 
     //for when atkBox is a projectile
     if (atkBox.key==="blue") {

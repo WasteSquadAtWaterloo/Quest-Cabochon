@@ -14,8 +14,8 @@ function loadMap(key, spawn_x, spawn_y, bgn){
         mobShots.destroy();
 
         if (map.key != "map0"){
-            NPC.forEach(function(spr){                           
-                if (!spr.alive) spr.kill();                     
+            NPC.forEach(function(spr){   
+                if (spr.visible) spr.visible = false;
             });           
         }        
 
@@ -110,6 +110,8 @@ function initPlayer(spawnX, spawnY, hp){
     player.kill = function(){ 
         gameState = states.dead;
 
+        player.loadTexture(JSON.stringify(equip));
+
         this.body.velocity.x = 0; this.body.velocity.y = 0;        
         this.alive = false;
         this.events.onKilled$dispatch(this);
@@ -182,7 +184,7 @@ function initPlayer(spawnX, spawnY, hp){
                 });
             }else {
                 anim.onStart.add(function(){                    
-                    spellSound.restart('', 0, 0.25);
+                    spellSound.restart('', 0, 0.1);
                 });
             }
         }
@@ -207,7 +209,7 @@ function initPlayer(spawnX, spawnY, hp){
                     break;
                 case (3):
                     anim.onStart.add(function(){                                            
-                        wep3_sound.restart('', 0, 0.25);
+                        wep3_sound.restart('', 0, 0.15);
                     });
                     break;
             }
@@ -314,6 +316,9 @@ function portalCheck(map){
             loadMap('map1', 1728, 2088, false);
         }
         else if ((player.x>=828 && player.x<=947) && player.y>1275){
+            loadMap('map2', 2616, 216, false);            
+        }
+        else if ((player.x>=1710 && player.x<=1750) && player.y>610){
             loadMap('map6', spawn.x, spawn.y, false);
         }
     }
