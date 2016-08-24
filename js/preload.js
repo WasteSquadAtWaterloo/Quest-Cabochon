@@ -8,6 +8,7 @@ function preload() {
     game.load.tilemap('map3', 'assets/Map/map_3.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map4', 'assets/Map/map_4.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.tilemap('map5', 'assets/Map/map_5.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map6', 'assets/Map/map_6.json', null, Phaser.Tilemap.TILED_JSON);
 
     game.load.image('tiles', 'assets/Spritesheet/roguelikeSheet_transparent.png');
     
@@ -103,6 +104,10 @@ function preload() {
     game.load.spritesheet('wolfBoss', 'assets/Spritesheet/monsters/Boss_1.png', 32, 50);
     game.load.spritesheet('skeleBoss','assets/Spritesheet/monsters/BOSS2.png', 50, 48);
     game.load.spritesheet('knightBoss','assets/Spritesheet/monsters/BOSS3.png', 49, 48);
+    game.load.spritesheet('raidBoss', 'assets/Spritesheet/monsters/BOSS4.png', 46, 52);
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34); 
+
+    game.plugins.add(new Phaser.Plugin.Isometric(game));
+    game.physics.startSystem(Phaser.Plugin.Isometric.ISOARCADE);
 }

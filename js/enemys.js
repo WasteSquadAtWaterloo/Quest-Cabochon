@@ -43,6 +43,10 @@ function initEnemys(map){
         enemys.guards = game.add.group();
         createEnemys(enemys.guards, 'guard', 45, 20, 130, 528, 624, 288, 1, 4, 2, 150, 10);
     }    
+    else if (map === "map6") {
+        enemys.raidBoss = game.add.group();
+        createRaidBoss('raidBoss', 500, 20, 540, 338, 850, 550, 1.5, 2500);
+    }
 
 }
 
@@ -196,4 +200,47 @@ function createKnightBoss(key, hp, atk, topX, topY, width, height, scale, goldAm
     tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
 
     tweenA.start();
+}
+
+function createRaidBoss(key, hp, atk, topX, topY, width, height, scale, goldAmount) {
+    var raidBoss = enemys.raidBoss.create(topX, topY, 'raidBoss');
+    
+    raidBoss.maxHealth = hp;
+    raidBoss.setHealth(hp);
+    game.physics.enable(raidBoss, Phaser.Physics.ARCADE);
+
+    var madeBar = mobHealthBarManager(raidBoss.health, raidBoss.health);
+    var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);
+    raidBoss.addChild(monHealthBar);
+
+    raidBoss.scale.set(scale);       
+    raidBoss.animations.add('down', [0,1,2,3], 10, true);   
+    raidBoss.animations.add('left', [4,5,6,7], 10, true);     
+    raidBoss.animations.add('right', [8,9,10,11], 10, true);     
+    raidBoss.animations.add('up', [12,13,14,15], 10, true);                
+    //raidBoss.play('move');            
+    raidBoss.atk = atk;
+    raidBoss.exp = 150;
+
+    raidBoss.gold = goldAmount;
+    /*
+    var tweenA = game.add.tween(raidBoss).to( { 
+        x: raidBoss.x + (Math.random()*40+80)}, 
+    Math.random()*750+750, null, false, Math.random()*850, 0, false);
+
+    var tweenB = game.add.tween(raidBoss).to( {  
+        y: raidBoss.y + (Math.random()*40+80)}, 
+    Math.random()*750+750, null, false, Math.random()*850, 0, false);
+
+    var tweenC = game.add.tween(raidBoss).to( { 
+        x: raidBoss.x - (Math.random()*40+80)}, 
+    Math.random()*750+750, null, false, Math.random()*850, 0, false);
+
+    var tweenD = game.add.tween(raidBoss).to( { 
+        y: raidBoss.y - (Math.random()*40+80)}, 
+    Math.random()*750+750, null, false, Math.random()*850, 0, false);
+
+    tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
+
+    tweenA.start(); */
 }
