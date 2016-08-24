@@ -37,6 +37,7 @@ function preload() {
     game.load.image('knightBossDialogue', 'assets/characterArt/knightBossText.png');
     game.load.image('wolfBossDialogue', 'assets/characterArt/wolfBossText.png');
     game.load.image('skeleBossDialogue', 'assets/characterArt/skeleBossText.png');
+    game.load.image('raidBossDialogue', 'assets/characterArt/raidBossText.png');
 
     game.load.image('red', 'assets/red_shot.png');
     game.load.image('green', 'assets/green_shot.png');
@@ -112,8 +113,7 @@ function preload() {
     game.load.audio('graveyard', 'assets/audio/graveyardbgm.mp3');
     game.load.audio('castle', 'assets/audio/castlebgm.mp3');
     game.load.audio('wolfBattle', 'assets/audio/wolfBossBattle.mp3');
-    game.load.audio('skeleBattle', 'assets/audio/skeleBossBattle.mp3');
-    game.load.audio('knightBattle', 'assets/audio/knightBossBattle.mp3');
+    game.load.audio('skeleBattle', 'assets/audio/skeleBossBattle.mp3');    
 
     game.load.audio('woosh', 'assets/audio/woosh.mp3');
     game.load.audio('wep1', 'assets/audio/wep1.mp3');

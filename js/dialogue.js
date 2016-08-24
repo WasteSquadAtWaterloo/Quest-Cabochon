@@ -17,12 +17,13 @@ dialogueText = {
 }
 
 function createDialogue(collisionBox, player) {
-	if (gameState===states.alive && !inventory.alive && game.time.now - dialogueTimer > 250){	
+	console.log(player);
+	if (player===undefined || (gameState===states.alive && !inventory.alive && game.time.now - dialogueTimer > 250)){	
 		dialogueTimer = game.time.now;
 
-		gameState = states.dialogue;
+		gameState = states.dialogue;		
 		var NPCname = (collisionBox.name).toString();		
-		var text = game.add.text(495, 500, null, niceTxtStyle);		
+		var text = game.add.text(495, 500, null, niceTxtStyle);
 
 		switch (NPCname){
 			case "oldman":
@@ -52,6 +53,30 @@ function createDialogue(collisionBox, player) {
 				shop.bringToTop();
 				shop.revive();	
 				break;	
+
+			case "wolfBoss":
+				curDialogueBox = wolfBossText;
+				text.setText(dialogueText.wolfBoss || "GTFO");
+				wolfBossText.exists = true;
+				break;
+
+			case "skeleBoss":
+				curDialogueBox = skeleBossText;
+				text.setText(dialogueText.skeleBoss || "GTFO");
+				skeleBossText.exists = true;
+				break;
+
+			case "knightBoss":
+				curDialogueBox = knightBossText;
+				text.setText(dialogueText.knightBoss || "GTFO");
+				knightBossText.exists = true;
+				break;
+
+			case "raidBoss":
+				curDialogueBox = raidBossText;
+				text.setText(dialogueText.raidBoss || "GTFO");
+				raidBossText.exists = true;
+				break;
 		}
 		curDialogueBox.name = NPCname;
 		if (text) curDialogueBox.addChild(text);

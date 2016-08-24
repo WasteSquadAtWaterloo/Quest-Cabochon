@@ -2,6 +2,7 @@ var map;
 var NPC;
 var healer, kid, storeClerk, oldMan;
 var healerBox, kidBox, storeClerkBox;
+var oldmanText, kidText, clerkText, clericText, wolfBossText, skeleBossText, knightBossText, raidBossText;
 var bgm = {};
 var mapMusic = {
     'map0' : 'forest',
@@ -96,10 +97,11 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     clericText.bringToTop();
     clerkText.bringToTop();
 
-    /*
-    textBox.bringToTop();
-    textBox2.bringToTop();
-    */
+    wolfBossText.bringToTop();
+    skeleBossText.bringToTop();
+    knightBossText.bringToTop();
+    raidBossText.bringToTop();
+    
     goldHud.bringToTop();
     gold.bringToTop();
     levelIcon.bringToTop();   
@@ -291,7 +293,12 @@ function initNPC(){
     oldmanText = game.add.sprite(0, window.innerHeight-720, "oldmanDialogue"); oldmanText.fixedToCamera = true; oldmanText.exists = false;
     kidText = game.add.sprite(0, window.innerHeight-720, "kidDialogue"); kidText.fixedToCamera = true; kidText.exists = false;
     clerkText = game.add.sprite(0, window.innerHeight-720, "clerkDialogue"); clerkText.fixedToCamera = true; clerkText.exists = false;
-    clericText = game.add.sprite(0, window.innerHeight-720, "clericDialogue"); clericText.fixedToCamera = true; clericText.exists = false
+    clericText = game.add.sprite(0, window.innerHeight-720, "clericDialogue"); clericText.fixedToCamera = true; clericText.exists = false;
+
+    wolfBossText = game.add.sprite(0, window.innerHeight-720, "wolfBossDialogue"); wolfBossText.fixedToCamera = true; wolfBossText.exists = false;
+    skeleBossText = game.add.sprite(0, window.innerHeight-720, "skeleBossDialogue"); skeleBossText.fixedToCamera = true; skeleBossText.exists = false;
+    knightBossText = game.add.sprite(0, window.innerHeight-720, "knightBossDialogue"); knightBossText.fixedToCamera = true; knightBossText.exists = false;
+    raidBossText = game.add.sprite(0, window.innerHeight-720, "raidBossDialogue"); raidBossText.fixedToCamera = true; raidBossText.exists = false;
 }
 
 function initInput(){
@@ -336,13 +343,22 @@ function portalCheck(map){
         if ((player.y>=2051 && player.y<=2127) && player.x>1780){
             loadMap('map0', 96, 264, false);
         }
-        else if ((player.y >= 336 && player.y <= 770) && (player.x <= 912) && (!wolfBossFight)){
-            wolfBossFight = true;
+        //for bgm & dialogue purposes - wolfboss
+        else if ((player.y >= 336 && player.y <= 770) && (player.x < 912 && player.x >906)){
+            if (!bgm.wolfBattle.isPlaying && player.body.velocity.x < 0 && enemys.wolfBoss){
+                if (enemys.wolfBoss.children.length){
+                    bgm.forest.stop();
+                    bgm.wolfBattle.play();
+                    
+                    createDialogue({name:"wolfBoss"});
+                }
+            }else if (!bgm.forest.isPlaying){
+                bgm.wolfBattle.stop();
+                bgm.forest.play();                
+            }
+        }else {
 
-            console.log("Wolf Boss fight");
-
-            //insert code for what happens
-        }
+        }                
     }
 
     else if (map==='map2'){
@@ -362,12 +378,19 @@ function portalCheck(map){
         if (player.y<0){
             loadMap('map2', 2160, 1872, false);
         }
-        else if ((player.x >= 960 && player.x <= 1152) && (player.y >=1824) && (!skeleBossFight)){
-            skeleBossFight = true;
+        //for bgm & dialogue purposes - skeleBoss
+        else if ((player.x >= 960 && player.x <= 1152) && (player.y >1824 && player.y<1832)){
+            if (!bgm.skeleBattle.isPlaying && player.body.velocity.y>0 && enemys.skeleBoss){
+                if (enemys.skeleBoss.children.length){
+                    bgm.graveyard.stop();
+                    bgm.skeleBattle.play();
 
-            console.log("Skele Boss fight");
-
-            //insert code for what happens
+                    createDialogue({name:"skeleBoss"});
+                }
+            }else if (!bgm.graveyard.isPlaying){
+                bgm.skeleBattle.stop();
+                bgm.graveyard.play();
+            }
         }
     }
 
@@ -384,12 +407,12 @@ function portalCheck(map){
         if (player.y>960){
             loadMap('map4', 1612, 35, false);
         }
-        else if ((player.x >= 336 && player.x <= 576) && (player.y <= 900) && (!knightBossFight)){
-            knightBossFight = true;
+        //for bgm & dialogue purposes - knightboss
+        else if ((player.x >= 336 && player.x <= 576) && (player.y < 900 && player.y >894) && 
+            player.body.velocity.y<0 && enemys.knightBoss){
 
-            console.log("Knight Boss fight");
-
-            //insert code for what happens
+            if (enemys.knightBoss.children.length)
+                createDialogue({name:"knightBoss"});
         }
     }
 }
@@ -403,13 +426,16 @@ function levelUp(){
 }
 
 function initAudio(){
-    bgm['forest'] = game.add.audio('forest', 0.01, true);
-    bgm['graveyard'] = game.add.audio('graveyard', 0.03, true);
-    bgm['castle'] = game.add.audio('castle', 0.03, true);
+    bgm['forest'] = game.add.audio('forest', 0.03, true);
+    bgm['graveyard'] = game.add.audio('graveyard', 0.3, true);
+    bgm['castle'] = game.add.audio('castle', 0.01, true);
 
-    woosh = game.add.audio('woosh', 0.25);
-    wep1_sound = game.add.audio('wep1', 0.25);
-    wep2_sound = game.add.audio('wep2', 0.25);
+    bgm['wolfBattle'] = game.add.audio('wolfBattle', 0.01, true);
+    bgm['skeleBattle'] = game.add.audio('skeleBattle', 0.05, true);
+
+    woosh = game.add.audio('woosh', 0.1);
+    wep1_sound = game.add.audio('wep1', 0.1);
+    wep2_sound = game.add.audio('wep2', 0.1);
     wep3_sound = game.add.audio('wep3', 0.05);
 
     spellSound = game.add.audio('spell', 0.05);

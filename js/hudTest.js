@@ -2,7 +2,6 @@ var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.C
 
 var map;
 var gameProgress = 0;
-var oldmanText, kidText, clerkText, clericText;
 var dialogue = false;
 var playerGold = 100; var gold, goldText, goldHud;
 var levelIcon, levelText;
@@ -378,6 +377,11 @@ function resizeComponents(){
     kidText.cameraOffset.y = window.innerHeight-720;
     clerkText.cameraOffset.y = window.innerHeight-720;
     clericText.cameraOffset.y = window.innerHeight-720;
+
+    wolfBossText.cameraOffset.y = window.innerHeight-720;
+    skeleBossText.cameraOffset.y = window.innerHeight-720;
+    knightBossText.cameraOffset.y = window.innerHeight-720;
+    raidBossText.cameraOffset.y = window.innerHeight-720;
 }
 
 
@@ -449,9 +453,7 @@ function attackCollisionHandler(atkBox, enemy){
     });    
 
     atkTime = game.time.now;
-    enemy.damage(atk);
-
-    console.log(enemy.name);
+    enemy.damage(atk);    
 
     var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
@@ -477,8 +479,7 @@ function attackCollisionHandler(atkBox, enemy){
         
         switch (enemy.key){
             case "wolfBoss":
-                wolfDeathSound.play();
-                bgm.forest.play();
+                wolfDeathSound.play();                
                 game.camera.shake(0.01, 1000, true);
                 dropItem(items.armor0, 'armor0', enemy.x, enemy.y, 1);  
                 enemy.destroy();
