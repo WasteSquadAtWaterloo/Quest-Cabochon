@@ -266,7 +266,7 @@ function update() {
                 game.physics.arcade.overlap(player, mobShots, enemyCollisionHandler, null, this);          
         }
         
-        if (map.key === "map6"){
+        if (map.key === "map6"){            
             raidBossAi();
         }
         //Boss spells
@@ -473,19 +473,20 @@ function attackCollisionHandler(atkBox, enemy){
         
         switch (enemy.key){
             case "wolfBoss":
-                wolfDeathSound.restart('', 0, 0.25);
+                wolfDeathSound.play();
+                bgm.forest.play();
                 game.camera.shake(0.01, 1000, true);
                 dropItem(items.armor0, 'armor0', enemy.x, enemy.y, 1);  
                 enemy.destroy();
                 break;
             case "skeleBoss":
-                skeleDeathSound.restart('', 0, 0.25);
+                skeleDeathSound.play();
                 game.camera.shake(0.01, 1000, true);
                 dropItem(items.armor1, 'armor1', enemy.x, enemy.y, 2);     
                 enemy.destroy();           
                 break;
             case "knightBoss":
-                knightDeathSound.restart('', 0, 0.25);
+                knightDeathSound.play();
                 game.camera.shake(0.01, 1000, true);
                 dropItem(items.armor2, 'armor2', enemy.x, enemy.y, 3); 
                 enemy.destroy();               
@@ -515,7 +516,7 @@ function attackCollisionHandler(atkBox, enemy){
     //for when atkBox is a projectile
     if (atkBox.key==="blue") {
         atkBox.exists = false; 
-        spellImpactSound.restart('', 0, 0.25);
+        spellImpactSound.play();
     }
 }
 

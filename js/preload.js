@@ -108,6 +108,13 @@ function preload() {
 
     game.load.spritesheet('items', 'assets/Spritesheet/items.png', 34, 34); 
 
+    game.load.audio('forest', 'assets/audio/forestbgm.mp3');
+    game.load.audio('graveyard', 'assets/audio/graveyardbgm.mp3');
+    game.load.audio('castle', 'assets/audio/castlebgm.mp3');
+    game.load.audio('wolfBattle', 'assets/audio/wolfBossBattle.mp3');
+    game.load.audio('skeleBattle', 'assets/audio/skeleBossBattle.mp3');
+    game.load.audio('knightBattle', 'assets/audio/knightBossBattle.mp3');
+
     game.load.audio('woosh', 'assets/audio/woosh.mp3');
     game.load.audio('wep1', 'assets/audio/wep1.mp3');
     game.load.audio('wep2', 'assets/audio/wep2.mp3');
@@ -118,5 +125,4 @@ function preload() {
     game.load.audio('skeleDeath', 'assets/audio/skeleDeath.mp3');
     game.load.audio('knightDeath', 'assets/audio/knightDeath.mp3');
     game.load.audio('raidBossDeath', 'assets/audio/raidBossDeath.mp3');
-
 }

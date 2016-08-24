@@ -2,10 +2,24 @@ var map;
 var NPC;
 var healer, kid, storeClerk, oldMan;
 var healerBox, kidBox, storeClerkBox;
+var bgm = {};
+var mapMusic = {
+    'map0' : 'forest',
+    'map1' : 'forest',
+    'map2' : 'forest',
+    'map4' : 'forest',
+    'map3' : 'graveyard',
+    'map5' : 'castle'
+}
 var woosh, wep1_sound, wep2_sound, wep3_sound, spellSound, spellImpactSound, wolfDeathSound, skeleDeathSound, knightDeathSound, raidBossDeathSound;
 
 function loadMap(key, spawn_x, spawn_y, bgn){
 	if (!bgn){
+        if (mapMusic[key] !== mapMusic[map.key]){
+            bgm[mapMusic[map.key]].stop();
+            bgm[mapMusic[key]].play();
+        }   
+
         for (var enemy in enemys){
             enemys[enemy].destroy();
         }
@@ -26,7 +40,10 @@ function loadMap(key, spawn_x, spawn_y, bgn){
 		layer5.destroy();
 		map.destroy();
         map.key = "map0";
-	}
+	}else {
+        bgm.forest.play();
+    }
+    
     
 	map = game.add.tilemap(key);   
     map.addTilesetImage('roguelikeSheet_transparent','tiles');
@@ -181,11 +198,11 @@ function initPlayer(spawnX, spawnY, hp){
             anim = player.animations.add(dirs[dir]+acts[act], playerFrames[dirs[dir]][acts[act].slice(1)], 15, false);            
             if (acts[act]==='_melee'){                 
                 anim.onStart.add(function(){                    
-                    woosh.restart('', 0, 0.25);
+                    woosh.play();//restart('', 0, 0.25);
                 });
             }else {
                 anim.onStart.add(function(){                    
-                    spellSound.restart('', 0, 0.1);
+                    spellSound.play();//restart('', 0, 0.1);
                 });
             }
         }
@@ -200,17 +217,17 @@ function initPlayer(spawnX, spawnY, hp){
             switch (wp){
                 case (1): 
                     anim.onStart.add(function(){                                         
-                        wep1_sound.restart('', 0, 0.25);
+                        wep1_sound.play();//restart('', 0, 0.25);
                     });
                     break;
                 case (2):
                     anim.onStart.add(function(){                                        
-                        wep2_sound.restart('', 0, 0.25);
+                        wep2_sound.play();//restart('', 0, 0.25);
                     });
                     break;
                 case (3):
                     anim.onStart.add(function(){                                            
-                        wep3_sound.restart('', 0, 0.15);
+                        wep3_sound.play();//restart('', 0, 0.15);
                     });
                     break;
             }
@@ -257,15 +274,6 @@ function initPlayer(spawnX, spawnY, hp){
 }
 
 function initNPC(){
-    /*
-    textBox = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 90 , 'textHud'); 
-    textBox.fixedToCamera = true; 
-    textBox.exists = false;
-
-    textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 180 , 'textHud2'); 
-    textBox2.fixedToCamera = true;
-    textBox2.exists = false; */
-
     NPC = game.add.group();
     NPC.enableBody = true;
     NPC.physicsBodyType = Phaser.Physics.ARCADE;
@@ -373,16 +381,20 @@ function levelUp(){
 }
 
 function initAudio(){
-    woosh = game.add.audio('woosh');
-    wep1_sound = game.add.audio('wep1');
-    wep2_sound = game.add.audio('wep2');
-    wep3_sound = game.add.audio('wep3');
+    bgm['forest'] = game.add.audio('forest', 0.01, true);
+    bgm['graveyard'] = game.add.audio('graveyard', 0.03, true);
+    bgm['castle'] = game.add.audio('castle', 0.03, true);
 
-    spellSound = game.add.audio('spell');
-    spellImpactSound = game.add.audio('spell_impact');
+    woosh = game.add.audio('woosh', 0.25);
+    wep1_sound = game.add.audio('wep1', 0.25);
+    wep2_sound = game.add.audio('wep2', 0.25);
+    wep3_sound = game.add.audio('wep3', 0.05);
 
-    wolfDeathSound = game.add.audio('wolfDeath');
-    skeleDeathSound = game.add.audio('skeleDeath');
-    knightDeathSound = game.add.audio('knightDeath');
-    raidBossDeathSound = game.add.audio('raidBossDeath');
+    spellSound = game.add.audio('spell', 0.05);
+    spellImpactSound = game.add.audio('spell_impact', 0.05);
+
+    wolfDeathSound = game.add.audio('wolfDeath', 0.05);
+    skeleDeathSound = game.add.audio('skeleDeath', 0.1);
+    knightDeathSound = game.add.audio('knightDeath', 0.1);
+    raidBossDeathSound = game.add.audio('raidBossDeath', 0.1);
 }
