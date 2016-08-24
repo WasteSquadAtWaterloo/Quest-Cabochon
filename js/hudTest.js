@@ -65,6 +65,20 @@ var gameState = 0;
 var states = {alive:0, dead:1, dialogue:2};
 var curDialogueBox, dialogueTimer = 0;
 
+var easystar;
+var timeStep;
+var level;
+
+var currentNextPointX; 
+var currentNextPointY;
+var currentPlayerXtile;
+var currentPlayerYtile;
+var currentBossXtile;
+var currentBossYtile;
+
+var tileSize = 48;
+var mapSize = 25;
+
 function create() {   
 
     $(window).resize(resizeComponents);        
@@ -253,6 +267,129 @@ function update() {
                 game.physics.arcade.overlap(player, mobShots, enemyCollisionHandler, null, this);          
         }
         
+        if (map.key === "map6"){
+            currentBossXtile = Math.round(enemys.raidBoss.children[0].x/48);
+            currentBossYtile = Math.round(enemys.raidBoss.children[0].y/48);
+            currentPlayerXtile = Math.round(player.x/48);
+            currentPlayerYtile = Math.round(player.y/48);
+            //console.log(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile);
+
+            setInterval(function(){ 
+                
+                easystar.findPath(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile, function( path ) {
+                    if (path === null) {
+                        //console.log("The path to the destination point was not found.");
+                    } 
+                    
+                    if (path) {
+                        currentNextPointX = path[1].x;
+                        currentNextPointY = path[1].y;
+                    }
+                    
+                    if (currentNextPointX < currentBossXtile && currentNextPointY < currentBossYtile)
+                    {
+                        // left up
+                        
+                        //console.log("GO LEFT UP");
+                        
+                        //enemyDirection = "NW";
+                        enemys.raidBoss.children[0].body.velocity.x = -100;
+                        enemys.raidBoss.children[0].body.velocity.y = -100;
+                    }
+                    else if (currentNextPointX == currentBossXtile && currentNextPointY < currentBossYtile)
+                    {
+                        // up
+                        
+                        //console.log("GO UP");
+                        
+                        //enemyDirection = "N";
+                        enemys.raidBoss.children[0].body.velocity.x = 0;
+                        enemys.raidBoss.children[0].body.velocity.y = -100;
+                        
+                    }
+                    else if (currentNextPointX > currentBossXtile && currentNextPointY < currentBossYtile)
+                    {
+                        // right up
+                        
+                        //console.log("GO RIGHT UP");
+                        
+                        //enemyDirection = "NE";
+                        enemys.raidBoss.children[0].body.velocity.x = 100;
+                        enemys.raidBoss.children[0].body.velocity.y = -100;
+                        
+                    }
+                    else if (currentNextPointX < currentBossXtile && currentNextPointY == currentBossYtile)
+                    {
+                        // left
+                        
+                        //console.log("GO LEFT");
+                        
+                        //enemyDirection = "W";
+                        enemys.raidBoss.children[0].body.velocity.x = -100;
+                        enemys.raidBoss.children[0].body.velocity.y = 0;
+                        
+                    }
+                    else if (currentNextPointX > currentBossXtile && currentNextPointY == currentBossYtile)
+                    {
+                        // right
+                        
+                        //console.log("GO RIGHT");
+                        
+                        //enemyDirection = "E";
+                        enemys.raidBoss.children[0].body.velocity.x = 100;
+                        enemys.raidBoss.children[0].body.velocity.y = 0;
+                    
+                    }
+                    else if (currentNextPointX > currentBossXtile && currentNextPointY > currentBossYtile)
+                    {
+                        // right down
+                        
+                        //console.log("GO RIGHT DOWN");
+                        
+                        //enemyDirection = "SE";
+                        enemys.raidBoss.children[0].body.velocity.x = 100;
+                        enemys.raidBoss.children[0].body.velocity.y = 100;
+                        
+                    }
+                    else if (currentNextPointX == currentBossXtile && currentNextPointY > currentBossYtile)
+                    {
+                        // down
+                        
+                        //console.log("GO DOWN");
+                        
+                        //enemyDirection = "S";
+                        enemys.raidBoss.children[0].body.velocity.x = 0;
+                        enemys.raidBoss.children[0].body.velocity.y = 100;
+                        
+                    }
+                    else if (currentNextPointX < currentBossXtile && currentNextPointY > currentBossYtile)
+                    {
+                        // left down
+                        
+                        //console.log("GO LEFT DOWN");
+                        
+                        //enemyDirection = "SW";
+                        enemys.raidBoss.children[0].body.velocity.x = -100;
+                        enemys.raidBoss.children[0].body.velocity.y = 100;
+                        
+                    }
+                    else
+                    {
+                        
+                        //enemyDirection = "STOP";
+                        enemys.raidBoss.children[0].body.velocity.x = 0;
+                        enemys.raidBoss.children[0].body.velocity.y = 0;
+                        
+                    }
+                    
+                   // if (enemyDirection != "STOP") cowboy.animations.play(enemyDirection);
+                    
+                });
+
+                easystar.calculate();
+                
+            }, 3000);
+        }
         //Boss spells
         
         if (game.time.now - bossSpellTime>=2500 && map.key==="map1"){
