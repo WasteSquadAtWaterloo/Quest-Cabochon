@@ -328,6 +328,13 @@ function portalCheck(map){
         if ((player.y>=2051 && player.y<=2127) && player.x>1780){
             loadMap('map0', 96, 264, false);
         }
+        else if ((player.y >= 336 && player.y <= 770) && (player.x <= 912) && (!wolfBossFight)){
+            wolfBossFight = true;
+
+            console.log("Wolf Boss fight");
+
+            //insert code for what happens
+        }
     }
 
     else if (map==='map2'){
@@ -340,11 +347,19 @@ function portalCheck(map){
         else if((player.y>=630 && player.y<=735) && player.x>3360){
             loadMap('map4', 8, 3407, false);
         }
+
     }
 
     else if (map==='map3'){
         if (player.y<0){
             loadMap('map2', 2160, 1872, false);
+        }
+        else if ((player.x >= 960 && player.x <= 1152) && (player.y >=1824) && (!skeleBossFight)){
+            skeleBossFight = true;
+
+            console.log("Skele Boss fight");
+
+            //insert code for what happens
         }
     }
 
@@ -360,6 +375,13 @@ function portalCheck(map){
     else if (map==="map5"){
         if (player.y>960){
             loadMap('map4', 1612, 35, false);
+        }
+        else if ((player.x >= 336 && player.x <= 576) && (player.y <= 900) && (!knightBossFight)){
+            knightBossFight = true;
+
+            console.log("Knight Boss fight");
+
+            //insert code for what happens
         }
     }
 }
