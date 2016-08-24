@@ -65,6 +65,8 @@ var gameState = 0;
 var states = {alive:0, dead:1, dialogue:2};
 var curDialogueBox, dialogueTimer = 0;
 
+var wolfBossFight = false; var skeleBossFight = false; var knightBossFight = false;
+
 var easystar;
 var timeStep = 0;
 var level;
@@ -327,7 +329,7 @@ function update() {
             }                                
         } 
 
-        if (game.time.now - bossSpellTime>=1500 && map.key==="map6"){
+        if (game.time.now - bossSpellTime>=5000 && map.key==="map6"){
             bossSpellTime = game.time.now;            
             var boss = enemys.raidBoss.getFirstAlive();
             if (boss){                
@@ -336,7 +338,7 @@ function update() {
                     x: boss.x+boss.width/2,
                     y: boss.y+boss.height/2,                     
                     scale: 0.4,
-                    atk: 20, //UPDATE                
+                    atk: 25, //UPDATE                
                     group: mobShots
                 };
                 for (var ang=0; ang<=12; ang++){
@@ -449,6 +451,8 @@ function attackCollisionHandler(atkBox, enemy){
     atkTime = game.time.now;
     enemy.damage(atk);
 
+    console.log(enemy.name);
+
     var madeBar = mobHealthBarManager(enemy.maxHealth, enemy.health);
     var monHealthBar = new Phaser.Sprite(this.game, 0, 0, madeBar);     
 
@@ -509,7 +513,12 @@ function attackCollisionHandler(atkBox, enemy){
                     dropItem(items.weapon3, 'weapon3', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[2] = true;
                 }
-                break;          
+                break;
+            case "raidBoss":
+                if (enemy.health < 100){
+                    console.log("raidBossText");
+                    //insert actions here
+                }          
         }               
     }
 
