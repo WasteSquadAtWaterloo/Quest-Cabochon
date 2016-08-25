@@ -44,7 +44,7 @@ function createDialogue(collisionBox, player) {
 			case "kid":
 				curDialogueBox = kidText;
 				kidText.exists = true;
-				text.setText(dialogueText.kid[gameProgress/2]);		
+				text.setText(dialogueText.kid[Math.floor(gameProgress/2)]);		
 				break;		
 
 			case "cleric":

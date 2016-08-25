@@ -267,7 +267,7 @@ function update() {
                 game.physics.arcade.overlap(player, mobShots, enemyCollisionHandler, null, this);          
         }
         
-        if (map.key === "map6"){            
+        if (map.key === "map6" && enemys.raidBoss.children.length){            
             raidBossAi();
         }
         //Boss spells
@@ -471,10 +471,13 @@ function attackCollisionHandler(atkBox, enemy){
         playerGold += enemy.gold;
 
         player.exp += enemy.exp;
-        if (player.exp >= expReq[player.lvl-1]){                        
-            player.exp = player.exp - expReq[player.lvl-1];
-            player.lvl++;            
-            levelUp();
+        if (player.exp >= expReq[player.lvl-1]){    
+            while (player.exp >= expReq[player.lvl-1]){
+                player.exp = player.exp - expReq[player.lvl-1];
+                player.lvl++;            
+                levelUp(); 
+            }                    
+            
         }
         updateExpBar();
 
@@ -521,6 +524,8 @@ function attackCollisionHandler(atkBox, enemy){
                 break;
             case "raidBoss":
                 enemy.destroy();
+                bgm.raidBossBattle.stop();
+                bgm.victory.play();
                 break;         
         }               
     }

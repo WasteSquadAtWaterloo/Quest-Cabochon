@@ -336,7 +336,7 @@ function portalCheck(map){
         else if ((player.x>=828 && player.x<=947) && player.y>1275){
             loadMap('map2', 2616, 216, false);            
         }
-        else if ((player.x>=1710 && player.x<=1750) && player.y>610){
+        else if ((player.x>=1710 && player.x<=1750) && player.y<610){
             loadMap('map6', spawn.x, spawn.y, false);
         }
     }

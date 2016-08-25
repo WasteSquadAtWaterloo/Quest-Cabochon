@@ -104,8 +104,11 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
     wolfBoss.addChild(monHealthBar);
 
     wolfBoss.scale.set(scale);       
-    wolfBoss.animations.add('move', [0,1,2,3], 10, true);              
-    wolfBoss.play('move');            
+    wolfBoss.animations.add('down', [0,1,2,3], 10, true);
+    wolfBoss.animations.add('left', [4,5,6,7], 10, true);   
+    wolfBoss.animations.add('right', [8,9,10,11], 10, true);   
+    wolfBoss.animations.add('up', [12,13,14,15], 10, true);                 
+    wolfBoss.play('down');            
     wolfBoss.atk = atk;
     wolfBoss.exp = 10;
 
@@ -113,18 +116,30 @@ function createWolfBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
     var tweenA = game.add.tween(wolfBoss).to( { 
         x: wolfBoss.x + (Math.random()*80+80)}, 
     Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+    tweenA.onStart.add(function(){
+        wolfBoss.play('right');
+    });
 
     var tweenB = game.add.tween(wolfBoss).to( {  
         y: wolfBoss.y + (Math.random()*80+80)}, 
     Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+    tweenB.onStart.add(function(){
+        wolfBoss.play('down');
+    });
 
     var tweenC = game.add.tween(wolfBoss).to( { 
         x: wolfBoss.x - (Math.random()*80+80)}, 
     Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+    tweenC.onStart.add(function(){
+        wolfBoss.play('left');
+    });
 
     var tweenD = game.add.tween(wolfBoss).to( { 
         y: wolfBoss.y - (Math.random()*80+80)}, 
     Math.random()*1000+1000, null, false, Math.random()*2000, 0, false);
+    tweenD.onStart.add(function(){
+        wolfBoss.play('up');
+    });
 
     tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
 
@@ -143,8 +158,11 @@ function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmo
     skeleBoss.addChild(monHealthBar);
 
     skeleBoss.scale.set(scale);       
-    skeleBoss.animations.add('move', [0,1,2,3], 10, true);              
-    skeleBoss.play('move');            
+    skeleBoss.animations.add('down', [0,1,2,3], 10, true);    
+    skeleBoss.animations.add('left', [4,5,6,7], 10, true); 
+    skeleBoss.animations.add('right', [8,9,10,11], 10, true); 
+    skeleBoss.animations.add('up', [12,13,14,15], 10, true);           
+    skeleBoss.play('down');            
     skeleBoss.atk = atk;
     skeleBoss.exp = 20;
 
@@ -152,18 +170,30 @@ function createSkeleBoss(key, hp, atk, topX, topY, width, height, scale, goldAmo
     var tweenA = game.add.tween(skeleBoss).to( { 
         x: skeleBoss.x + (Math.random()*80+80)}, 
     Math.random()*1000+750, null, false, Math.random()*1000, 0, false);
+    tweenA.onStart.add(function(){
+        skeleBoss.play('right');
+    });
 
     var tweenB = game.add.tween(skeleBoss).to( {  
         y: skeleBoss.y + (Math.random()*80+80)}, 
     Math.random()*1000+750, null, false, Math.random()*1000, 0, false);
+    tweenB.onStart.add(function(){
+        skeleBoss.play('down');
+    });
 
     var tweenC = game.add.tween(skeleBoss).to( { 
         x: skeleBoss.x - (Math.random()*80+80)}, 
     Math.random()*1000+750, null, false, Math.random()*1000, 0, false);
+    tweenC.onStart.add(function(){
+        skeleBoss.play('left');
+    });
 
     var tweenD = game.add.tween(skeleBoss).to( { 
         y: skeleBoss.y - (Math.random()*80+80)}, 
     Math.random()*1000+750, null, false, Math.random()*1000, 0, false);
+    tweenD.onStart.add(function(){
+        skeleBoss.play('up');
+    });
 
     tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
 
@@ -181,8 +211,11 @@ function createKnightBoss(key, hp, atk, topX, topY, width, height, scale, goldAm
     knightBoss.addChild(monHealthBar);
 
     knightBoss.scale.set(scale);       
-    knightBoss.animations.add('move', [0,1,2,3], 10, true);              
-    knightBoss.play('move');            
+    knightBoss.animations.add('down', [0,1,2,3], 10, true);    
+    knightBoss.animations.add('left', [4,5,6,7], 10, true); 
+    knightBoss.animations.add('right', [8,9,10,11], 10, true); 
+    knightBoss.animations.add('up', [12,13,14,15], 10, true);           
+    knightBoss.play('down');            
     knightBoss.atk = atk;
     knightBoss.exp = 30;
 
@@ -190,18 +223,30 @@ function createKnightBoss(key, hp, atk, topX, topY, width, height, scale, goldAm
     var tweenA = game.add.tween(knightBoss).to( { 
         x: knightBoss.x + (Math.random()*40+80)}, 
     Math.random()*750+750, null, false, Math.random()*850, 0, false);
+    tweenA.onStart.add(function(){
+        knightBoss.play('right');
+    });
 
     var tweenB = game.add.tween(knightBoss).to( {  
         y: knightBoss.y + (Math.random()*40+80)}, 
     Math.random()*750+750, null, false, Math.random()*850, 0, false);
+    tweenB.onStart.add(function(){
+        knightBoss.play('down');
+    });
 
     var tweenC = game.add.tween(knightBoss).to( { 
         x: knightBoss.x - (Math.random()*40+80)}, 
     Math.random()*750+750, null, false, Math.random()*850, 0, false);
+    tweenC.onStart.add(function(){
+        knightBoss.play('left');
+    });
 
     var tweenD = game.add.tween(knightBoss).to( { 
         y: knightBoss.y - (Math.random()*40+80)}, 
     Math.random()*750+750, null, false, Math.random()*850, 0, false);
+    tweenD.onStart.add(function(){
+        knightBoss.play('up');
+    });
 
     tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
 
@@ -229,26 +274,6 @@ function createRaidBoss(key, hp, atk, topX, topY, width, height, scale, goldAmou
     raidBoss.exp = 150;
 
     raidBoss.gold = goldAmount;
-    /*
-    var tweenA = game.add.tween(raidBoss).to( { 
-        x: raidBoss.x + (Math.random()*40+80)}, 
-    Math.random()*750+750, null, false, Math.random()*850, 0, false);
-
-    var tweenB = game.add.tween(raidBoss).to( {  
-        y: raidBoss.y + (Math.random()*40+80)}, 
-    Math.random()*750+750, null, false, Math.random()*850, 0, false);
-
-    var tweenC = game.add.tween(raidBoss).to( { 
-        x: raidBoss.x - (Math.random()*40+80)}, 
-    Math.random()*750+750, null, false, Math.random()*850, 0, false);
-
-    var tweenD = game.add.tween(raidBoss).to( { 
-        y: raidBoss.y - (Math.random()*40+80)}, 
-    Math.random()*750+750, null, false, Math.random()*850, 0, false);
-
-    tweenA.chain(tweenB); tweenB.chain(tweenC); tweenC.chain(tweenD); tweenD.chain(tweenA);
-
-    tweenA.start(); */
 }
 
 function raidBossAi(){
