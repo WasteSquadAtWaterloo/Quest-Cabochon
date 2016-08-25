@@ -284,7 +284,8 @@ function raidBossAi(){
     //console.log(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile);
 
     setInterval(function(){ 
-        
+            
+
         easystar.findPath(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile, function( path ) {
             if (path === null) {
                 //console.log("The path to the destination point was not found.");
@@ -304,6 +305,7 @@ function raidBossAi(){
                 //enemyDirection = "NW";
                 enemys.raidBoss.children[0].body.velocity.x = -300;
                 enemys.raidBoss.children[0].body.velocity.y = -300;
+                enemys.raidBoss.children[0].play("up");
             }
             else if (currentNextPointX == currentBossXtile && currentNextPointY < currentBossYtile)
             {
@@ -314,6 +316,7 @@ function raidBossAi(){
                 //enemyDirection = "N";
                 enemys.raidBoss.children[0].body.velocity.x = 0;
                 enemys.raidBoss.children[0].body.velocity.y = -300;
+                enemys.raidBoss.children[0].play("up");
                 
             }
             else if (currentNextPointX > currentBossXtile && currentNextPointY < currentBossYtile)
@@ -325,6 +328,7 @@ function raidBossAi(){
                 //enemyDirection = "NE";
                 enemys.raidBoss.children[0].body.velocity.x = 300;
                 enemys.raidBoss.children[0].body.velocity.y = -300;
+                enemys.raidBoss.children[0].play("up");
                 
             }
             else if (currentNextPointX < currentBossXtile && currentNextPointY == currentBossYtile)
@@ -336,6 +340,7 @@ function raidBossAi(){
                 //enemyDirection = "W";
                 enemys.raidBoss.children[0].body.velocity.x = -300;
                 enemys.raidBoss.children[0].body.velocity.y = 0;
+                enemys.raidBoss.children[0].play("left");
                 
             }
             else if (currentNextPointX > currentBossXtile && currentNextPointY == currentBossYtile)
@@ -347,6 +352,7 @@ function raidBossAi(){
                 //enemyDirection = "E";
                 enemys.raidBoss.children[0].body.velocity.x = 300;
                 enemys.raidBoss.children[0].body.velocity.y = 0;
+                enemys.raidBoss.children[0].play("right");
             
             }
             else if (currentNextPointX > currentBossXtile && currentNextPointY > currentBossYtile)
@@ -358,6 +364,7 @@ function raidBossAi(){
                 //enemyDirection = "SE";
                 enemys.raidBoss.children[0].body.velocity.x = 300;
                 enemys.raidBoss.children[0].body.velocity.y = 300;
+                enemys.raidBoss.children[0].play("down");
                 
             }
             else if (currentNextPointX == currentBossXtile && currentNextPointY > currentBossYtile)
@@ -369,6 +376,7 @@ function raidBossAi(){
                 //enemyDirection = "S";
                 enemys.raidBoss.children[0].body.velocity.x = 0;
                 enemys.raidBoss.children[0].body.velocity.y = 300;
+                enemys.raidBoss.children[0].play("down");
                 
             }
             else if (currentNextPointX < currentBossXtile && currentNextPointY > currentBossYtile)
@@ -380,7 +388,7 @@ function raidBossAi(){
                 //enemyDirection = "SW";
                 enemys.raidBoss.children[0].body.velocity.x = -300;
                 enemys.raidBoss.children[0].body.velocity.y = 300;
-                
+                enemys.raidBoss.children[0].play("down");
             }
             else
             {
@@ -388,7 +396,7 @@ function raidBossAi(){
                 //enemyDirection = "STOP";
                 enemys.raidBoss.children[0].body.velocity.x = 0;
                 enemys.raidBoss.children[0].body.velocity.y = 0;
-                
+                enemys.raidBoss.children[0].animations.stop("down", 0);
             }
             
            // if (enemyDirection != "STOP") cowboy.animations.play(enemyDirection);
