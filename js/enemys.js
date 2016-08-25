@@ -283,17 +283,13 @@ function raidBossAi(){
     currentPlayerYtile = Math.round(player.y/48);
     //console.log(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile);
 
-    setInterval(function(){ 
-            
-
+    setInterval(function(){
         easystar.findPath(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile, function( path ) {
-            if (path === null) {
-                //console.log("The path to the destination point was not found.");
-            } 
-            
-            if (path) {
-                currentNextPointX = path[1].x;
-                currentNextPointY = path[1].y;
+            if (path) {        
+                if (path[1]){        
+                    currentNextPointX = path[1].x;
+                    currentNextPointY = path[1].y;
+                }
             }
             
             if (currentNextPointX < currentBossXtile && currentNextPointY < currentBossYtile)

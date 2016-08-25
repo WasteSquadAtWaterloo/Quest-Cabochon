@@ -30,6 +30,7 @@ var equip = {
 var enemys = {};
 var atkBox, NPCBox;
 var items = {};
+var colors = ['red','green','yellow'];
 
 google: {
   families: ['Finger Paint']
@@ -79,6 +80,7 @@ var currentBossYtile;
 
 var tileSize = 48;
 var mapSize = 25;
+var ct=0;
 
 function create() {   
 
@@ -328,22 +330,25 @@ function update() {
             }                                
         } 
 
-        if (game.time.now - bossSpellTime>=5000 && map.key==="map6"){
-            bossSpellTime = game.time.now;            
-            var boss = enemys.raidBoss.getFirstAlive();
-            if (boss){                
-                var spellOpts = {
-                    color: 'yellow',
-                    x: boss.x+boss.width/2,
-                    y: boss.y+boss.height/2,                     
-                    scale: 0.4,
-                    atk: 25, //UPDATE                
-                    group: mobShots
-                };
-                for (var ang=0; ang<=12; ang++){
-                    spellCast.call(spellOpts, (Math.PI/6)*ang);
-                }
-            }                                
+        if (game.time.now - bossSpellTime>=3000 && map.key==="map6"){
+            if (enemys.raidBoss.children.length){
+                ct++;
+                bossSpellTime = game.time.now;            
+                var boss = enemys.raidBoss.getFirstAlive();
+                if (boss){                
+                    var spellOpts = {
+                        color: colors[ct%3],
+                        x: boss.x+boss.width/2,
+                        y: boss.y+boss.height/2,                     
+                        scale: 0.4,
+                        atk: 20, //UPDATE                
+                        group: mobShots
+                    };
+                    for (var ang=0; ang<12; ang++){                        
+                        spellCast.call(spellOpts, (Math.PI/6)*ang);
+                    }
+                } 
+            }                               
         }                
 
         //NPC stuff
