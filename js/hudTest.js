@@ -461,13 +461,17 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.removeChildAt(0);
     enemy.addChild(monHealthBar);
 
+    if (enemy.key==="raidBoss" && enemy.health<=100){
+        createDialogue({name: "raidBoss"})
+    }    
+
     if (!enemy.alive) {
 
         enemy.deathTime = game.time.now;
         playerGold += enemy.gold;
 
         player.exp += enemy.exp;
-        if (player.exp >= expReq[player.lvl-1]){            
+        if (player.exp >= expReq[player.lvl-1]){                        
             player.exp = player.exp - expReq[player.lvl-1];
             player.lvl++;            
             levelUp();
@@ -516,10 +520,8 @@ function attackCollisionHandler(atkBox, enemy){
                 }
                 break;
             case "raidBoss":
-                if (enemy.health < 100){
-                    console.log("raidBossText");
-                    //insert actions here
-                }          
+                enemy.destroy();
+                break;         
         }               
     }
 

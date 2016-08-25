@@ -114,6 +114,8 @@ function preload() {
     game.load.audio('castle', 'assets/audio/castlebgm.mp3');
     game.load.audio('wolfBattle', 'assets/audio/wolfBossBattle.mp3');
     game.load.audio('skeleBattle', 'assets/audio/skeleBossBattle.mp3');    
+    game.load.audio('raidBossBattle', 'assets/audio/raidBossBattle.mp3');  
+    game.load.audio('victory', 'assets/audio/victoryMusic.mp3');  
 
     game.load.audio('woosh', 'assets/audio/woosh.mp3');
     game.load.audio('wep1', 'assets/audio/wep1.mp3');

@@ -10,14 +10,16 @@ var mapMusic = {
     'map2' : 'forest',
     'map4' : 'forest',
     'map3' : 'graveyard',
-    'map5' : 'castle'
+    'map5' : 'castle',
+    'map6' : 'raidBossBattle'
 }
 var woosh, wep1_sound, wep2_sound, wep3_sound, spellSound, spellImpactSound, wolfDeathSound, skeleDeathSound, knightDeathSound, raidBossDeathSound;
 
 function loadMap(key, spawn_x, spawn_y, bgn){
 	if (!bgn){
         if (mapMusic[key] !== mapMusic[map.key]){
-            bgm[mapMusic[map.key]].stop();
+            for (var m in bgm)
+                if (bgm[m].isPlaying) bgm[m].stop();            
             bgm[mapMusic[key]].play();
         }   
 
@@ -429,9 +431,10 @@ function initAudio(){
     bgm['forest'] = game.add.audio('forest', 0.03, true);
     bgm['graveyard'] = game.add.audio('graveyard', 0.3, true);
     bgm['castle'] = game.add.audio('castle', 0.01, true);
-
     bgm['wolfBattle'] = game.add.audio('wolfBattle', 0.01, true);
     bgm['skeleBattle'] = game.add.audio('skeleBattle', 0.05, true);
+    bgm['raidBossBattle'] = game.add.audio('raidBossBattle', 0.02, true);
+    bgm['victory'] = game.add.audio('victory', 0.05, true);
 
     woosh = game.add.audio('woosh', 0.1);
     wep1_sound = game.add.audio('wep1', 0.1);
