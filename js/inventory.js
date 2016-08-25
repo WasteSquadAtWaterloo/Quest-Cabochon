@@ -197,7 +197,13 @@ function pickUpItems(item, player) {
             }
         }
     }
-    else{    	
+    else{
+        if (item.itemCode === "gem"){
+            gameState = states.dead;
+            var winText = game.add.text(window.innerWidth/2, window.innerHeight/2, "GJ MAN", deathTxtStyle);
+            winText.fixedToCamera = true;
+            console.log(winText)
+        }  	
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {
                 this.x = 0;

@@ -90,6 +90,7 @@ function createDialogue(collisionBox, player) {
 				raidBossText.exists = true;
 				break;
 		}
+		curDialogueBox.bringToTop();		
 		curDialogueBox.name = NPCname;
 		if (text) curDialogueBox.addChild(text);
 	}
