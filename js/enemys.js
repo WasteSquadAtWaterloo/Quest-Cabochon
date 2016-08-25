@@ -283,7 +283,7 @@ function raidBossAi(){
     currentPlayerYtile = Math.round(player.y/48);
     //console.log(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile);
 
-    setInterval(function(){
+    setInterval(function(){ 
         easystar.findPath(currentBossXtile, currentBossYtile, currentPlayerXtile, currentPlayerYtile, function( path ) {
             if (path) {        
                 if (path[1]){        
@@ -292,7 +292,11 @@ function raidBossAi(){
                 }
             }
             
-            if (currentNextPointX < currentBossXtile && currentNextPointY < currentBossYtile)
+            if (raidBossText.exists){
+                enemys.raidBoss.children[0].body.velocity.x = 0;
+                enemys.raidBoss.children[0].body.velocity.y = 0;
+            }
+            else if (currentNextPointX < currentBossXtile && currentNextPointY < currentBossYtile)
             {
                 // left up
                 
