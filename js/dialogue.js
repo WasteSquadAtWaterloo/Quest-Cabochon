@@ -65,25 +65,25 @@ function createDialogue(collisionBox, player) {
 
 			case "wolfBoss":
 				curDialogueBox = wolfBossText;
-				text.setText(dialogueText.wolfBoss || "GTFO");
+				text.setText(dialogueText.wolfBoss);
 				wolfBossText.exists = true;
 				break;
 
 			case "skeleBoss":
 				curDialogueBox = skeleBossText;
-				text.setText(dialogueText.skeleBoss || "GTFO");
+				text.setText(dialogueText.skeleBoss);
 				skeleBossText.exists = true;
 				break;
 
 			case "knightBoss":
 				curDialogueBox = knightBossText;
-				text.setText(dialogueText.knightBoss || "GTFO");
+				text.setText(dialogueText.knightBoss);
 				knightBossText.exists = true;
 				break;
 
 			case "raidBoss":
 				curDialogueBox = raidBossText;
-				text.setText(dialogueText.raidBoss || "GTFO");
+				text.setText(dialogueText.raidBoss);
 				raidBossText.exists = true;
 				break;
 		}
