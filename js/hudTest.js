@@ -81,6 +81,7 @@ var currentBossYtile;
 var tileSize = 48;
 var mapSize = 25;
 var ct=0;
+var below100 = false;
 
 function create() {   
 
@@ -468,9 +469,10 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.removeChildAt(0);
     enemy.addChild(monHealthBar);
 
-    if (enemy.key==="raidBoss" && enemy.health<=100){
+    if (enemy.key==="raidBoss" && enemy.health<=100 && !below100){
         //enemys.raidBoss.children[0].body.velocity.x = 0;
         //enemys.raidBoss.children[0].body.velocity.y = 0;
+        below100 = true;
         createDialogue({name: "raidBoss"});
 
     }    
@@ -486,8 +488,7 @@ function attackCollisionHandler(atkBox, enemy){
                 player.exp = player.exp - expReq[player.lvl-1];
                 player.lvl++;            
                 levelUp(); 
-            }                    
-            
+            }            
         }
         updateExpBar();
 
@@ -515,7 +516,7 @@ function attackCollisionHandler(atkBox, enemy){
                 enemy.destroy();               
                 break;  
             case "raidBoss":
-                raidBossDeathSound.play();
+                //raidBossDeathSound.play();
                 game.camera.shake(0.1, 1000, true);
                 dropItem(items.gem, 'gem', enemy.x, enemy.y, 4); 
                 createDialogue({name: "raidBoss"});
