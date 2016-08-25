@@ -143,7 +143,7 @@ function initPlayer(spawnX, spawnY, hp){
 
         console.log(gameProgress);
 
-        if (gameProgress === 3){
+        if (map.key === "map6"){
             var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-50, "You have died. The game is over", deathTxtStyle); 
             deathText.fixedToCamera = true;
 
