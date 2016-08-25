@@ -94,7 +94,7 @@ itemFrames = {
 	'mp0': 38,
 	'mp1': 52,
 	'mp2': 31,
-	'gem': 227,
+	'gem': 212,
 	'levelIcon': 364,
 
 	load: function(item, x, y){

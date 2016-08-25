@@ -270,7 +270,8 @@ function update() {
                 game.physics.arcade.overlap(player, mobShots, enemyCollisionHandler, null, this);          
         }
         
-        if (map.key === "map6" && enemys.raidBoss.children.length){            
+        if (map.key === "map6" && enemys.raidBoss.children.length){
+            console.log('YO')            
             raidBossAi();
         }
         //Boss spells
@@ -491,8 +492,9 @@ function attackCollisionHandler(atkBox, enemy){
         updateExpBar();
 
         gold.getChildAt(0).setText(playerGold); 
-        levelIcon.getChildAt(0).setText(player.lvl);        
+        levelIcon.getChildAt(0).setText(player.lvl);       
         
+
         switch (enemy.key){
             case "wolfBoss":
                 wolfDeathSound.play();                
@@ -542,8 +544,7 @@ function attackCollisionHandler(atkBox, enemy){
                 enemy.destroy();
                 bgm.raidBossBattle.stop();
                 bgm.victory.play();
-                break;        
-
+                break;    
         }               
     }
 
