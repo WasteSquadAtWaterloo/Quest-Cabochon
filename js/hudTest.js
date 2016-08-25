@@ -523,6 +523,7 @@ function attackCollisionHandler(atkBox, enemy){
                 }
                 break;
             case "raidBoss":
+                raidBossDeathSound.play();
                 enemy.destroy();
                 bgm.raidBossBattle.stop();
                 bgm.victory.play();

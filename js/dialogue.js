@@ -25,8 +25,7 @@ dialogueText = {
 
 }
 
-function createDialogue(collisionBox, player) {
-	console.log(player);
+function createDialogue(collisionBox, player) {	
 	if (player===undefined || (gameState===states.alive && !inventory.alive && game.time.now - dialogueTimer > 250)){	
 		dialogueTimer = game.time.now;
 
@@ -38,7 +37,9 @@ function createDialogue(collisionBox, player) {
 			case "oldman":
 				curDialogueBox = oldmanText;
 				oldmanText.exists = true;
-				text.setText(dialogueText.oldman[gameProgress]);				
+				text.setText(dialogueText.oldman[gameProgress]);
+				if (gameProgress === 3)
+					loadMap('map6', spawn.x, spawn.y, false);				
 				break;
 
 			case "kid":
