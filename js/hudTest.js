@@ -468,7 +468,7 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.removeChildAt(0);
     enemy.addChild(monHealthBar);
 
-    if (enemy.key==="raidBoss" && enemy.health<=100){
+    if (enemy.key==="raidBoss" && enemy.health<=100 && 0<enemy.health){
         //enemys.raidBoss.children[0].body.velocity.x = 0;
         //enemys.raidBoss.children[0].body.velocity.y = 0;
         createDialogue({name: "raidBoss"});
@@ -520,6 +520,9 @@ function attackCollisionHandler(atkBox, enemy){
                 dropItem(items.gem, 'gem', enemy.x, enemy.y, 4); 
                 createDialogue({name: "raidBoss"});
                 enemy.destroy();
+                bgm.raidBossBattle.stop();
+                bgm.victory.play();
+                break;   
 
             case "spider":
                 if (!unlockedWep[0] && Math.random()>0.2){ //CHANGE CHANCE LATER
@@ -538,12 +541,6 @@ function attackCollisionHandler(atkBox, enemy){
                     dropItem(items.weapon3, 'weapon3', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[2] = true;
                 }
-                break;
-            case "raidBoss":
-                raidBossDeathSound.play();
-                enemy.destroy();
-                bgm.raidBossBattle.stop();
-                bgm.victory.play();
                 break;    
         }               
     }
