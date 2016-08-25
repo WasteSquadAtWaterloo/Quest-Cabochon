@@ -41,6 +41,7 @@ function createDialogue(collisionBox, player) {
 				oldmanText.exists = true;
 				text.setText(dialogueText.oldman[gameProgress]);
 				if (gameProgress === 3)
+					game.camera.shake(0.1, 1000, true);
 					loadMap('map6', spawn.x, spawn.y, false);				
 				break;
 

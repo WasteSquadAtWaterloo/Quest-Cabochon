@@ -141,16 +141,28 @@ function initPlayer(spawnX, spawnY, hp){
 
         if (inventoryDisplayed) toggleInventory();
 
-        var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-50, "lol rip", deathTxtStyle); 
-        deathText.fixedToCamera = true;
+        console.log(gameProgress);
 
-        var reviveBtn = game.add.button(window.innerWidth/2-80, window.innerHeight/2+50, "reviveBtn", function(){
-            deathText.destroy();
-            player.revive();
-            reviveBtn.destroy();
-        }, this);
-        reviveBtn.fixedToCamera = true;
+        if (gameProgress === 3){
+            var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-50, "You have died. The game is over", deathTxtStyle); 
+            deathText.fixedToCamera = true;
 
+            var reviveBtn = game.add.button(window.innerWidth/2-80, window.innerHeight/2+50, "restartBtn", function(){
+                window.location.reload();
+            }, this);
+            reviveBtn.fixedToCamera = true;
+        }
+        else {
+            var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-50, "You have died.", deathTxtStyle); 
+            deathText.fixedToCamera = true;
+
+            var reviveBtn = game.add.button(window.innerWidth/2-80, window.innerHeight/2+50, "reviveBtn", function(){
+                deathText.destroy();
+                player.revive();
+                reviveBtn.destroy();
+            }, this);
+            reviveBtn.fixedToCamera = true;
+        }   
         return this;
     }
     player.revive = function () {
