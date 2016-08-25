@@ -236,7 +236,8 @@ function update() {
         if (!items.armor2.inInv) game.physics.arcade.overlap(items.armor2, player, pickUpItems, null, items.armor2);
         if (!items.weapon1.inInv) game.physics.arcade.overlap(items.weapon1, player, pickUpItems, null, items.weapon1); 
         if (!items.weapon2.inInv) game.physics.arcade.overlap(items.weapon2, player, pickUpItems, null, items.weapon2); 
-        if (!items.weapon3.inInv) game.physics.arcade.overlap(items.weapon3, player, pickUpItems, null, items.weapon3);       
+        if (!items.weapon3.inInv) game.physics.arcade.overlap(items.weapon3, player, pickUpItems, null, items.weapon3);
+        if (!items.gem.inInv) game.physics.arcade.overlap(items.gem, player, pickUpItems, null, items.gem);              
 
         //ENemy collion + revive
         for (var enemyGroup in enemys){  
@@ -462,7 +463,10 @@ function attackCollisionHandler(atkBox, enemy){
     enemy.addChild(monHealthBar);
 
     if (enemy.key==="raidBoss" && enemy.health<=100){
-        createDialogue({name: "raidBoss"})
+        //enemys.raidBoss.children[0].body.velocity.x = 0;
+        //enemys.raidBoss.children[0].body.velocity.y = 0;
+        createDialogue({name: "raidBoss"});
+
     }    
 
     if (!enemy.alive) {
@@ -499,7 +503,13 @@ function attackCollisionHandler(atkBox, enemy){
                 game.camera.shake(0.01, 1000, true);
                 dropItem(items.armor2, 'armor2', enemy.x, enemy.y, 3); 
                 enemy.destroy();               
-                break;   
+                break;  
+            case "raidBoss":
+                raidBossDeathSound.play();
+                game.camera.shake(0.1, 1000, true);
+                dropItem(items.gem, 'gem', enemy.x, enemy.y, 4); 
+                createDialogue({name: "raidBoss"});
+                enemy.destroy();
 
             case "spider":
                 if (!unlockedWep[0] && Math.random()>0.2){ //CHANGE CHANCE LATER
@@ -518,10 +528,7 @@ function attackCollisionHandler(atkBox, enemy){
                     dropItem(items.weapon3, 'weapon3', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[2] = true;
                 }
-                break;
-            case "raidBoss":
-                enemy.destroy();
-                break;         
+                break;        
         }               
     }
 

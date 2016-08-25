@@ -69,6 +69,7 @@ function initInventory(){
     items.weapon1 = itemFrames.load('weapon1'); items.weapon1.kill();
     items.weapon2 = itemFrames.load('weapon2'); items.weapon2.kill();
     items.weapon3 = itemFrames.load('weapon3'); items.weapon3.kill();
+    items.gem = itemFrames.load("gem"); items.gem.kill();
 
     inventory.kill();
 }
