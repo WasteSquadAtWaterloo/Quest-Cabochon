@@ -48,17 +48,29 @@
 }
 
 #controls{
+  text-align: center;
+  list-style-type: none;
   position: fixed;
   background-color: transparent;
   width: 701px;
   color: #000;
   left: 50%;
   top: 50%;
-  margin-left: -360px;
+  margin-left: -390px;
+
 }
 
 #controls>h3{
-  text-align: center;
+  font-family: "Courier New Bold";
+  font-size: 20px;
+}
+
+#controls>li{
+  font-family: "Courier New Bold";
+  font-size: 15px;
+  
+  
+
 }
 
 .ps {  
