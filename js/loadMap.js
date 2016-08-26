@@ -440,7 +440,7 @@ function levelUp(){
 }
 
 function initAudio(){
-    bgm['forest'] = game.add.audio('forest', 0.03, true);
+    bgm['forest'] = game.add.audio('forest', 0.01, true);
     bgm['graveyard'] = game.add.audio('graveyard', 0.3, true);
     bgm['castle'] = game.add.audio('castle', 0.01, true);
     bgm['wolfBattle'] = game.add.audio('wolfBattle', 0.01, true);

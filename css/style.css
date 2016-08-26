@@ -8,6 +8,16 @@
   background-color: #000;
 }
 
+#loadingBG{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-image: url("/assets/LoadingBG.jpg");
+  overflow: hidden;
+}
+
 #loading > img {
   position: fixed;
   top: 50%;
@@ -17,7 +27,7 @@
 }
 
 #loading-bar{
-  background-color: #fff;
+  background-color: #000;
   position: fixed;  
   width: 0px;  
   height: 28px;
@@ -36,8 +46,25 @@
 .hud .bar {
 	right: 10;
 }
+
+#controls{
+  position: fixed;
+  background-color: transparent;
+  width: 701px;
+  color: #000;
+  left: 50%;
+  top: 50%;
+  margin-left: -360px;
+}
+
+#controls>h3{
+  text-align: center;
+}
+
 .ps {  
   position: absolute;
+  height: 100%;
+  width: 100%;
   top: 0;
   left: 0;
 }

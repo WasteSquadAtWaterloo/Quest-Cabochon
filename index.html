@@ -33,19 +33,32 @@
 
 	</head>
 	<body>
-		<div id="container">			
-  			<div class="ps" id="phaser-example"></div>
-  			
-  			<div class="hud">  				
+		<div class="ps" id="phaser-example"></div>
+
+		<div id="loadingBG"></div>
+
+		<div id="container"> 			
+  			<div class="hud"> 
+
   				<div id="loading">
-					<img src="assets/loading.jpg">
+					<img src="assets/loading.png">
 					<div id="loading-bar"></div>
+					<ul id="controls">
+						<h3>Controls</h3>
+						<li>WASD or Arrow Keys to move</li>
+						<li>Click in a direction for a melee attack</li>
+						<li>C to toggle inventory</li>
+						<li>E to use health potion (If available)</li>
+						<li>Q to use mana potion (If available)</li>
+						<li>Z to interact with NPC you are near</li>
+						<li>Space Bar to shoot a magic attack in the direction of the mouse pointer</li>
+					</ul>
 				</div>
+
   				<img id="player-hud" src="assets/HUD/health_hud_player.png" alt="Stats Hud" style="display: none">  				
   				<div id="red-bars"> </div>
   				<div id="blue-bars"> </div>
   				<div id="green-bars"> </div>
-
   			</div>  			
 		</div>
 		<script type="text/javascript" src="js/hudTest.js"></script>

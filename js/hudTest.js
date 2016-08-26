@@ -1,4 +1,4 @@
-var game = new Phaser.Game(window.innerWidth-20, window.innerHeight-20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 var map;
 var gameProgress = 0;
@@ -95,6 +95,7 @@ function create() {
     loadMap('map0', spawn.x, spawn.y, true); console.log('Map loaded');    
 
     $("#player-hud").css('display', 'inline'); 
+    $("#loadingBG").remove();  
     $("#loading").remove();  
 
     initInput();
@@ -372,7 +373,7 @@ function render() {
 }
 
 function resizeComponents(){
-    game.scale.setGameSize(window.innerWidth-20, window.innerHeight-20);
+    game.scale.setGameSize(window.innerWidth, window.innerHeight);
     
     shop.cameraOffset.x = window.innerWidth>1235 ? Math.max(window.innerWidth/2-400, 440):(window.innerWidth-772); 
     shop.cameraOffset.y = window.innerHeight/2-283;
