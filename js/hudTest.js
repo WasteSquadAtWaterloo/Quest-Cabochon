@@ -51,7 +51,7 @@ var deathTxtStyle = {
     boundsAlignH: "center",
     boundsAlignV: "center",
 };
-var spawn = {x:1152, y:624};
+var spawn = {x:2018, y:740};
 var maxHealth = 20;
 var spellTime = 0;
 var playerShots;
@@ -101,12 +101,12 @@ function create() {
     initInput();
 
     //FOR TESTING
-    dropItem(items.armor0, 'armor0', 1100, 700);
-    dropItem(items.armor1, 'armor1', 1150, 700);
-    dropItem(items.armor2, 'armor2', 1200, 700);
-    dropItem(items.weapon1, 'weapon1', 1100, 750);
-    dropItem(items.weapon2, 'weapon2', 1150, 750);
-    dropItem(items.weapon3, 'weapon3', 1200, 750);
+    dropItem(items.armor0, 'armor0', 1100, 700); items.armor0.exists = false;
+    dropItem(items.armor1, 'armor1', 1150, 700); items.armor1.exists = false;
+    dropItem(items.armor2, 'armor2', 1200, 700); items.armor2.exists = false;
+    dropItem(items.weapon1, 'weapon1', 1100, 750); items.weapon1.exists = false;
+    dropItem(items.weapon2, 'weapon2', 1150, 750); items.weapon2.exists = false;
+    dropItem(items.weapon3, 'weapon3', 1200, 750); items.weapon3.exists = false;
 
     resizeComponents();
 }
@@ -206,10 +206,14 @@ function update() {
 
         //spell attack and its animation
         if (wasd.space.isDown && player.animations.currentAnim.name.indexOf("melee") < 0 || wasd.space.isDown && player.animations.currentAnim.name.indexOf("melee") > 0 && player.animations.currentAnim.isFinished){
-            player.play(player_dir+"_spell");            
+            if (player.mana > 5){   
+                player.play(player_dir+"_spell");   
+
+            }         
         }
         
         if (player.animations.currentAnim.name.indexOf("spell") > -1 && !player.animations.currentAnim.isFinished  && game.time.now - spellTime >=500 && player.mana>=5){
+             
             spellTime = game.time.now;
             spellCast.call({
                 color: 'blue',
@@ -228,7 +232,7 @@ function update() {
         if (game.time.now - spellTime >= 5000) playerShots.removeChildren();
 
         //pasive mana regen
-        if (game.time.now - manaRegenTick >= 20){
+        if (game.time.now - manaRegenTick >= 1000){
             manaRegenTick = game.time.now;
             player.mana = Math.min(player.maxMana, player.mana+1);
             updateManaBar();            
