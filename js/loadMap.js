@@ -267,22 +267,22 @@ function initPlayer(spawnX, spawnY, hp){
     textBox2 = game.add.sprite((window.innerWidth/2) - 245, (window.innerHeight) - 160 , 'textHud2'); textBox2.fixedToCamera = true; textBox2.exists = false; 
     */
 
-    goldHud = game.add.sprite(0, 80, 'gold_and_exp_hud');
+    goldHud = game.add.sprite(5, 90, 'gold_and_exp_hud');
     goldHud.scale.set(1.2);
     goldHud.fixedToCamera = true;
 
-    levelIcon = itemFrames.load("levelIcon", 180, 87);
-    levelIcon.scale.set(0.8);
+    levelIcon = itemFrames.load("levelIcon", 148, 5); goldHud.addChild(levelIcon);
+    levelIcon.scale.set(0.67);
     levelText = game.add.text(-20, -5, player.lvl.toString(), niceTxtStyle); levelText.fontSize = 30;
     levelIcon.addChild(levelText);
-    levelIcon.fixedToCamera = true;
+    
 
-    gold = game.add.sprite(30, 88, 'goldIcon');
-    gold.scale.set(0.8);
+    gold = game.add.sprite(28, 6.5, 'goldIcon'); goldHud.addChild(gold);
+    gold.scale.set(0.67);
     goldText = game.add.text(35,0,playerGold.toString(), niceTxtStyle); goldText.fontSize = 20;
     gold.addChild(goldText);
 
-    gold.fixedToCamera = true;
+    
     updateHealthBar();
     updateManaBar();
 
