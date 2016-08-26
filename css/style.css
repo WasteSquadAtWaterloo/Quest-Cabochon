@@ -14,7 +14,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  background-image: url("/assets/loadingbg.jpg");
+  background-image: url("/assets/loadingbg.png");
   overflow: hidden;
 }
 
