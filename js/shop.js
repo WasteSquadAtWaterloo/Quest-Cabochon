@@ -44,9 +44,8 @@ function make_button (x, y, item){
 				var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "no inventory space" , niceTxtStyle); 
 				shopTxt.fixedToCamera = true; shopTxt.fontSize = 15; 
 				shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "red";
-			}	    
-
-			
+			}
+						
 		}else{
 			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "not enough gold" , niceTxtStyle); 
 			shopTxt.fixedToCamera = true; shopTxt.fontSize = 15; 
