@@ -199,10 +199,21 @@ function pickUpItems(item, player) {
     }
     else{
         if (item.itemCode === "gem"){
+            var sItem = itemFrames.load(this.toString(), 0, 0);
+            sItem.name = this.toString();
+            for (var i=0; i<24; i++){
+                if (inventoryAvailability[i]) {                
+                    inventorySlots[i].addChild(sItem);
+                    inventoryAvailability[i] = false;                
+                    break;
+                }
+            }
             gameState = states.dead;
-            var winText = game.add.text(window.innerWidth/2, window.innerHeight/2, "GJ MAN", deathTxtStyle);
+            var winText = game.add.text(window.innerWidth/2, window.innerHeight/2, "Thank you for playing", deathTxtStyle);
             winText.fixedToCamera = true;
-            console.log(winText)
+            game.camera.fade('#000000', 5000);
+            //console.log(winText)
+
         }  	
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {

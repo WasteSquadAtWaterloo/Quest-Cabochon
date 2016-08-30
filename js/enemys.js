@@ -303,8 +303,8 @@ function raidBossAi(){
                 //console.log("GO LEFT UP");
                 
                 //enemyDirection = "NW";
-                enemys.raidBoss.children[0].body.velocity.x = -300;
-                enemys.raidBoss.children[0].body.velocity.y = -300;
+                enemys.raidBoss.children[0].body.velocity.x = -100;
+                enemys.raidBoss.children[0].body.velocity.y = -100;
                 enemys.raidBoss.children[0].play("up");
             }
             else if (currentNextPointX == currentBossXtile && currentNextPointY < currentBossYtile)
@@ -315,7 +315,7 @@ function raidBossAi(){
                 
                 //enemyDirection = "N";
                 enemys.raidBoss.children[0].body.velocity.x = 0;
-                enemys.raidBoss.children[0].body.velocity.y = -300;
+                enemys.raidBoss.children[0].body.velocity.y = -150;
                 enemys.raidBoss.children[0].play("up");
                 
             }
@@ -326,8 +326,8 @@ function raidBossAi(){
                 //console.log("GO RIGHT UP");
                 
                 //enemyDirection = "NE";
-                enemys.raidBoss.children[0].body.velocity.x = 300;
-                enemys.raidBoss.children[0].body.velocity.y = -300;
+                enemys.raidBoss.children[0].body.velocity.x = 100;
+                enemys.raidBoss.children[0].body.velocity.y = -100;
                 enemys.raidBoss.children[0].play("up");
                 
             }
@@ -338,7 +338,7 @@ function raidBossAi(){
                 //console.log("GO LEFT");
                 
                 //enemyDirection = "W";
-                enemys.raidBoss.children[0].body.velocity.x = -300;
+                enemys.raidBoss.children[0].body.velocity.x = -150;
                 enemys.raidBoss.children[0].body.velocity.y = 0;
                 enemys.raidBoss.children[0].play("left");
                 
@@ -350,7 +350,7 @@ function raidBossAi(){
                 //console.log("GO RIGHT");
                 
                 //enemyDirection = "E";
-                enemys.raidBoss.children[0].body.velocity.x = 300;
+                enemys.raidBoss.children[0].body.velocity.x = 150;
                 enemys.raidBoss.children[0].body.velocity.y = 0;
                 enemys.raidBoss.children[0].play("right");
             
@@ -362,8 +362,8 @@ function raidBossAi(){
                 //console.log("GO RIGHT DOWN");
                 
                 //enemyDirection = "SE";
-                enemys.raidBoss.children[0].body.velocity.x = 300;
-                enemys.raidBoss.children[0].body.velocity.y = 300;
+                enemys.raidBoss.children[0].body.velocity.x = 100;
+                enemys.raidBoss.children[0].body.velocity.y = 100;
                 enemys.raidBoss.children[0].play("down");
                 
             }
@@ -375,7 +375,7 @@ function raidBossAi(){
                 
                 //enemyDirection = "S";
                 enemys.raidBoss.children[0].body.velocity.x = 0;
-                enemys.raidBoss.children[0].body.velocity.y = 300;
+                enemys.raidBoss.children[0].body.velocity.y = 150;
                 enemys.raidBoss.children[0].play("down");
                 
             }
@@ -386,8 +386,8 @@ function raidBossAi(){
                 //console.log("GO LEFT DOWN");
                 
                 //enemyDirection = "SW";
-                enemys.raidBoss.children[0].body.velocity.x = -300;
-                enemys.raidBoss.children[0].body.velocity.y = 300;
+                enemys.raidBoss.children[0].body.velocity.x = -100;
+                enemys.raidBoss.children[0].body.velocity.y = 100;
                 enemys.raidBoss.children[0].play("down");
             }
             else
