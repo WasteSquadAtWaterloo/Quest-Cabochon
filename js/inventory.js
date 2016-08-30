@@ -193,16 +193,16 @@ function pickUpItems(item, player) {
             if (inventoryAvailability[i]) {                
                 inventorySlots[i].addChild(sItem);
                 inventoryAvailability[i] = false;                
-                break;
+                return true;
             }
         }
+        return false;
     }
     else{
         if (item.itemCode === "gem"){
             gameState = states.dead;
             var winText = game.add.text(window.innerWidth/2, window.innerHeight/2, "GJ MAN", deathTxtStyle);
-            winText.fixedToCamera = true;
-            console.log(winText)
+            winText.fixedToCamera = true;            
         }  	
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {
@@ -211,9 +211,10 @@ function pickUpItems(item, player) {
                 inventorySlots[i].addChild(this);
                 inventoryAvailability[i] = false;
                 item.inInv = true;
-                break;
+                return true;
             }
         }
+        return false;
     }    
 }
 

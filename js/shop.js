@@ -1,4 +1,16 @@
 var shop;
+var itemCost = {
+	hp0: 50,
+	hp1: 100,
+	hp2: 200,
+	mp0: 50,
+	mp1: 100,
+	mp2: 200,
+	hat0: 1000,
+	hat1: 2000,
+	hat2: 3500,
+	hat3: 5000,
+}
 
 function initShop(){
 	shop = game.add.sprite( window.innerWidth>1235 ? Math.max(window.innerWidth/2-400, 440):(window.innerWidth-772), window.innerHeight/2-300 ,'shop');
@@ -20,166 +32,31 @@ function initShop(){
 function make_button (x, y, item){	
 	var btn = game.add.button(x, y, '', function(){
 
-		if (item == "hp0" && playerGold >= 50){
-			playerGold -= 50;
-			gold.getChildAt(0).setText(playerGold);
-			
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);
-		}
-		else if (item == "hp1" && playerGold >= 100){
-			playerGold -= 100;
+		if (playerGold >= itemCost[item]){
+			playerGold -= itemCost[item];
 			gold.getChildAt(0).setText(playerGold);
 
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
+			if (pickUpItems.call(item)){
+				var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
+				shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
+				shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
+			}else{
+				var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "no inventory space" , niceTxtStyle); 
+				shopTxt.fixedToCamera = true; shopTxt.fontSize = 15; 
+				shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "red";
+			}	    
+
 			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);
+		}else{
+			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "not enough gold" , niceTxtStyle); 
+			shopTxt.fixedToCamera = true; shopTxt.fontSize = 15; 
+			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "red";
 		}
-		else if (item == "hp2" && playerGold >= 200){
-			playerGold -= 200;
-			gold.getChildAt(0).setText(playerGold);
 
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);
-		}
-		else if (item == "mp0" && playerGold >= 50){
-			playerGold -= 50;
-			gold.getChildAt(0).setText(playerGold);
-
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);
-		}
-		else if (item == "mp1" && playerGold >= 100){
-			playerGold -= 100;
-			gold.getChildAt(0).setText(playerGold);
-
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);
-		}
-		else if (item == "mp2" && playerGold >= 200){
-			playerGold -= 200;
-			gold.getChildAt(0).setText(playerGold);
-
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);			
-		}
-		else if (item == "hat0" && playerGold >= 1000){
-			playerGold -= 1000;
-			gold.getChildAt(0).setText(playerGold);
-
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);			
-		}
-		else if (item == "hat1" && playerGold >= 2000){
-			playerGold -= 2000;
-			gold.getChildAt(0).setText(playerGold);
-
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);			
-		}
-		else if (item == "hat2" && playerGold >= 3500){
-			playerGold -= 3500;
-			gold.getChildAt(0).setText(playerGold);
-
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);			
-		}
-		else if (item == "hat3" && playerGold >= 5000){
-			playerGold -= 5000;
-			gold.getChildAt(0).setText(playerGold);
-
-			var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
-			shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
-			shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
-			
-		    var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
-		    
-		    tweenTxt.onComplete.add(function(){
-		        shopTxt.destroy();
-		    });    
-
-			pickUpItems.call(item);
-		}
+		var tweenTxt = game.add.tween(shopTxt.cameraOffset).to({y: shopTxt.y-75}, 1500, Phaser.Easing.Default, true);	    
+	    tweenTxt.onComplete.add(function(){
+	        shopTxt.destroy();
+	    }); 
 
 	} ,item);
 

@@ -139,9 +139,7 @@ function initPlayer(spawnX, spawnY, hp){
         this.events.onKilled$dispatch(this);
         this.animations.play('dead');  
 
-        if (inventoryDisplayed) toggleInventory();
-
-        console.log(gameProgress);
+        if (inventoryDisplayed) toggleInventory();        
 
         if (map.key === "map6"){
             var deathText = game.add.text(window.innerWidth/2-206, window.innerHeight/2-50, "You have died. The game is over", deathTxtStyle); 
@@ -166,10 +164,7 @@ function initPlayer(spawnX, spawnY, hp){
         return this;
     }
     player.revive = function () {
-        if (map.key != "map0") loadMap('map0', spawn.x, spawn.y, false);
-        else if (map.key === "map6") {
-            console.log("game over");
-        }
+        if (map.key != "map0") loadMap('map0', spawn.x, spawn.y, false);        
         else {
             this.x = spawn.x; 
             this.y = spawn.y;
