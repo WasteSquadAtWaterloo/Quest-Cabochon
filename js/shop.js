@@ -33,13 +33,13 @@ function make_button (x, y, item){
 	var btn = game.add.button(x, y, '', function(){
 
 		if (playerGold >= itemCost[item]){
-			playerGold -= itemCost[item];
-			gold.getChildAt(0).setText(playerGold);
-
 			if (pickUpItems.call(item)){
 				var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "+1" , niceTxtStyle); 
 				shopTxt.fixedToCamera = true; shopTxt.fontSize = 30; 
 				shopTxt.stroke = "black"; shopTxt.strokeThickness = 3; shopTxt.fill = "green";
+
+				playerGold -= itemCost[item];
+				gold.getChildAt(0).setText(playerGold);				
 			}else{
 				var shopTxt = game.add.text(x+shop.cameraOffset.x+15, y+shop.cameraOffset.y+15, "no inventory space" , niceTxtStyle); 
 				shopTxt.fixedToCamera = true; shopTxt.fontSize = 15; 
