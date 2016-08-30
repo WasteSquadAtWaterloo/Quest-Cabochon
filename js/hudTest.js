@@ -140,22 +140,22 @@ function update() {
         //movement and its animation
         if (player.animations.currentAnim.isFinished || (player.animations.currentAnim.name.indexOf("melee")<0 && player.animations.currentAnim.name.indexOf("spell")<0) ){
             if (cursors.left.isDown || wasd.left.isDown){
-                player.body.velocity.x = -500;
+                player.body.velocity.x = -300;
                 player.play('left');                
                 player_dir = 'left';
             }
             else if (cursors.right.isDown || wasd.right.isDown){
-                player.body.velocity.x = 500;
+                player.body.velocity.x = 300;
                 player.play('right');                
                 player_dir = 'right';
             }
             else if (cursors.up.isDown || wasd.up.isDown){
-                player.body.velocity.y = -500;
+                player.body.velocity.y = -300;
                 player.play('up');                
                 player_dir = 'up';                                
             }
             else if (cursors.down.isDown || wasd.down.isDown){ 
-                player.body.velocity.y = 500;
+                player.body.velocity.y = 300;
                 player.play('down');                
                 player_dir = 'down';               
             }            
@@ -526,19 +526,19 @@ function attackCollisionHandler(atkBox, enemy){
                 break;   
 
             case "spider":
-                if (!unlockedWep[0] && Math.random()>0.2){ //CHANGE CHANCE LATER
+                if (!unlockedWep[0] && Math.random() < 0.3){ //CHANGE CHANCE LATER
                     dropItem(items.weapon1, 'weapon1', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[0] = true;
                 }
                 break;
             case "skeleton":
-                if (!unlockedWep[1] && Math.random()>0.2){
+                if (!unlockedWep[1] && Math.random() < 0.2){
                     dropItem(items.weapon2, 'weapon2', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[1] = true;
                 }
                 break;
             case "scorpion":
-                if (!unlockedWep[2] && Math.random()>0.2){
+                if (!unlockedWep[2] && Math.random() < 0.1){
                     dropItem(items.weapon3, 'weapon3', enemy.x+this.x, enemy.y+this.y);
                     unlockedWep[2] = true;
                 }
