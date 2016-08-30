@@ -144,8 +144,8 @@ function initPlayer(spawnX, spawnY, hp){
         console.log(gameProgress);
 
         if (map.key === "map6"){
-            var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-50, "You have died. The game is over", deathTxtStyle); 
-            deathText.fixedToCamera = true;
+            var deathText = game.add.text(window.innerWidth/2-206, window.innerHeight/2-50, "You have died. The game is over", deathTxtStyle); 
+            deathText.fixedToCamera = true;          
 
             var reviveBtn = game.add.button(window.innerWidth/2-80, window.innerHeight/2+50, "restartBtn", function(){
                 window.location.reload();
@@ -153,8 +153,8 @@ function initPlayer(spawnX, spawnY, hp){
             reviveBtn.fixedToCamera = true;
         }
         else {
-            var deathText = game.add.text(window.innerWidth/2-63.5, window.innerHeight/2-50, "You have died.", deathTxtStyle); 
-            deathText.fixedToCamera = true;
+            var deathText = game.add.text(window.innerWidth/2-95, window.innerHeight/2-50, "You have died.", deathTxtStyle); 
+            deathText.fixedToCamera = true;            
 
             var reviveBtn = game.add.button(window.innerWidth/2-80, window.innerHeight/2+50, "reviveBtn", function(){
                 deathText.destroy();
