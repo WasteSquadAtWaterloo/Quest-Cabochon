@@ -106,7 +106,7 @@ function loadMap(key, spawn_x, spawn_y, bgn){
     
     goldHud.bringToTop();
     gold.bringToTop();
-    levelIcon.bringToTop();   
+    levelIcon.bringToTop();  
 }
 
 
@@ -413,7 +413,7 @@ function portalCheck(map){
             loadMap('map2', 3344, 672, false);
         }
         else if ((player.x>=1548 && player.x<=1667) && player.y<0){
-            loadMap('map5', 480, 928, false);
+            loadMap('map5', 480, 960, false);
         }
     }
 
@@ -422,7 +422,7 @@ function portalCheck(map){
             loadMap('map4', 1612, 35, false);
         }
         //for bgm & dialogue purposes - knightboss
-        else if ((player.x >= 336 && player.x <= 576) && (player.y < 900 && player.y >894) && 
+        else if ((player.x >= 336 && player.x <= 576) && (player.y > 950 && player.y < 960) && 
             player.body.velocity.y<0 && enemys.knightBoss){
 
             if (enemys.knightBoss.children.length)
