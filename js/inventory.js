@@ -193,9 +193,10 @@ function pickUpItems(item, player) {
             if (inventoryAvailability[i]) {                
                 inventorySlots[i].addChild(sItem);
                 inventoryAvailability[i] = false;                
-                break;
+                return true;
             }
         }
+        return false;
     }
     else{
         if (item.itemCode === "gem"){
@@ -209,12 +210,12 @@ function pickUpItems(item, player) {
                 }
             }
             gameState = states.dead;
+
             var winText = game.add.text(window.innerWidth/2, window.innerHeight/2, "Thank you for playing", deathTxtStyle);
             winText.fixedToCamera = true;
             game.camera.fade('#000000', 5000);
-            //console.log(winText)
-
-        }  	
+        }
+          	
         for (var i=0; i<24; i++){
             if (inventoryAvailability[i]) {
                 this.x = 0;
@@ -222,9 +223,10 @@ function pickUpItems(item, player) {
                 inventorySlots[i].addChild(this);
                 inventoryAvailability[i] = false;
                 item.inInv = true;
-                break;
+                return true;
             }
         }
+        return false;
     }    
 }
 

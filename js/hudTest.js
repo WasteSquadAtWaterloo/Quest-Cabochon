@@ -33,7 +33,7 @@ var items = {};
 var colors = ['red','green','yellow'];
 
 google: {
-  families: ['Finger Paint']
+  families: ['Finger Paint', 'Vollkorn']
 }
 
 var dmgTxtStyle = {
@@ -45,7 +45,7 @@ var niceTxtStyle = {
     fill: "white",
 };
 var deathTxtStyle = {
-    font: "30px Lucida Console",
+    font: "30px Vollkorn",
     fill: "black",
     align: "center",
     boundsAlignH: "center",
@@ -133,9 +133,7 @@ function update() {
         game.physics.arcade.collide(player, layer2);
         game.physics.arcade.collide(player, layer3);
         game.physics.arcade.collide(player, layer4);
-        //game.physics.arcade.collide(player, layer5);        
-
-        //var curAn = player.animations.currentAnim.name
+        game.physics.arcade.collide(player, layer5);        
 
         //movement and its animation
         if (player.animations.currentAnim.isFinished || (player.animations.currentAnim.name.indexOf("melee")<0 && player.animations.currentAnim.name.indexOf("spell")<0) ){

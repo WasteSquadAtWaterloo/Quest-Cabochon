@@ -62,14 +62,14 @@
 
 #controls>h3{
   font-family: "Courier New Bold";
-  font-size: 20px;
+  font-size: 25px;
+  font-weight: 800;
 }
 
 #controls>li{
   font-family: "Courier New Bold";
   font-size: 15px;
-  
-  
+  font-weight: 500;
 
 }
 
