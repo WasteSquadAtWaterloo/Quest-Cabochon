@@ -1,3 +1,4 @@
+//player animation frame indices
 var playerFrames = {
 	"dead": [260, 261, 262, 263, 264, 265],
 
@@ -38,6 +39,7 @@ var playerFrames = {
 	}
 },
 
+//enemy animation frame indices
 enemyFrames = {
 "snail": {
 	"down": {
@@ -77,6 +79,7 @@ enemyFrames = {
 }
 },
 
+//item sprite indices
 itemFrames = {
 	'hat0': 192,
 	'hat1': 190,
@@ -135,31 +138,7 @@ itemFrames = {
 	}
 }
 
-
-
-var stand = [];
-
-for (var i=0; i<25; i++){
-    for (var j=6; j<14; j++){
-    	if (i>6 || j<11) stand.push(i*57+j);
-    }
-}
-
-for (var i=21; i<25; i++){
-    for (var j=13; j<41; j++){
-        stand.push(i*57+j);
-    }
-}
-
-
-for (var i=25; i<28; i++){
-	for (var j=41; j<50; j++){
-		stand.push (i*57+j);
-	}
-}
-
-stand.push(541, 542, 543, 544, 545, 546, 547, 548, 549, 593, 650, 583, 584, 585, 586, 587, 588);
-
+//offsets for proper hit box collision of weapon
 var atkOpts = {
     "up": [
     	{x:-2.5, y:-30},
@@ -219,3 +198,27 @@ var wepBoxSize = {
 		}
 	} 
 }
+
+//get all tile ids that cannot be collided with
+var stand = [];
+
+for (var i=0; i<25; i++){
+    for (var j=6; j<14; j++){
+    	if (i>6 || j<11) stand.push(i*57+j);
+    }
+}
+
+for (var i=21; i<25; i++){
+    for (var j=13; j<41; j++){
+        stand.push(i*57+j);
+    }
+}
+
+
+for (var i=25; i<28; i++){
+	for (var j=41; j<50; j++){
+		stand.push (i*57+j);
+	}
+}
+
+stand.push(541, 542, 543, 544, 545, 546, 547, 548, 549, 593, 650, 583, 584, 585, 586, 587, 588);
