@@ -75,6 +75,7 @@ function update(){
 	if (selfId){
 		Player.update();
 
+		//update self player
 		var player = Player.list[selfId].sprite;
 
 		game.physics.arcade.collide(player, layer1);
@@ -86,25 +87,26 @@ function update(){
 		player.body.velocity.set(0);
 
 		if (cursors.left.isDown || wasd.left.isDown){
-	        player.body.velocity.x = -750;	       
+	        player.body.velocity.x = -250;	       
 	        socket.emit('playAnim', {id:selfId, anim:'left'});
 	    }
 	    else if (cursors.right.isDown || wasd.right.isDown){
-	        player.body.velocity.x = 750;	                       
+	        player.body.velocity.x = 250;	                       
 	        socket.emit('playAnim', {id:selfId, anim: 'right'});
 	    }
 	    else if (cursors.up.isDown || wasd.up.isDown){
-	        player.body.velocity.y = -750;	                      
+	        player.body.velocity.y = -250;	                      
 	    	socket.emit('playAnim', {id:selfId, anim: 'up'});
 	    }
 	    else if (cursors.down.isDown || wasd.down.isDown){ 
-	        player.body.velocity.y = 750;	                       
+	        player.body.velocity.y = 250;	                       
 	        socket.emit('playAnim', {id:selfId, anim: 'down'});
 	    }
 
 	    socket.emit('updatePos', {id:selfId, x:player.x, y:player.y});    
 	}
     
+    //update other players
     for (var i in Player.list){
     	var pl = Player.list[i];
     	if (pl.sprite.animations.currentAnim.isFinished){    		
@@ -137,6 +139,9 @@ function initInput(){
     game.input.mouse.capture = true;
 }
 
+
+
+//DEBUGGING
 socket.on('addToConsole', function(data){
 	console.log(data);
 });
