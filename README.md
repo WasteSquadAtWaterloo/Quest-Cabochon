@@ -1,6 +1,6 @@
-# WasteRPG
-## WORK IN PROGRESS, TEST [HERE](https://wastesquadatwaterloo.github.io/Quest-Cabochon/)
-###Controls:
+# Quest Cabochon
+## WORK IN PROGRESS, TEST [HERE](https://hidden-journey-67033.herokuapp.com/)
+##Controls:
 * WASD or Arrow Keys to move
 * Click in a direction for a melee attack
 * C to toggle inventory
